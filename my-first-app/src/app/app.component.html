@@ -14,6 +14,41 @@
       <hr />
       <app-warning-alert></app-warning-alert>
       <app-success-alert></app-success-alert>
+
+      <ol>
+        <li>
+          Add a input field which updates a property ('username') via 2-way
+          binding
+        </li>
+        <li>
+          Output the username property via String Interpolation (in a paragraph
+          below the input)
+        </li>
+        <li>
+          Add a button which may only be clicked if the username is NOT an empty
+          string
+        </li>
+        <li>
+          Upon clicking the button, the username should be reset to an empty
+          string
+        </li>
+      </ol>
+      <hr />
+      <label for="username">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        [(ngModel)]="username"
+      />
+      <p>{{ username }}</p>
+      <button
+        class="btn btn-primary"
+        [disabled]="username === ''"
+        (click)="username = ''"
+      >
+        Reset User
+      </button>
     </div>
   </div>
 </div>
