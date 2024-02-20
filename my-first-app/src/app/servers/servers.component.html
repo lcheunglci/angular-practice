@@ -25,5 +25,4 @@
 </p>
 <np-template #noServer>No server was created</np-template>
 -->
-<app-server></app-server>
-<app-server></app-server>
+<app-server *ngFor="let server of servers"></app-server>
