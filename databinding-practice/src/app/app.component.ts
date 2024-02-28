@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.Emulated, // the default value, but can use None, and Native
 })
 export class AppComponent {
   serverElements = [
