@@ -13,7 +13,7 @@ export class CockpitComponent {
     serverContent: string;
   }>();
 
-  @Output() blueprintCreated = new EventEmitter<{
+  @Output('bpCreated') blueprintCreated = new EventEmitter<{
     serverName: string;
     serverContent: string;
   }>();
