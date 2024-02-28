@@ -18,19 +18,28 @@ export class CockpitComponent {
     serverContent: string;
   }>();
 
-  newServerName = '';
+  // newServerName = '';
   newServerContent = '';
 
-  onAddServer() {
+  //onAddServer() {
+  //  this.serverCreated.emit({
+  //    serverName: this.newServerName,
+  //    serverContent: this.newServerContent,
+  //  });
+  //}
+
+  onAddServer(nameInput: HTMLInputElement) {
+    console.log(nameInput.value);
+
     this.serverCreated.emit({
-      serverName: this.newServerName,
+      serverName: nameInput.value,
       serverContent: this.newServerContent,
     });
   }
 
-  onAddBlueprint() {
+  onAddBlueprint(nameInput: HTMLInputElement) {
     this.blueprintCreated.emit({
-      serverName: this.newServerName,
+      serverName: nameInput.value,
       serverContent: this.newServerContent,
     });
   }
