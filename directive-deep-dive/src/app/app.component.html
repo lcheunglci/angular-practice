@@ -32,7 +32,10 @@
         </div>
       </ul>
       <p appBasicHighlight>Style me with basic directive!</p>
-      <p appBetterHighlight>Style me with a better directive!</p>
+      <!-- <p [appBetterHighlight]="'red'" [defaultColor]="'yellow'"> -->
+      <p [appBetterHighlight]="'red'" defaultColor="yellow">
+        Style me with a better directive!
+      </p>
     </div>
   </div>
 </div>
