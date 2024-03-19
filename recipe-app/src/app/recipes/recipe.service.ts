@@ -6,15 +6,20 @@ export class RecipeService {
 
   private recipes: Recipe[] = [
     new Recipe(
-      'A Test Recipe',
-      'This is simply a test',
-      'https://unsplash.com/photos/uQs1802D0CQ/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzA4NzU5NDUzfA&force=true&w=640'
-    ),
-    new Recipe(
-      'Another Test Recipe',
-      'This is simply another test',
-      'https://unsplash.com/photos/uQs1802D0CQ/download?ixid=M3wxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNzA4NzU5NDUzfA&force=true&w=640'
-    ),
+      'Tasty Schnitzel',
+      'A super-tasty Schnitzel - just awesome!',
+      'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+      [
+        new Ingredient('Meat', 1),
+        new Ingredient('French Fries', 20)
+      ]),
+    new Recipe('Big Fat Burger',
+      'What else you need to say?',
+      'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+      [
+        new Ingredient('Buns', 2),
+        new Ingredient('Meat', 1)
+      ])
   ];
 
   getRecipes() {
