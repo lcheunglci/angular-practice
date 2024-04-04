@@ -4,6 +4,7 @@
     ></app-recipe-list>
   </div>
   <div class="col-md-7">
+    <router-outlet></router-outlet>
     <app-recipe-detail
       *ngIf="selectedRecipe; else infoText"
       [recipe]="selectedRecipe"
