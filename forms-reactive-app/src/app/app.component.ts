@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms'
 @Component({
   selector: 'app-root',
@@ -7,8 +7,13 @@ import { NgForm } from '@angular/forms'
 })
 export class AppComponent {
   genders = ['male', 'female'];
+  @ViewChild('f') signupForm: NgForm;
 
-  onSubmit(form: NgForm) {
-    console.log(form);
+  // onSubmit(form: NgForm) {
+  //    console.log(form);
+  //  }
+
+  onSubmit() {
+
   }
 }
