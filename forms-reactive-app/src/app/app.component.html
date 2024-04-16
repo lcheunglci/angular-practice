@@ -28,11 +28,15 @@
         </div>
         <div class="radio" *ngFor="let gender of genders">
           <label>
-            <input
-              type="radio"
-              [value]="gender">{{ gender }}
-              ngModel
-              name="gender"
+            <select
+              id="gender"
+              class="form-control"
+              [ngModel]="defaultGender"
+              name="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="unknown">Unknown</option>
+            </select>
           </label>
         </div>
         <button class="btn btn-primary" type="submit">Submit</button>
