@@ -15,11 +15,11 @@ export class AppComponent {
     const suggestUserName = 'Superuser';
   }
 
-  // onSubmit(form: NgForm) {
-  //    console.log(form);
-  //  }
-
-  onSubmit() {
-
+  onSubmit(form: NgForm) {
+    console.log(form);
   }
+
+  //onSubmit() {
+  //
+  //}
 }

@@ -1,7 +1,9 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-      <form (ngSubmit)=onSubmit(f) #f="ngForm">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2" >
+      <div id="user-data" ngModelGroup="userData" #userData="ngModelGroup">
+
+       <form (ngSubmit)=onSubmit(f) #f="ngForm">
         <div class="form-group">
           <label for="username">Username</label>
           <input
@@ -13,6 +15,7 @@
             required
           >
         </div>
+          <button class="btn btn-default" type="button">Suggest a Username</button>
         <div class="form-group">
           <label for="email">email</label>
           <input
@@ -26,6 +29,7 @@
           #email="ngModel">
             <span class="help-block" *ngIf="!email.value && email.touched">Please enter a valid email.</span>
         </div>
+          <p *ngIf="!userData.valid && userData.touched">User Data is invalid</p>
         <div class="radio" *ngFor="let gender of genders">
           <label>
             <select
@@ -45,6 +49,7 @@
         <p>Your reply {{ answer }}</p>
         <button class="btn btn-primary" type="submit">Submit</button>
       </form>
+      </div>
     </div>
   </div>
 </div>
