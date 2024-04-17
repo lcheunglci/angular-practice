@@ -31,17 +31,21 @@
         </div>
           <p *ngIf="!userData.valid && userData.touched">User Data is invalid</p>
         <div class="radio" *ngFor="let gender of genders">
-          <label>
-            <select
-              id="gender"
-              class="form-control"
-              [ngModel]="defaultGender"
-              name="gender">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="unknown">Unknown</option>
-            </select>
+          <label type="radio">
+              <input type="radio" name="gender" ngModel [value]="gender" required> {{ gender }}
           </label>
+        </div>
+          <div class="form-group">
+            <select
+              id="secret"
+              class="form-control"
+              [ngModel]="defaultQuestion"
+              name="secret">
+              <option value="pet">Your first pet?</option>
+              <option value="teacher">Your first teacher?</option>
+              <option value="song">Your favorite song?</option>
+            </select>
+
         </div>
         <div class="form-group">
         <textarea name="questionAnswer" rows="3" class="form-control" [(ngModel)]="answer"
