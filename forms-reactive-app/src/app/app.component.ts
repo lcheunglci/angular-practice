@@ -35,16 +35,16 @@ export class AppComponent implements OnInit {
       'gender': 'male',
       'hobbies': []
     });
-    this.signupForm.patch({
+    this.signupForm.patchValue({
       'userData': {
         'username': 'Sam',
       },
     });
-
   }
 
   onSubmit() {
     console.log(this.signupForm);
+    this.signupForm.reset();
   }
 
   onAddHobby() {
