@@ -16,6 +16,7 @@ import { Subscription } from 'rxjs';
 export class ShoppingEditComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   editMode = false;
+  editedItemIndex: number;
 
   constructor(private slService: ShoppingListService) { }
 
