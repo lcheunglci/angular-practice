@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { env } from 'process';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,18 +25,29 @@ export class AppComponent implements OnInit {
       postData).subscribe(responseData => {
         console.log(responseData);
       });
+  }
 
 
-
-    onFetchPosts() {
-      // Send Http request
-      this.http.get(process.env['URL']).subscribe(posts => {
+  onFetchPosts() {
+    // Send Http request
+    this.http
+      .get(process.env['URL'])
+      .pipe(map(responseData => {
+        const postsArray = [];
+        for (const key in responseData[key]) {
+          if (responseData.hasOwnProperty(key)) {
+            postsArray.push({ ...responseData[key], id: key });
+          }
+        }
+        return postsArray;
+      }))
+      .subscribe(posts => {
         console.log(posts);
       });
+  }
 
+  ClearPosts() {
+    // Send Http request
+  }
 
-      ClearPosts() {
-        // Send Http request
-      }
-
-
+}
