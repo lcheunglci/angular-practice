@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
     // Send Http request
     // console.log(postData);
     //
-    this.http.post(
+    this.http.post<{ name: string }>(
       process.env['URL'],
       postData).subscribe(responseData => {
         console.log(responseData);
@@ -32,8 +32,8 @@ export class AppComponent implements OnInit {
   onFetchPosts() {
     // Send Http request
     this.http
-      .get(process.env['URL'])
-      .pipe(map((responseData: { [key: string]: Post }) => {
+      .get<{ [key: string]: Post }>(process.env['URL'])
+      .pipe(map(responseData => {
         const postsArray: Post[] = [];
         for (const key in responseData[key]) {
           if (responseData.hasOwnProperty(key)) {
