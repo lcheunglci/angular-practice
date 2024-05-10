@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { env } from 'process';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,9 @@ export class AppComponent implements OnInit {
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.onFetchPosts();
+  }
 
   onCreatePost(postData: { title: string; content: string }) {
     // Send Http request
@@ -23,13 +26,17 @@ export class AppComponent implements OnInit {
         console.log(responseData);
       });
 
-  }
 
-  onFetchPosts() {
-    // Send Http request
-  }
 
-  onClearPosts() {
-    // Send Http request
-  }
-}
+    onFetchPosts() {
+      // Send Http request
+      this.http.get(process.env['URL']).subscribe(posts => {
+        console.log(posts);
+      });
+
+
+      ClearPosts() {
+        // Send Http request
+      }
+
+
