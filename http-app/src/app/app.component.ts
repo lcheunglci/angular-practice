@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { Post } from './post.model';
+import { PostsService } from './posts.service';
 
 @Component({
   selector: 'app-root',
@@ -12,49 +13,30 @@ export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isFetching = false;
 
-  constructor(private http: HttpClient) { }
-
+  constructor(private http: HttpClient, private postsService: PostsService) { }
   ngOnInit() {
-    this.onFetchPosts();
+    this.isFetching = true;
+    this.postsService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    })
   }
 
   onCreatePost(postData: Post) {
     // Send Http request
     // console.log(postData);
     //
-    this.http.post<{ name: string }>(
-      process.env['URL'],
-      postData).subscribe(responseData => {
-        console.log(responseData);
-      });
+    this.postsService.createAndStorePost(postData.title, postData.content);
   }
 
   onFetchPosts() {
     // Send Http request
     ///
-    this.fetchPosts();
-
-  }
-
-
-  private fetchPosts() {
     this.isFetching = true;
-    this.http
-      .get<{ [key: string]: Post }>(process.env['URL'])
-      .pipe(map(responseData => {
-        const postsArray: Post[] = [];
-        for (const key in responseData[key]) {
-          if (responseData.hasOwnProperty(key)) {
-            postsArray.push({ ...responseData[key], id: key });
-          }
-        }
-        return postsArray;
-      }))
-      .subscribe(posts => {
-        // console.log(posts);
-        this.isFetching = false;
-        this.loadedPosts = posts;
-      });
+    this.postsService.fetchPosts().subscribe(posts => {
+      this.isFetching = false;
+      this.loadedPosts = posts;
+    });
   }
 
   onClearPosts() {
