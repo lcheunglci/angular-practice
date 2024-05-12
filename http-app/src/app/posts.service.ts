@@ -35,4 +35,8 @@ export class PostsService {
       }));
 
   }
+
+  deletePosts() {
+    return this.http.delete(process.env['URL']);
+  }
 }
