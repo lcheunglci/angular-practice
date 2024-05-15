@@ -32,7 +32,8 @@ export class PostsService {
     return this.http
       .get<{ [key: string]: Post }>(process.env['URL'], {
         headers: new HttpHeaders({ "Custom-Header": 'Hello' }),
-        params: searchParams
+        params: searchParams,
+        responseType: 'json' // default
         // params: new HttpParams().set('print', 'pretty')
       })
       .pipe(map(responseData => {
@@ -54,7 +55,10 @@ export class PostsService {
 
   deletePosts() {
     return this.http.delete(process.env['URL'],
-      { observe: 'events' }).pipe(
+      {
+        observe: 'events',
+        responseType: 'text'
+      }).pipe(
         tap(event => {
           console.log(event)
           if (event == HttpEventType.Sent) {
