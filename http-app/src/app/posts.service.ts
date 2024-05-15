@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpEventType, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Post } from "./post.model";
 import { Subject, catchError, map, throwError } from "rxjs";
@@ -14,7 +14,8 @@ export class PostsService {
     const postData: Post = { title: title, content: content };
     this.http.post<{ name: string }>(
       process.env['URL'],
-      postData).subscribe(responseData => {
+      postData, { observe: 'response' })
+      .subscribe(responseData => {
         console.log(responseData);
       }, error => {
         this.error.next(error.message);
@@ -52,6 +53,16 @@ export class PostsService {
   }
 
   deletePosts() {
-    return this.http.delete(process.env['URL']);
+    return this.http.delete(process.env['URL'],
+      { observe: 'events' }).pipe(
+        tap(event => {
+          console.log(event)
+          if (event == HttpEventType.Sent) {
+            // ..
+          }
+          if (event == HttpEventType.Response) {
+            console.log(event.body);
+          }
+        }));
   }
 }
