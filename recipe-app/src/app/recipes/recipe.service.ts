@@ -8,6 +8,7 @@ import { Subject } from "rxjs";
 export class RecipeService {
   recipeChanged = new Subject<Recipe[]>();
 
+  /*
   private recipes: Recipe[] = [
     new Recipe(
       'Tasty Schnitzel',
@@ -25,6 +26,8 @@ export class RecipeService {
         new Ingredient('Meat', 1)
       ])
   ];
+  */
+  private recipes: Recipe[] = [];
 
   constructor(private slService: ShoppingListService) {
 
