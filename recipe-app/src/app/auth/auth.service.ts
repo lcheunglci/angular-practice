@@ -9,7 +9,7 @@ export interface AuthResponseData {
   email: string;
   refreshToken: string;
   expiresIn: string;
-  loadId: string;
+  localId: string;
   registered?: boolean;
 }
 
@@ -29,10 +29,7 @@ export class AuthService {
         returnSecureToken: true,
       }
     ).pipe(catchError(this.handleError), tap(resData => {
-      const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-      const user = new User(resData.email, resData.localId, resData.idToken, expirationDate)
-
-      this.user.next(user);
+      this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn)
     }));
 
   }
@@ -48,9 +45,9 @@ export class AuthService {
         returnSecureToken: true
       }).pipe(
         catchError(this.handleError),
-        tap(resData => { this.handleAuthentication(resData.email, resData.loadId, resData.idToken, resData.expiresIn); })
-
-        // this.handleAuthentication(resData.name, resData.localId, resData.token, +resData.expiresIn))
+        tap(resData => {
+          this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+        })
       );
   }
 
