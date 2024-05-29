@@ -1,7 +1,7 @@
 import { Component, ComponentFactoryResolver, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { AuthResponseData, AuthService } from "./auth.service";
-import { Observable } from "rxjs";
+import { Observable, Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { AlertComponent } from "../shared/alert/alert.component";
 import { PlaceHolderDirective } from "../shared/placeholder/placeholder.directive";
@@ -15,6 +15,8 @@ export class AuthComponent {
   isLoading = false;
   error: string = null;
   @ViewChild(PlaceHolderDirective) alertHost: PlaceHolderDirective;
+
+  private closeSub: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -65,14 +67,19 @@ export class AuthComponent {
     this.error = null;
   }
 
-  private showErrorAlert(errorMessage: string) {
+  private showErrorAlert(message: string) {
     // const alertCmp = new AlertComponent();
     const alertCmpFactory = this.componentFactoryResolver
       .resolveComponentFactory(AlertComponent);
     const hostViewContainerRef = this.alertHost.viewContainerRef;
     hostViewContainerRef.clear();
 
-    hostViewContainerRef.createComponent(alertCmpFactory);
+    const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
+
+    componentRef.instance.message = message;
+    componentRef.instance.close.subscribe(() => {
+
+    })
 
   }
 }
