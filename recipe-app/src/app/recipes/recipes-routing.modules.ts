@@ -7,7 +7,7 @@ import { RecipeEditComponent } from "./recipe-edit/recipe-edit.component";
 import { RecipeResolverService } from "./recipe-resolver.service";
 import { RecipeDetailComponent } from "./recipe-detail/recipe-detail.component";
 
-const routes: Routes = {
+const routes: Routes = [{
 
   path: 'recipes',
   component: RecipesComponent,
@@ -25,7 +25,7 @@ const routes: Routes = {
     }
   ]
 
-}
+}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
