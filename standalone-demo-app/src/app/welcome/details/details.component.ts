@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
 import { AnalyticsService } from '../../shared/analytics.service';
+import { HighlightDirective } from '../../shared/highlight.directive';
 
 @Component({
   standalone: true,
-  imports: [SharedModule],
+  imports: [HighlightDirective],
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.css'],
