@@ -6,4 +6,4 @@ export const increment = createAction(
 
 export const decrement = createAction(
   '[Counter] Decrement'
-);
+)
