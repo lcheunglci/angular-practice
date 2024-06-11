@@ -1,6 +1,6 @@
 // import { createReducer, on } from "@ngrx/store";
 import { Action } from "@ngrx/store";
-import { CounterActions, DECREMENT, DecrementAction, INCREMENT, IncrementAction } from "./counter.actions";
+import { CounterActions, DECREMENT, DecrementAction, INCREMENT, IncrementAction, SET, SetAction } from "./counter.actions";
 // import { decrement, increment } from "./counter.actions";
 
 const initialState = 0;
@@ -18,6 +18,11 @@ export function counterReducer(state = initialState, action: CounterActions | Ac
   if (action.type === DECREMENT) {
     return state - (action as DecrementAction).value;
   }
+  if (action.type === SET) {
+    return (action as SetAction).value;
+  }
+
+
   return state;
 }
 
