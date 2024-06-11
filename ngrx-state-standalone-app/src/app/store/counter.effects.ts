@@ -1,13 +1,12 @@
 import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { DECREMENT, DecrementAction, INCREMENT, IncrementAction } from "./counter.actions";
 import { tap } from "rxjs";
 import { Injectable } from "@angular/core";
+import { decrement, increment } from "./counter.actions";
 
 @Injectable()
 export class CounterEffects {
   saveCount = createEffect(() => this.actions$.pipe(
-    // ofType(IncrementAction, DecrementAction),
-    ofType(INCREMENT, DECREMENT),
+    ofType(increment, decrement),
     tap((action) => {
       console.log(action);
       localStorage.setItem('count', action.value.toString());
