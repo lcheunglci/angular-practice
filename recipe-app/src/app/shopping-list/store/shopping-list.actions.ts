@@ -6,4 +6,6 @@ export const ADD_INCREDIENT = 'ADD_INCREDIENT';
 export class AddIngredient implements Action {
   readonly type = ADD_INCREDIENT;
   payload: Ingredient;
+
+  constructor(public playload: Ingredient);
 }
