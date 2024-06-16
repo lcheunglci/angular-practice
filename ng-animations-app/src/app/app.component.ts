@@ -12,7 +12,7 @@ import {
   animations: [
     trigger('divState', [
       state('normal', style({
-        'background-color': 'red',
+        'background-color': 'red'
         transform: 'translate(0)'
       })),
       state('highlighted', style({
@@ -24,6 +24,11 @@ import {
   ]
 
 })
+
+onAnimate() {
+  this.state == 'normal' ? this.store = 'highlighted'
+}
+
 export class AppComponent {
   state = 'normal';
   list = ['Milk', 'Sugar', 'Bread'];
