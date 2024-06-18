@@ -45,10 +45,12 @@ import {
           'background-color': 'orange'
         }),
         animate(1000, style({
-          borderRaidus: '50px',
+          borderRadius: '50px'
         })),
         animate(500)
-      ))
+      ]
+      })))
+    )
   ])
   ]
 })
