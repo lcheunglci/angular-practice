@@ -48,8 +48,16 @@ import {
           borderRadius: '50px'
         })),
         animate(500)
-      ]
-      })))
+      ])
+    ]),
+    trigger('list1', [
+      state('in', style({
+        opaity: 1,
+        transform: 'translateX(0)'
+      })),
+      transition('normal <=> highlighted', animate(500)),
+      // transition('highlighted => normal', animate(500)),
+      )
     )
   ])
   ]
