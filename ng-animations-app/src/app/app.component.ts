@@ -55,11 +55,20 @@ import {
         opaity: 1,
         transform: 'translateX(0)'
       })),
-      transition('normal <=> highlighted', animate(500)),
-      // transition('highlighted => normal', animate(500)),
-      )
-    )
-  ])
+      transition('void <=> *', [
+        style({
+          opacity: 0,
+          transform: 'translateX(-100px)'
+        }),
+        animate(300)]),
+      transition('* <=> void', [
+        animate(300, style({
+          transform: 'translateX(100px)',
+          opacity: 0
+        })
+        )
+      ])
+    ])
   ]
 })
 export class AppComponent {
