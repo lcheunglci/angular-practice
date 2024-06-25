@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getDatabase, provideDatabase } from '@angular/fire/database';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,11 @@ import { MatListModule } from '@angular/material/list';
     MatListModule
   ],
   providers: [
-    provideAnimationsAsync()
-  ],
-  bootstrap: [AppComponent]
-})
+    provideAnimationsAsync(),
+    // TODO: add this back in:
+    // provideFirebaseApp(() => initializeApp(),
+    provideDatabase(() =>  getDatabas e())
+  ], 
+ bootstrap: [AppComponent]
+
 export class AppModule { }
