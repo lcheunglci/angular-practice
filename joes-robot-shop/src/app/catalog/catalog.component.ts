@@ -23,4 +23,8 @@ export class CatalogComponent {
     }
     
   }
+
+  getImageUrl(product: IProduct) {
+    return '/assets/images/robot-parts/' + product.imageName
+  }
 }
