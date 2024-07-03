@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CatalogComponent {
   products: IProduct[];
-  filter: string;
+  filter: string = '';
 
   constructor() {
     this.products = [

@@ -13,13 +13,13 @@
         <div class="product-details">
           <img [src]="getImageUrl(product)" [alt]="product.name" />
           <div class="product-info">
-            <div class="name">{{ product.name }}</div>
-            <div class="description">{{ product.description }}</div>
-            <div class="category">Part Type: {{ product.category }}</div>
+            <div class="name">{{ product?.name }}</div>
+            <div class="description">{{ product?.description }}</div>
+            <div class="category">Part Type: {{ product?.category }}</div>
           </div>
         </div>
         <div class="price">
-          <div>${{ product.price.toFixed(2) }}</div>
+          <div>${{ product?.price?.toFixed(2) }}</div>
           <button class="cta">Buy</button>
         </div>
       </div>
