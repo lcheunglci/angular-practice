@@ -11,9 +11,10 @@ import { CommonModule } from '@angular/common';
 })
 export class CatalogComponent {
   products: IProduct[];
+  filter: string;
 
   constructor() {
-    let products = [
+    this.products = [
       {
         id: 1,
         description:
@@ -192,5 +193,11 @@ export class CatalogComponent {
 
   getImageUrl(product: IProduct) {
     return '/assets/images/robot-parts/' + product.imageName
+  }
+
+  getFilteredProducts() {
+    return this.filter === '' 
+    ? this.products 
+    : this.products.filter((product) => product.category == this.filter);
   }
 }
