@@ -10,8 +10,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './catalog.component.css',
 })
 export class CatalogComponent {
+
   products: IProduct[];
   filter: string = '';
+  cart: IProduct[] = [];
 
   constructor() {
     this.products = [
@@ -190,6 +192,12 @@ export class CatalogComponent {
       },
     ];
   }
+
+  addToCart(product: IProduct) {
+    this.cart.push(product);
+    console.log(`product ${product.name} added to cart`);
+  }
+    
 
   getImageUrl(product: IProduct) {
     return '/assets/images/robot-parts/' + product.imageName;
