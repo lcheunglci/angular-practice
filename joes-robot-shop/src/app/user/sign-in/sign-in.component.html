@@ -16,9 +16,10 @@
       type="password"
     />
     <div class="buttons">
-      <button type="submit"class="button cta">
-        Sign In
-      </button>
+      <button type="submit" class="button cta">Sign In</button>
+    </div>
+    <div class="signInError" *ngIf="signInError">
+      Sign-In Failed. Please try again.
     </div>
   </form>
 </div>
