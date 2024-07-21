@@ -1,28 +1,64 @@
 <div class="content">
-  <h1 class="header">
-    Edit Contact
-  </h1>
+  <h1 class="header">Edit Contact</h1>
   <form>
     <section>
       <nav>Name/Info</nav>
       <div>
-        <input placeholder="First Name" />
-        <input placeholder="Last Name" />
-        <input placeholder="Date of Birth" />
-        <input placeholder="Favorites Ranking" />
+        <input
+          placeholder="First Name"
+          [(ngModel)]="contact.firstName"
+          name="firstName"
+        />
+        <input
+          placeholder="Last Name"
+          [(ngModel)]="contact.lastName"
+          name="lastName"
+        />
+        <input
+          placeholder="Date of Birth"
+          [(ngModel)]="contact.dateOfBirth"
+          name="dateOfBirth"
+        />
+        <input
+          placeholder="Favorites Ranking"
+          [(ngModel)]="contact.favoritesRanking"
+          name="favoritesRanking"
+        />
       </div>
     </section>
     <section>
       <nav>Phone</nav>
       <div class="flex-column">
         <div class="flex-group">
-          <input placeholder="Phone" />
+          <input
+            placeholder="Phone"
+            [(ngModel)]="contact.phone.phoneNumber"
+            name="phoneNumber"
+          />
           <img src="/assets/plus-grey-blue.png" class="add" />
         </div>
         <div class="radio">
-          <input type="radio" value="mobile"> Mobile
-          <input type="radio" value="work"> Work
-          <input type="radio" value="other"> Other
+          <input
+            type="radio"
+            value="mobile"
+            [(ngModel)]="contact.phone.phoneType"
+            name="phoneType"
+          />
+          Mobile
+          <input
+            type="radio"
+            value="work"
+            [(ngModel)]="contact.phone.phoneType"
+            name="phoneType"
+          />
+          Work
+          <input
+            type="radio"
+            value="other"
+            [(ngModel)]="contact.phone.phoneType"
+            name="phoneType"
+          />
+          Other
         </div>
       </div>
     </section>
@@ -31,13 +67,29 @@
       <div>
         <div class="address">
           <div class="flex-group">
-            <input placeholder="Address" />
+            <input
+              placeholder="Address"
+              [(ngModel)]="contact.address.streetAddress"
+              name="streetAddress"
+            />
             <img src="/assets/plus-grey-blue.png" class="add" />
           </div>
-          <input placeholder="City" />
-          <input placeholder="State/Region" />
-          <input placeholder="Zip/Postal Code" />
-          <select>
+          <input
+            placeholder="City"
+            [(ngModel)]="contact.address.city"
+            name="city"
+          />
+          <input
+            placeholder="State/Region"
+            [(ngModel)]="contact.address.state"
+            name="state"
+          />
+          <input
+            placeholder="Zip/Postal Code"
+            [(ngModel)]="contact.address.postalCode"
+            name="postalCode"
+          />
+          <select [(ngModel)]="contact.address.addressType" name="addressType">
             <option value="home">Home</option>
             <option value="work">Work</option>
             <option value="other">Other</option>
