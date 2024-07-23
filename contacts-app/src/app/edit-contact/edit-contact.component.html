@@ -4,6 +4,7 @@
     <section>
       <nav>Name/Info</nav>
       <div>
+        <input type="hidden" [ngModel]="contact.id" name="id" />
         <input
           placeholder="First Name"
           [(ngModel)]="contact.firstName"
