@@ -39,27 +39,15 @@
           <img src="/assets/plus-grey-blue.png" class="add" />
         </div>
         <div class="radio">
+          <span *ngFor="let phoneType of phoneTypes">
           <input
             type="radio"
-            value="mobile"
+            [value]="phoneType.value"
             [(ngModel)]="contact.phone.phoneType"
             name="phoneType"
           />
-          Mobile
-          <input
-            type="radio"
-            value="work"
-            [(ngModel)]="contact.phone.phoneType"
-            name="phoneType"
-          />
-          Work
-          <input
-            type="radio"
-            value="other"
-            [(ngModel)]="contact.phone.phoneType"
-            name="phoneType"
-          />
-          Other
+          {{ phoneType.title }}
+        </span>
         </div>
       </div>
     </section>
