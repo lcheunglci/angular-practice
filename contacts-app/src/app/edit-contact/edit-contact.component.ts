@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Contact } from '../contacts/contact.model';
 import { ContactsService } from '../contacts/contacts.service';
@@ -44,9 +44,9 @@ export class EditContactComponent implements OnInit {
     });
   }
 
-  saveContact() {
-    console.log(this.contact);
-    this.contactsService.saveContact(this.contact).subscribe({
+  saveContact(form: NgForm) {
+    console.log(form.value);
+    this.contactsService.saveContact(form.value).subscribe({
       next: () => this.router.navigate(['/contacts']),
     });
   }
