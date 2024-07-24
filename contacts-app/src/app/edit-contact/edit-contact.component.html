@@ -8,8 +8,12 @@
         <input
           placeholder="First Name"
           [(ngModel)]="contact.firstName"
+          required
+          #firstName="ngModel"
           name="firstName"
+          [class.error]="firstName.invalid && firstName.touched"
         />
+        <em *ngIf="firstName.invalid && firstName.touched">Please enter a First Name</em>
         <input
           placeholder="Last Name"
           [(ngModel)]="contact.lastName"
