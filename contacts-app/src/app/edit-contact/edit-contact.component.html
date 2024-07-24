@@ -9,11 +9,14 @@
           placeholder="First Name"
           [(ngModel)]="contact.firstName"
           required
+          minlength="3"
           #firstName="ngModel"
           name="firstName"
           [class.error]="firstName.invalid && firstName.touched"
         />
-        <em *ngIf="firstName.invalid && firstName.touched">Please enter a First Name</em>
+        <em *ngIf="firstName.errors?.['required'] && firstName.touched">Please enter a First Name</em>
+        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched">First Name must be at least 3 characters</em>
+        
         <input
           placeholder="Last Name"
           [(ngModel)]="contact.lastName"
