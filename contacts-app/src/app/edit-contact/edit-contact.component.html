@@ -40,14 +40,14 @@
         </div>
         <div class="radio">
           <span *ngFor="let phoneType of phoneTypes">
-          <input
-            type="radio"
-            [value]="phoneType.value"
-            [(ngModel)]="contact.phone.phoneType"
-            name="phoneType"
-          />
-          {{ phoneType.title }}
-        </span>
+            <input
+              type="radio"
+              [value]="phoneType.value"
+              [(ngModel)]="contact.phone.phoneType"
+              name="phoneType"
+            />
+            {{ phoneType.title }}
+          </span>
         </div>
       </div>
     </section>
@@ -79,9 +79,12 @@
             name="postalCode"
           />
           <select [(ngModel)]="contact.address.addressType" name="addressType">
-            <option value="home">Home</option>
-            <option value="work">Work</option>
-            <option value="other">Other</option>
+            <option
+              *ngFor="let addressType of addressTypes"
+              [value]="addressType.value"
+            >
+              {{ addressType.title }}
+            </option>
           </select>
         </div>
       </div>
