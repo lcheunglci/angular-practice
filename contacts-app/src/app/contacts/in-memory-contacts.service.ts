@@ -19,6 +19,7 @@ export class InMemoryContactsApi implements InMemoryDbService {
           postalCode: 'A4321',
           addressType: 'home'
         },
+        notes: '',
       },
       {
         id: 'A6rwe',
@@ -33,8 +34,9 @@ export class InMemoryContactsApi implements InMemoryDbService {
           city: 'Sleepytown',
           state: 'Ulaska',
           postalCode: 'F2231',
-          addressType: 'other'
+          addressType: 'other',
         },
+        notes: '',
       },
       {
         id: '3bNGA',
@@ -51,6 +53,7 @@ export class InMemoryContactsApi implements InMemoryDbService {
           postalCode: 'Z2345',
           addressType: 'work'
         },
+        notes: '',
       },
     ]
 

@@ -20,8 +20,10 @@
           [(ngModel)]="contact.dateOfBirth"
           name="dateOfBirth"
         />
-        <input type="range"
-        min="0" max="5"
+        <input
+          type="range"
+          min="0"
+          max="5"
           placeholder="Favorites Ranking"
           [(ngModel)]="contact.favoritesRanking"
           name="favoritesRanking"
@@ -29,7 +31,12 @@
         <span>{{ contact.favoritesRanking }}</span>
 
         <div>
-          <input type="checkbox" [(ngModel)]="contact.personal" name="personal" /> Personal
+          <input
+            type="checkbox"
+            [(ngModel)]="contact.personal"
+            name="personal"
+          />
+          Personal
         </div>
       </div>
     </section>
@@ -93,6 +100,18 @@
             </option>
           </select>
         </div>
+      </div>
+    </section>
+    <section>
+      <nav>Notes</nav>
+      <div>
+        <textarea
+          name="notes"
+          rows="3"
+          placeholder="Notes"
+          [(ngModel)]="contact.notes"
+        >
+        </textarea>
       </div>
     </section>
   </form>
