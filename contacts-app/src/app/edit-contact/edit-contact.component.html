@@ -14,9 +14,13 @@
           name="firstName"
           [class.error]="firstName.invalid && firstName.touched"
         />
-        <em *ngIf="firstName.errors?.['required'] && firstName.touched">Please enter a First Name</em>
-        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched">First Name must be at least 3 characters</em>
-        
+        <em *ngIf="firstName.errors?.['required'] && firstName.touched"
+          >Please enter a First Name</em
+        >
+        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched"
+          >First Name must be at least 3 characters</em
+        >
+
         <input
           placeholder="Last Name"
           [(ngModel)]="contact.lastName"
@@ -75,12 +79,18 @@
     <section>
       <nav>Address</nav>
       <div>
-        <div class="address" ngModelGroup="address">
+        <div
+          class="address"
+          ngModelGroup="address"
+          #addressGroup="ngModelGroup"
+        >
           <div class="flex-group">
             <input
               placeholder="Address"
               [(ngModel)]="contact.address.streetAddress"
               name="streetAddress"
+              required
+              [class error]="addressGroup.invalid && addressGroup.dirty"
             />
             <img src="/assets/plus-grey-blue.png" class="add" />
           </div>
@@ -88,16 +98,19 @@
             placeholder="City"
             [(ngModel)]="contact.address.city"
             name="city"
+            required
           />
           <input
             placeholder="State/Region"
             [(ngModel)]="contact.address.state"
             name="state"
+            required
           />
           <input
             placeholder="Zip/Postal Code"
             [(ngModel)]="contact.address.postalCode"
             name="postalCode"
+            required
           />
           <select [(ngModel)]="contact.address.addressType" name="addressType">
             <option
@@ -107,7 +120,8 @@
               {{ addressType.title }}
             </option>
           </select>
-        </div>
+          <em *ngIf="addressGroup.invalid && addressGroup.dirty">Incomplete Address</em>
+        </div>        
       </div>
     </section>
     <section>
@@ -125,7 +139,7 @@
   </form>
   <div class="buttons">
     <button class="secondary" type="button">Cancel</button>
-    <button class="primary" type="submit">Save</button>
+    <button class="primary" type="submit" [disabled]="contactForm.invalid">Save</button>
     <button class="saving" disabled>Saving...</button>
   </div>
 </div>
