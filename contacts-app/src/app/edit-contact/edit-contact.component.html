@@ -132,8 +132,12 @@
           rows="3"
           placeholder="Notes"
           [(ngModel)]="contact.notes"
+          restrictedWords
+          #notes="ngModel"
+          [class error]="notes.errors?.['restrictedWords']"
         >
         </textarea>
+        <em *ngIf="notes.errors?.['restrictedWords']">Restricted words found</em>
       </div>
     </section>
   </form>
