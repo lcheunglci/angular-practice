@@ -54,26 +54,32 @@
       </div>
     </section>
     <section>
-      <nav>Phone</nav>
-      <div class="flex-column" ngModelGroup="phone">
-        <div class="flex-group">
-          <input
-            placeholder="Phone"
-            [(ngModel)]="contact.phone.phoneNumber"
-            name="phoneNumber"
-          />
-          <img src="/assets/plus-grey-blue.png" class="add" />
-        </div>
-        <div class="radio">
-          <span *ngFor="let phoneType of phoneTypes">
+      <nav>Phones</nav>
+      <div class="flex-column" ngModelGroup="phones">
+        <div
+          *ngFor="let phone of contact.phones; let i = index"
+          class="flex-column"
+        >
+          <div class="flex-group">
             <input
-              type="radio"
-              [value]="phoneType.value"
-              [(ngModel)]="contact.phone.phoneType"
-              name="phoneType"
+              placeholder="Phone"
+              [(ngModel)]="phone.phoneNumber"
+              name="phoneNumber{{ i }}"
             />
-            {{ phoneType.title }}
-          </span>
+            <img src="/assets/plus-grey-blue.png" class="add" />
+          </div>
+
+          <div class="radio">
+            <span *ngFor="let phoneType of phoneTypes">
+              <input
+                type="radio"
+                [value]="phoneType.value"
+                [(ngModel)]="phone.phoneType"
+                name="phoneType{{ i }}"
+              />
+              {{ phoneType.title }}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -91,7 +97,8 @@
               [(ngModel)]="contact.address.streetAddress"
               name="streetAddress"
               required
-              [class error]="addressGroup.invalid && addressGroup.dirty"
+              [class
+              error]="addressGroup.invalid && addressGroup.dirty"
             />
             <img src="/assets/plus-grey-blue.png" class="add" />
           </div>
@@ -121,8 +128,10 @@
               {{ addressType.title }}
             </option>
           </select>
-          <em *ngIf="addressGroup.invalid && addressGroup.dirty">Incomplete Address</em>
-        </div>        
+          <em *ngIf="addressGroup.invalid && addressGroup.dirty"
+            >Incomplete Address</em
+          >
+        </div>
       </div>
     </section>
     <section>
@@ -135,16 +144,21 @@
           [(ngModel)]="contact.notes"
           [restrictedWords]="['foo', 'bar']"
           #notes="ngModel"
-          [class error]="notes.errors?.['restrictedWords']"
+          [class
+          error]="notes.errors?.['restrictedWords']"
         >
         </textarea>
-        <em *ngIf="notes.errors?.['restrictedWords']">Restricted words found: {{notes.errors?.['restrictedWords']}}</em>
+        <em *ngIf="notes.errors?.['restrictedWords']"
+          >Restricted words found: {{notes.errors?.['restrictedWords']}}</em
+        >
       </div>
     </section>
   </form>
   <div class="buttons">
     <button class="secondary" type="button">Cancel</button>
-    <button class="primary" type="submit" [disabled]="contactForm.invalid">Save</button>
+    <button class="primary" type="submit" [disabled]="contactForm.invalid">
+      Save
+    </button>
     <button class="saving" disabled>Saving...</button>
   </div>
 </div>
