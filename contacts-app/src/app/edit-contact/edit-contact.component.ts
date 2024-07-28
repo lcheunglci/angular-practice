@@ -2,14 +2,24 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { addressTypeValues, Contact, phoneTypeValues } from '../contacts/contact.model';
+import {
+  addressTypeValues,
+  Contact,
+  phoneTypeValues,
+} from '../contacts/contact.model';
 import { ContactsService } from '../contacts/contacts.service';
 import { RestrictedWordsValidator } from '../validators/restricted-words-validator.directive';
 import { DateValueAccessorDirective } from '../date-value-accessor/date-value-accessor.directive';
 import { ProfileIconSelectorComponent } from '../profile-icon-selector/profile-icon-selector.component';
 
 @Component({
-  imports: [CommonModule, FormsModule, RestrictedWordsValidator, DateValueAccessorDirective, ProfileIconSelectorComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RestrictedWordsValidator,
+    DateValueAccessorDirective,
+    ProfileIconSelectorComponent,
+  ],
   standalone: true,
   templateUrl: './edit-contact.component.html',
   styleUrls: ['./edit-contact.component.css'],
@@ -26,10 +36,12 @@ export class EditContactComponent implements OnInit {
     lastName: '',
     dateOfBirth: null,
     favoritesRanking: 0,
-    phones: [{
-      phoneNumber: '',
-      phoneType: '',
-    }],
+    phones: [
+      {
+        phoneNumber: '',
+        phoneType: '',
+      },
+    ],
     address: {
       streetAddress: '',
       city: '',
@@ -50,6 +62,13 @@ export class EditContactComponent implements OnInit {
     if (!contactId) return;
     this.contactsService.getContact(contactId).subscribe((contact) => {
       if (contact) this.contact = contact;
+    });
+  }
+
+  addPhone() {
+    this.contact.phones.push({
+      phoneNumber: '',
+      phoneType: '',
     });
   }
 
