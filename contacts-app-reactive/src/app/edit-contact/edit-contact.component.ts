@@ -33,9 +33,10 @@ export class EditContactComponent implements OnInit {
   }
 
   saveContact() {
-    console.log(this.firstName.value);
-    console.log(this.lastName.value);
-    console.log(this.dateOfBirth.value);
-    console.log(this.favoritesRanking.value);
+    console.log(this.contactForm.value);
+    // console.log(this.contactForm.controls.firstName.value);
+    // console.log(this.contactForm.controls.lastName.value);
+    // console.log(this.contactForm.controls.dateOfBirth.value);
+    // console.log(this.contactForm.controls.favoritesRanking.value);
   }
 }
