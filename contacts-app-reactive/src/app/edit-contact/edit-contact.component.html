@@ -1,15 +1,16 @@
 <div class="content">
-  <h1 class="header">
-    Edit Contact
-  </h1>
-  <form>
+  <h1 class="header">Edit Contact</h1>
+  <form [formGroup]="contactForm">
     <section>
       <nav>Name/Info</nav>
       <div>
-        <input [formControl]="firstName" placeholder="First Name" />
-        <input [formControl]="lastName" placeholder="Last Name" />
-        <input [formControl]="dateOfBirth" placeholder="Date of Birth" />
-        <input [formControl]="favoritesRanking" placeholder="Favorites Ranking" />
+        <input formControlName="firstName" placeholder="First Name" />
+        <input formControlName="lastName" placeholder="Last Name" />
+        <input formControlName="dateOfBirth" placeholder="Date of Birth" />
+        <input
+          formControlName="favoritesRanking"
+          placeholder="Favorites Ranking"
+        />
       </div>
     </section>
     <section>
@@ -20,9 +21,9 @@
           <img src="/assets/plus-grey-blue.png" class="add" />
         </div>
         <div class="radio">
-          <input type="radio" value="mobile"> Mobile
-          <input type="radio" value="work"> Work
-          <input type="radio" value="other"> Other
+          <input type="radio" value="mobile" /> Mobile
+          <input type="radio" value="work" /> Work
+          <input type="radio" value="other" /> Other
         </div>
       </div>
     </section>

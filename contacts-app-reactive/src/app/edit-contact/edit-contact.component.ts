@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 
@@ -8,11 +8,13 @@ import { ContactsService } from '../contacts/contacts.service';
   styleUrls: ['./edit-contact.component.css'],
 })
 export class EditContactComponent implements OnInit {
-  firstName = new FormControl();
-  lastName = new FormControl();
-  dateOfBirth = new FormControl();
-  favoritesRanking = new FormControl();
-
+  contactForm = new FormGroup({
+    firstName : new FormControl(),
+    lastName : new FormControl(),
+    dateOfBirth : new FormControl(),
+    favoritesRanking : new FormControl(), 
+  });
+  
   constructor(
     private route: ActivatedRoute,
     private contactsService: ContactsService
@@ -23,10 +25,10 @@ export class EditContactComponent implements OnInit {
     if (!contactId) return;
 
     this.contactsService.getContact(contactId).subscribe((contact) => {
-      this.firstName.setValue(contact?.firstName);
-      this.lastName.setValue(contact?.lastName);
-      this.dateOfBirth.setValue(contact?.dateOfBirth);
-      this.favoritesRanking.setValue(contact?.favoritesRanking);
+      this.contactForm.controls.firstName.setValue(contact?.firstName);
+      this.contactForm.controls.lastName.setValue(contact?.lastName);
+      this.contactForm.controls.dateOfBirth.setValue(contact?.dateOfBirth);
+      this.contactForm.controls.favoritesRanking.setValue(contact?.favoritesRanking);
     });
   }
 
