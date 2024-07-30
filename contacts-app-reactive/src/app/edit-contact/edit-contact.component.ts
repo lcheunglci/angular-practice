@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService } from '../contacts/contacts.service';
 
@@ -8,29 +8,30 @@ import { ContactsService } from '../contacts/contacts.service';
   styleUrls: ['./edit-contact.component.css'],
 })
 export class EditContactComponent implements OnInit {
-  contactForm = new FormGroup({
-    id: new FormControl(),
-    firstName: new FormControl(),
-    lastName: new FormControl(),
-    dateOfBirth: new FormControl(),
-    favoritesRanking: new FormControl(),
-    phone: new FormGroup({
-      phoneNumber: new FormControl(),
-      phoneType: new FormControl(),
+  contactForm = this.fb.group({
+    id: '',
+    firstName: '',
+    lastName: '',
+    dateOfBirth: <Date|null> null,
+    favoritesRanking: <number|null> null,
+    phone: this.fb.group({
+      phoneNumber: '',
+      phoneType: '',
     }),
-    address: new FormGroup({
-      streetAddress: new FormControl(),
-      city: new FormControl(),
-      state: new FormControl(),
-      postalCode: new FormControl(),
-      addressType: new FormControl(),
+    address: this.fb.group({
+      streetAddress: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      addressType: '',
     }),
   });
 
   constructor(
     private route: ActivatedRoute,
     private contactsService: ContactsService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
