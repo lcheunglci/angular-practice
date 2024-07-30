@@ -8,17 +8,17 @@ import { ContactsService } from '../contacts/contacts.service';
   styleUrls: ['./edit-contact.component.css'],
 })
 export class EditContactComponent implements OnInit {
-  contactForm = this.fb.group({
+  contactForm = this.fb.nonNullable.group({
     id: '',
     firstName: '',
     lastName: '',
     dateOfBirth: <Date|null> null,
     favoritesRanking: <number|null> null,
-    phone: this.fb.group({
+    phone: this.fb.nonNullable.group({
       phoneNumber: '',
       phoneType: '',
     }),
-    address: this.fb.group({
+    address: this.fb.nonNullable.group({
       streetAddress: '',
       city: '',
       state: '',
@@ -39,20 +39,12 @@ export class EditContactComponent implements OnInit {
     if (!contactId) return;
 
     this.contactsService.getContact(contactId).subscribe((contact) => {
-      this.contactForm.controls.id.setValue(contact?.id);
-      this.contactForm.controls.firstName.setValue(contact?.firstName);
-      this.contactForm.controls.lastName.setValue(contact?.lastName);
-      this.contactForm.controls.dateOfBirth.setValue(contact?.dateOfBirth);
-      this.contactForm.controls.favoritesRanking.setValue(
-        contact?.favoritesRanking
-      );
-      this.contactForm.controls.phone.controls.phoneNumber.setValue(contact?.phone.phoneNumber);
-      this.contactForm.controls.phone.controls.phoneType.setValue(contact?.phone.phoneType);
-      this.contactForm.controls.address.controls.streetAddress.setValue(contact?.address.streetAddress);
-      this.contactForm.controls.address.controls.city.setValue(contact?.address.city);
-      this.contactForm.controls.address.controls.state.setValue(contact?.address.state);
-      this.contactForm.controls.address.controls.postalCode.setValue(contact?.address.postalCode);
-      this.contactForm.controls.address.controls.addressType.setValue(contact?.address.addressType);
+
+      if (!contact) {
+        return;
+      }
+
+      this.contactForm.setValue(contact);
     });
   }
 
