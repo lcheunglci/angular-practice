@@ -5,6 +5,7 @@
       <nav>Name/Info</nav>
       <div>
         <input formControlName="firstName" placeholder="First Name" />
+        <em *ngIf="contactForm.controls.firstName.invalid && contactForm.controls.firstName.touched">Please enter a First Name</em>
         <input formControlName="lastName" placeholder="Last Name" />
         <input
           formControlName="dateOfBirth"
