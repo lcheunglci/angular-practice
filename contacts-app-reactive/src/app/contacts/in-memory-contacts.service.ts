@@ -17,8 +17,9 @@ export class InMemoryContactsApi implements InMemoryDbService {
           city: 'Gleeberg City',
           state: 'Colohoma',
           postalCode: 'A4321',
-          addressType: 'home'
-        }
+          addressType: 'home',
+        },
+        notes: '',
       },
       {
         id: 'A6rwe',
@@ -33,8 +34,9 @@ export class InMemoryContactsApi implements InMemoryDbService {
           city: 'Sleepytown',
           state: 'Ulaska',
           postalCode: 'F2231',
-          addressType: 'other'
+          addressType: 'other',
         },
+        notes: '',
       },
       {
         id: '3bNGA',
@@ -49,11 +51,12 @@ export class InMemoryContactsApi implements InMemoryDbService {
           city: 'Dorado City',
           state: 'Mezona',
           postalCode: 'Z2345',
-          addressType: 'work'
+          addressType: 'work',
         },
+        notes: '',
       },
-    ]
+    ];
 
-    return { contacts }
+    return { contacts };
   }
 }
