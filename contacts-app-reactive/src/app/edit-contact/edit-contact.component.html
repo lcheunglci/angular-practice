@@ -4,9 +4,17 @@
     <section>
       <nav>Name/Info</nav>
       <div>
-        <input formControlName="firstName" [class.error]="firstName.invalid && firstName.touched" placeholder="First Name" />
-        <em *ngIf="firstName.errors?.['required'] && firstName.touched">Please enter a First Name</em>
-        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched">First Name must be at least 3 characters</em>
+        <input
+          formControlName="firstName"
+          [class.error]="firstName.invalid && firstName.touched"
+          placeholder="First Name"
+        />
+        <em *ngIf="firstName.errors?.['required'] && firstName.touched"
+          >Please enter a First Name</em
+        >
+        <em *ngIf="firstName.errors?.['minlength'] && firstName.touched"
+          >First Name must be at least 3 characters</em
+        >
         <input formControlName="lastName" placeholder="Last Name" />
         <input
           formControlName="dateOfBirth"
@@ -50,7 +58,11 @@
     <section>
       <nav>Address</nav>
       <div>
-        <div formGroupName="address" class="address">
+        <div
+          formGroupName="address"
+          [class.error]="address.invalid && address.touched"
+          class="address"
+        >
           <div class="flex-group">
             <input placeholder="Address" formControlName="streetAddress" />
             <img src="/assets/plus-grey-blue.png" class="add" />
@@ -67,6 +79,7 @@
             </option>
           </select>
         </div>
+        <em *ngIf="address.invalid && address.touched">Incomplete Address</em>
       </div>
     </section>
     <section>
@@ -81,7 +94,9 @@
     </section>
     <div class="buttons">
       <button type="button" class="secondary">Cancel</button>
-      <button type="submit" class="primary">Save</button>
+      <button [disabled]="contactForm.invalid" type="submit" class="primary">
+        Save
+      </button>
     </div>
   </form>
 </div>

@@ -23,10 +23,10 @@ export class EditContactComponent implements OnInit {
       phoneType: '',
     }),
     address: this.fb.nonNullable.group({
-      streetAddress: '',
-      city: '',
-      state: '',
-      postalCode: '',
+      streetAddress: ['', Validators.required],
+      city: ['', Validators.required],
+      state: ['', Validators.required],
+      postalCode: ['', Validators.required],
       addressType: '',
     }),
     notes: ''
@@ -55,6 +55,10 @@ export class EditContactComponent implements OnInit {
 
   get firstName() {
     return this.contactForm.controls.firstName;
+  }
+
+  get address() {
+    return this.contactForm.controls.address;
   }
 
   saveContact() {
