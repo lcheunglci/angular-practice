@@ -6,7 +6,12 @@
       <div>
         <input formControlName="firstName" placeholder="First Name" />
         <input formControlName="lastName" placeholder="Last Name" />
-        <input formControlName="dateOfBirth" placeholder="Date of Birth" />
+        <input
+          formControlName="dateOfBirth"
+          type="date"
+          [value]="contactForm.controls.dateOfBirth | date : 'yyyy-MM-dd'"
+          placeholder="Date of Birth"
+        />
 
         <div>
           <span>Favorites Ranking:</span>
@@ -65,7 +70,11 @@
     <section>
       <nav>Notes</nav>
       <div>
-        <textarea placeholder="Notes" rows="5" formControlName="notes"></textarea>
+        <textarea
+          placeholder="Notes"
+          rows="5"
+          formControlName="notes"
+        ></textarea>
       </div>
     </section>
     <div class="buttons">
