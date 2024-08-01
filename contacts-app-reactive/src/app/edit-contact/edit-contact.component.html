@@ -91,7 +91,9 @@
           [class.error]="notes.invalid"
           formControlName="notes"
         ></textarea>
-        <em *ngIf="notes.errors?.['restrictedWords'] && notes.touched">Restricted words found</em>
+        <em *ngIf="notes.errors?.['restrictedWords'] && notes.touched">
+          Restricted words found: {{ notes.errors?.['restrictedWords'] }}
+        </em>
       </div>
     </section>
     <div class="buttons">
