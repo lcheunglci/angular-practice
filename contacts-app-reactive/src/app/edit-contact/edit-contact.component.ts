@@ -18,12 +18,9 @@ export class EditContactComponent implements OnInit {
     personal: false,
     firstName: ['', [Validators.required, Validators.minLength(3)]],
     lastName: '',
-    dateOfBirth: <Date|null> null,
-    favoritesRanking: <number|null> null,
-    phone: this.fb.nonNullable.group({
-      phoneNumber: '',
-      phoneType: '',
-    }),
+    dateOfBirth: <Date | null>null,
+    favoritesRanking: <number | null>null,
+    phones: this.fb.array([this.createPhoneGroup()]),
     address: this.fb.nonNullable.group({
       streetAddress: ['', Validators.required],
       city: ['', Validators.required],
@@ -31,7 +28,7 @@ export class EditContactComponent implements OnInit {
       postalCode: ['', Validators.required],
       addressType: '',
     }),
-    notes: ['', restrictedWords(['foo', 'bar'])]
+    notes: ['', restrictedWords(['foo', 'bar'])],
   });
 
   constructor(
@@ -46,12 +43,18 @@ export class EditContactComponent implements OnInit {
     if (!contactId) return;
 
     this.contactsService.getContact(contactId).subscribe((contact) => {
-
       if (!contact) {
         return;
       }
 
       this.contactForm.setValue(contact);
+    });
+  }
+
+  createPhoneGroup() {
+    return this.fb.nonNullable.group({
+      phoneNumber: '',
+      phoneType: '',
     });
   }
 
