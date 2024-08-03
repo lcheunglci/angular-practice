@@ -47,6 +47,10 @@ export class EditContactComponent implements OnInit {
         return;
       }
 
+      for (let i = 1; i < contact.phones.length; i++) {
+        this.contactForm.controls.phones.push(this.createPhoneGroup());
+      }
+
       this.contactForm.setValue(contact);
     });
   }
@@ -56,6 +60,10 @@ export class EditContactComponent implements OnInit {
       phoneNumber: '',
       phoneType: '',
     });
+  }
+  
+  addPhone() {
+    return this.contactForm.controls.phones.push(this.createPhoneGroup());
   }
 
   get firstName() {
