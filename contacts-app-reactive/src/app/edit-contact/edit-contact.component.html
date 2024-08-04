@@ -54,6 +54,8 @@
               />{{ phoneType.title }}</span
             >
           </div>
+          <em *ngIf="phone.controls.phoneNumber.invalid">Preferred Phone is required</em>
+          <span><input type="checkbox" formControlName="preferred"> Preferred </span>
         </div>
       </div>
     </section>
