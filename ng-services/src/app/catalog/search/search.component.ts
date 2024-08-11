@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../product.model';
 import { ProductService } from '@catalog/products.service';
-import { CART_SERVICE_TOKEN, CartService } from '@core/cart.service';
+import { CartService } from '@core/cart.service';
 
 @Component({
   selector: 'bot-search',
@@ -14,7 +14,7 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private productsService: ProductService,
-    @Inject(CART_SERVICE_TOKEN) private cartService: CartService
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
