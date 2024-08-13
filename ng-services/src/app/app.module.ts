@@ -7,22 +7,29 @@ import { AppComponent } from './app.component';
 import { SiteHeaderComponent } from '@core/site-header/site-header.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CatalogModule } from '@catalog/catalog.module';
-import { CartService } from '@core/cart.service';
+import { CART_OPTIONS_TOKEN, CartService } from '@core/cart.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SiteHeaderComponent,
+  declarations: [AppComponent, SiteHeaderComponent],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    CatalogModule,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule, CatalogModule],
   providers: [
-    // CartService
     {
-      provide: CartService,
-      // useClass: CartService
-      useFactory: () => new CartService()
-    }
+      provide: CART_OPTIONS_TOKEN,
+      useValue: { persistenceType: 'local', persistenceType: 'cart' },
+    },
+    // CartService
+    // {
+    //   provide: CartService,
+    //   // useClass: CartService
+    //   useFactory: () => new CartService()
+    // }
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
