@@ -26,10 +26,10 @@ import { EngineersService } from './engineers.service';
       },
       deps: [CART_OPTIONS_TOKEN],
     },
-    {
-      provide: IProductsServiceToken,
-      useClass: EngineersService,
-    },
+    // {
+    //   provide: IProductsServiceToken,
+    //   useClass: EngineersService,
+    // },
   ],
 })
 export class SquadModule {}
