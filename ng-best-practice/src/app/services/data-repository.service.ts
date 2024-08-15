@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject, EMPTY, throwError, timer } from 'rxjs';
 
 
-import { IUser } from '../services/user.model';
-import { IClass, ICourse } from '../services/class.model';
+import { IUser } from '../users/user.model';
+import { IClass, ICourse } from '../catalog/class.model';
 
 @Injectable()
 export class DataRepositoryService {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { DataRepositoryService } from "../services/data-repository"
-import { IClass } from '../services/class.model';
+import { DataRepositoryService } from "../services/data-repository.service"
+import { IClass } from './class.model';
 
 @Component({
   styleUrls: ['./catalog.component.css'],
