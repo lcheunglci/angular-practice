@@ -7,7 +7,8 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './nav-bar.component';
 import { SignInComponent } from "./users/sign-in.component";
 import { LoadingComponent } from "./components/loading-spinner.component";
-import { DataRepositoryService } from "./services/data-repository.service"
+import { CatalogRepositoryService } from './catalog/catalog-repository.service';
+import { UserRepositoryService } from './services/user-repository.service';
 import { AccountMenuComponent } from "./account-menu.component";
 import { CatalogComponent } from './catalog/catalog.component';
 import { RegisterComponent } from './users/register.component';
@@ -28,7 +29,7 @@ import { RegisterComponent } from './users/register.component';
     ReactiveFormsModule,
     AppRoutingModule
   ],
-  providers: [DataRepositoryService],
+  providers: [CatalogRepositoryService, UserRepositoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

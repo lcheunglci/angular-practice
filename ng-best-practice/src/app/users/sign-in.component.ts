@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router'
 
-import { DataRepositoryService } from '../services/data-repository.service'
+import { DataRepositoryService } from '../services/user-repository.service'
 
 @Component({
   styles: [`
