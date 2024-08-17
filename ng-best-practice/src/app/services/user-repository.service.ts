@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, EMPTY, throwError, timer } from 'rxjs';
+import { Observable, EMPTY, throwError, timer, delay } from 'rxjs';
 
 import { IUser } from '../users/user.model';
 
@@ -7,13 +7,13 @@ import { IUser } from '../users/user.model';
 export class UserRepositoryService {
   currentUser: IUser | null = null;
 
-  constructor() { }
+  constructor() {}
 
   saveUser(user: IUser): Observable<any> {
-    user.classes = user.classes || [];
-    this.currentUser = user;
+    let classes = user.classes || [];
+    this.currentUser = { ...user, classes: [...classes] };
 
-    return timer(1000);
+    return EMPTY.pipe(delay(1000));
   }
 
   enroll(classId: string): Observable<any> {
@@ -23,7 +23,10 @@ export class UserRepositoryService {
     if (this.currentUser.classes.includes(classId))
       return throwError(() => new Error('Already enrolled'));
 
-    this.currentUser.classes.push(classId);
+    this.currentUser = {
+      ...this.currentUser,
+      classes: this.currentUser.classes.concat(classId),
+    };
 
     return timer(1000);
   }
@@ -35,7 +38,12 @@ export class UserRepositoryService {
     if (!this.currentUser.classes.includes(classId))
       return throwError(() => new Error('Not enrolled'));
 
-    this.currentUser.classes = this.currentUser.classes.filter((c: string) => c !== classId);
+    this.currentUser = {
+      ...this.currentUser,
+      classes: this.currentUser.classes.filter(
+        (c: string) => c !== classId
+      ),
+    };
 
     return timer(1000);
   }
@@ -43,7 +51,10 @@ export class UserRepositoryService {
   signIn(credentials: any): Observable<any> {
     //Never, ever check credentials in client-side code.
     //This code is only here to supply a fake endpoint for signing in.
-    if (credentials.email !== 'me@whitebeards.edu' || credentials.password !== 'super-secret')
+    if (
+      credentials.email !== 'me@whitebeards.edu' ||
+      credentials.password !== 'super-secret'
+    )
       return throwError(() => new Error('Invalid login'));
 
     this.currentUser = {
@@ -51,7 +62,7 @@ export class UserRepositoryService {
       firstName: 'Jim',
       lastName: 'Cooper',
       email: 'me@whitebeards.edu',
-      classes: []
+      classes: [],
     };
 
     return EMPTY;
