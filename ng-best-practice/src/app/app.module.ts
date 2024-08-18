@@ -4,29 +4,24 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SignInComponent } from "./users/sign-in.component";
-import { CatalogRepositoryService } from './catalog/catalog-repository.service';
-import { CatalogComponent } from './catalog/catalog.component';
-import { RegisterComponent } from './users/register.component';
 import { CoreModule } from './core/core.module';
-import { SharedModule } from './shared/shared.module';
+import { CatalogModule } from './catalog/catalog.module';
+import { UsersModule } from './users/users.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CatalogComponent,
-    RegisterComponent,
-    SignInComponent,
+    AppComponent
   ],
   imports: [
     CoreModule,
-    SharedModule,
+    CatalogModule,
+    UsersModule,
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule
   ],
-  providers: [CatalogRepositoryService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
