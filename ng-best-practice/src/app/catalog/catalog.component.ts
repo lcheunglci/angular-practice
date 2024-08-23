@@ -10,8 +10,10 @@ import { FilterClassesService } from './filter-classes.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CatalogComponent implements OnInit  {
+
   classes: IClass[] = [];
   visibleClasses: IClass[] = [];
+  orderByField: string = '';
 
   constructor(
     private userRepository: UserRepositoryService,
@@ -24,6 +26,17 @@ export class CatalogComponent implements OnInit  {
       this.classes = classes;
       this.applyFilter('');
     });
+  }
+
+  updateFirstProfessor() {
+  this.visibleClasses = [
+    { ...this.visibleClasses[0], professor: "Lurarion"},
+    ...this.visibleClasses.slice(1)
+  ]
+  }
+
+  mutateFirstProfessor() {
+    this.visibleClasses[0].professor = 'Lucarion';
   }
 
   enroll(classToEnroll: IClass) {
