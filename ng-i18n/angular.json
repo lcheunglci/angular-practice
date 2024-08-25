@@ -102,6 +102,9 @@
             },
             "development": {
               "buildTarget": "angular-i18n:build:development"
+            },
+            "ja": {
+              "buildTarget": "angular-i18n:build:development,ja"
             }
           },
           "defaultConfiguration": "development"
