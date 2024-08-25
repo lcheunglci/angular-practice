@@ -5,6 +5,12 @@
   "projects": {
     "angular-i18n": {
       "projectType": "application",
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "ja": "src/locale/messages.ja.json"
+        }
+      },
       "schematics": {
         "@schematics/angular:component": {
           "inlineTemplate": true,
@@ -41,6 +47,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": true,
             "outputPath": "dist/angular-i18n",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -60,6 +67,9 @@
             "scripts": []
           },
           "configurations": {
+            "ja": {
+              "localize": ["ja"]
+            },
             "production": {
               "budgets": [
                 {
@@ -76,6 +86,7 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": false,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
@@ -98,7 +109,8 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "angular-i18n:build"
+            "buildTarget": "angular-i18n:build",
+            "outputPath": "src/locale"
           }
         }
       }
