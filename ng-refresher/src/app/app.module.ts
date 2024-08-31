@@ -5,10 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PersonsComponent } from './persons/persons.component';
 import { CommonModule } from '@angular/common';
+import { PersonInputComponent } from './persons/person-input.component';
 
 @NgModule({
   declarations: [
-    AppComponent, PersonsComponent
+    AppComponent, PersonsComponent, PersonInputComponent
   ],
   imports: [
     BrowserModule,
