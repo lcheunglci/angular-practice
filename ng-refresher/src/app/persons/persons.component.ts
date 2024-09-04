@@ -9,17 +9,23 @@ import { Subscription } from 'rxjs';
 })
 export class PersonsComponent implements OnInit, OnDestroy {
   personList: string[] = [];
+  isFetching = false;
+
   private personListSub = new Subscription();
 
   constructor(private prsService: PersonsService) {}
 
   ngOnInit(): void {
     // this.personList = this.prsService.persons;
-    this.prsService.fetchPersons();
-    
+
     this.personListSub = this.prsService.personsChanged.subscribe((persons) => {
       this.personList = persons;
+      this.isFetching = false;
     });
+
+    this.isFetching = true;
+
+    this.prsService.fetchPersons();
   }
 
   ngOnDestroy(): void {
