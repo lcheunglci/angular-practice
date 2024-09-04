@@ -7,6 +7,7 @@ import { PersonsComponent } from './persons/persons.component';
 import { CommonModule } from '@angular/common';
 import { PersonInputComponent } from './persons/person-input.component';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     BrowserModule,
     AppRoutingModule,
     CommonModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
