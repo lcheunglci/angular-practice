@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipes.model';
 import { RecipesService } from '../recipes.service';
 
@@ -11,19 +11,25 @@ import { RecipesService } from '../recipes.service';
 export class RecipeDetailPage implements OnInit {
   loadedRecipe: Recipe;
 
-  constructor(private activedRoute:ActivatedRoute, private recipesService:RecipesService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private recipesService: RecipesService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.activedRoute.paramMap.subscribe(
-      paramMap => {
-        if (!paramMap.has('recipeId')) {
-          // redirect
-          return;
-        }
-        const recipeId = paramMap.get('recipeId');
-        this.loadedRecipe = this.recipesService.getRecipe(recipeId);
+    this.activatedRoute.paramMap.subscribe((paramMap) => {
+      if (!paramMap.has('recipeId')) {
+        // redirect
+        return;
       }
-    )
+      const recipeId = paramMap.get('recipeId');
+      this.loadedRecipe = this.recipesService.getRecipe(recipeId);
+    });
   }
 
+  onDeleteRecipe() {
+    this.recipesService.deleteRecipe(this.loadedRecipe.id);
+    this.router.navigate(['/recipes']);
+  }
 }
