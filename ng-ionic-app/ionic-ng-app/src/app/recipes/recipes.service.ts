@@ -28,12 +28,12 @@ export class RecipesService {
     return [...this.recipes];
   }
 
-  getRecipe(recipeId: string) {
+  getRecipe(recipeId: string) : Recipe {
     return {
       ...this.recipes.find((recipe) => {
         return recipe.id === recipeId;
       }),
-    };
+    } as Recipe;
   }
 
   deleteRecipe(recipeId: string) {

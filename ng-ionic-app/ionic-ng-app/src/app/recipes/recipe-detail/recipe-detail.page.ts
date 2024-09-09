@@ -10,7 +10,7 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./recipe-detail.page.scss'],
 })
 export class RecipeDetailPage implements OnInit {
-  loadedRecipe: Recipe;
+  loadedRecipe!: Recipe;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -26,7 +26,10 @@ export class RecipeDetailPage implements OnInit {
         return;
       }
       const recipeId = paramMap.get('recipeId');
-      this.loadedRecipe = this.recipesService.getRecipe(recipeId);
+      if (recipeId != null) {
+        this.loadedRecipe = this.recipesService.getRecipe(recipeId);
+      }
+      
     });
   }
 
