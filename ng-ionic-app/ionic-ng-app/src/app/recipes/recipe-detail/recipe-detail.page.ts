@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../recipes.model';
 import { RecipesService } from '../recipes.service';
@@ -9,7 +9,7 @@ import { AlertController } from '@ionic/angular';
   templateUrl: './recipe-detail.page.html',
   styleUrls: ['./recipe-detail.page.scss'],
 })
-export class RecipeDetailPage implements OnInit {
+export class RecipeDetailPage implements OnInit, OnDestroy {
   loadedRecipe!: Recipe;
 
   constructor(
@@ -18,6 +18,22 @@ export class RecipeDetailPage implements OnInit {
     private router: Router,
     private alertCtrl: AlertController
   ) {}
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter');
+  }
+
+  ionViewWillLeave() {
+    console.log('ionViewWillLeave');
+  }
+
+  ionViewDidLeave() {
+    console.log('ionViewDidLeave');
+  }
+
+  ngOnDestroy(): void {
+    console.log('ngOnDestroy');
+  }
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe((paramMap) => {
