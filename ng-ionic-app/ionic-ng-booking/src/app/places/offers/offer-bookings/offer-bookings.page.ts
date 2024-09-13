@@ -10,7 +10,7 @@ import { PlacesService } from '../../places.service';
   styleUrls: ['./offer-bookings.page.scss'],
 })
 export class OfferBookingsPage implements OnInit {
-  place: Place;
+  place?: Place;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +26,8 @@ export class OfferBookingsPage implements OnInit {
         return;
       }
 
-      this.place = this.placesService.getPlace(paramMap.get('placeId'));
+      const placeId = paramMap.get('placeId') ?? '';
+      this.place = this.placesService.getPlace(placeId) as Place;
     });
   }
 }
