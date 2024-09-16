@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./offers.page.scss'],
 })
 export class OffersPage implements OnInit {
+  offers: {id: string, imageUrl: string, title: string}[] = [];
 
   constructor() { }
 
