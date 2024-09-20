@@ -65,6 +65,8 @@
 	--ion-color-dark-shade: #292929;
 	--ion-color-dark-tint: #444444;
 
+  --ion-toolbar-background: var(--ion-color-primary);
+  --ion-toolbar-color: var(--ion-color-primary-contrast);
 }
 
 .ios {
