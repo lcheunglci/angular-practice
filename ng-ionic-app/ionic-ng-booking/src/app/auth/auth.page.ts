@@ -11,25 +11,34 @@ import { NgForm } from '@angular/forms';
 })
 export class AuthPage {
   isLoading = false;
+  isLogin = true;
 
-  constructor(private authService: AuthService, private router: Router, private loadingCtrl: LoadingController) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private loadingCtrl: LoadingController
+  ) {}
 
   onLogin() {
     this.isLoading = true;
     this.authService.login();
-    this.loadingCtrl.create({keyboardClose: true, message: 'Logging in...'}).then(
-      loadingEl => {
+    this.loadingCtrl
+      .create({ keyboardClose: true, message: 'Logging in...' })
+      .then((loadingEl) => {
         loadingEl.present();
         setTimeout(() => {
           this.isLoading = false;
           loadingEl.dismiss();
           this.router.navigateByUrl('/places/tabs/discover');
         }, 1500);
-      }
-    );
+      });
   }
 
   onSubmit(form: NgForm) {
     console.log(form);
+  }
+
+  onSwitchAuthMode() {
+    this.isLogin = !this.isLogin;
   }
 }
