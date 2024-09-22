@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewOfferPage implements OnInit {
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  onCreateOffer() {
+    console.log('Creating offer space.');
   }
-
 }
