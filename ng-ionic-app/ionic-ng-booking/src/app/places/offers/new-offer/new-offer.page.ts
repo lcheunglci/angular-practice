@@ -23,6 +23,6 @@ export class NewOfferPage implements OnInit {
   }
 
   onCreateOffer() {
-    console.log('Creating offer space.');
+    console.log(this.form);
   }
 }
