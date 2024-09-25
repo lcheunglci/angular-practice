@@ -12,8 +12,8 @@ import { Place } from '../../place.model';
 })
 export class EditOfferPage implements OnInit {
 
-  place: Place;
-  form: FormGroup;
+  place!: Place;
+  form!: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
@@ -27,7 +27,7 @@ export class EditOfferPage implements OnInit {
         this.navCtrl.navigateBack('/places/tabs/offers');
         return;
       }
-      this.place = this.placesService.getPlace(paramsMap.get('placeId'));
+      this.place = this.placesService.getPlace(paramsMap.get('placeId')!);
       this.form = new FormGroup({
         title: new FormControl(this.place.title, {
           updateOn: 'blur',
