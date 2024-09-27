@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PlacesService } from '../../places.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
 import { Place } from '../../place.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-edit-offer',
   templateUrl: './edit-offer.page.html',
   styleUrls: ['./edit-offer.page.scss'],
 })
-export class EditOfferPage implements OnInit {
-
+export class EditOfferPage implements OnInit, OnDestroy {
   place!: Place;
   form!: FormGroup;
+  private placeSub: Subscription = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -21,23 +22,32 @@ export class EditOfferPage implements OnInit {
     private navCtrl: NavController
   ) {}
 
+  ngOnDestroy(): void {
+    this.placeSub.unsubscribe();
+  }
+
   ngOnInit() {
     this.route.paramMap.subscribe((paramsMap) => {
       if (!paramsMap.has('placeId')) {
         this.navCtrl.navigateBack('/places/tabs/offers');
         return;
       }
-      this.place = this.placesService.getPlace(paramsMap.get('placeId')!);
-      this.form = new FormGroup({
-        title: new FormControl(this.place.title, {
-          updateOn: 'blur',
-          validators: [Validators.required],
-        }),
-        description: new FormControl(this.place.description, {
-          updateOn: 'blur',
-          validators: [Validators.required, Validators.maxLength(180)],
-        }),
-      });
+      const placeId = paramsMap.get('placeId')!;
+      this.placeSub.add(
+        this.placesService.getPlace(placeId).subscribe((place) => {
+          this.place = place as Place;
+          this.form = new FormGroup({
+            title: new FormControl(this.place.title, {
+              updateOn: 'blur',
+              validators: [Validators.required],
+            }),
+            description: new FormControl(this.place.description, {
+              updateOn: 'blur',
+              validators: [Validators.required, Validators.maxLength(180)],
+            }),
+          });
+        })
+      );
     });
   }
 

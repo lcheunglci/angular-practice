@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ActionSheetController,
   ModalController,
@@ -8,14 +8,16 @@ import { CreateBookingComponent } from '../../../bookings/create-booking/create-
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-place-detail',
   templateUrl: './place-detail.page.html',
   styleUrls: ['./place-detail.page.scss'],
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
   place!: Place;
+  placeSub: Subscription = new Subscription();
 
   constructor(
     private navCtrl: NavController,
@@ -25,6 +27,12 @@ export class PlaceDetailPage implements OnInit {
     private actionSheetCtrl: ActionSheetController
   ) {}
 
+  ngOnDestroy(): void {
+    if (this.placeSub) {
+      this.placeSub.unsubscribe();
+    }
+  }
+
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap) => {
       if (!paramMap.has('placeId')) {
@@ -33,7 +41,11 @@ export class PlaceDetailPage implements OnInit {
       }
 
       const placeId = paramMap.get('placeId') ?? '';
-      this.place = this.placesService.getPlace(placeId) as Place;
+      this.placeSub.add(
+        this.placesService.getPlace(placeId).subscribe((place) => {
+          this.place = place as Place;
+        })
+      );
     });
   }
 
@@ -74,7 +86,7 @@ export class PlaceDetailPage implements OnInit {
         component: CreateBookingComponent,
         componentProps: {
           selectedPlace: this.place,
-          selectedMode: mode
+          selectedMode: mode,
         },
       })
       .then((modalEl) => {
