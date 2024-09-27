@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Place } from './place.model';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,8 @@ export class PlacesService {
       'https://unsplash.com/photos/UWYPTISci4o/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTB8fGZhbmN5JTIwbWFuc2lvbnxlbnwwfHx8fDE3MjYxMjQwNzl8MA&force=true&w=640',
       149.99,
       new Date('2024-01-01'),
-      new Date('2024-12-31')
+      new Date('2024-12-31'),
+      'abc'
     ),
     new Place(
       'p2',
@@ -22,7 +24,8 @@ export class PlacesService {
       'https://unsplash.com/photos/euNoSSVFl8U/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fHBhcmlzJTIwaG91c2V8ZW58MHx8fHwxNzI2MTI0MTY1fDA&force=true&w=640',
       189.99,
       new Date('2024-01-01'),
-      new Date('2024-12-31')
+      new Date('2024-12-31'),
+      'abc'
     ),
     new Place(
       'p3',
@@ -31,7 +34,8 @@ export class PlacesService {
       'https://unsplash.com/photos/nxc9KgICLRU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGZvZ2d5JTIwcGFsYWNlfGVufDB8fHx8MTcyNjEyNDI1NHww&force=true&w=640',
       99.99,
       new Date('2024-01-01'),
-      new Date('2024-12-31')
+      new Date('2024-12-31'),
+      'abc'
     ),
   ];
 
@@ -39,9 +43,30 @@ export class PlacesService {
     return [...this._places];
   }
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
   getPlace(id: string): Place {
     return { ...this._places.find((p) => p.id === id) } as Place;
+  }
+
+  addPlace(
+    title: string,
+    description: string,
+    price: number,
+    dateFrom: Date,
+    dateTo: Date
+  ) {
+    const newPlace = new Place(
+      Math.random().toString(),
+      title,
+      description,
+      'https://unsplash.com/photos/nxc9KgICLRU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGZvZ2d5JTIwcGFsYWNlfGVufDB8fHx8MTcyNjEyNDI1NHww&force=true&w=640',
+      price,
+      dateFrom,
+      dateTo,
+      this.authService.userId
+    );
+
+    this._places.push(newPlace);
   }
 }
