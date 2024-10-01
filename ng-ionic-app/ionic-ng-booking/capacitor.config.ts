@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'ionic-ng-booking',
+  appId: 'com.lawrencelci.papayabnb',
+  appName: 'Papaya BnB',
   webDir: 'www'
 };
 
