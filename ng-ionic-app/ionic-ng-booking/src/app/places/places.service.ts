@@ -3,6 +3,7 @@ import { Place } from './place.model';
 import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject, delay, map, switchMap, take, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 interface PlaceData {
   availableFrom: string;
@@ -58,33 +59,32 @@ export class PlacesService {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
   fetchPlaces() {
-    return this.http
-      .get<{ [key: string]: PlaceData }>(
-        process.env['DB_URL'] + 'offered-places.json'
-      )
-      .pipe(
-        map((resData) => {
-          const places = [];
-          for (const key in resData) {
-            if (resData.hasOwnProperty(key)) {
-              places.push(
-                new Place(
-                  key,
-                  resData[key].title,
-                  resData[key].description,
-                  resData[key].imageUrl,
-                  resData[key].price,
-                  new Date(resData[key].availableFrom),
-                  new Date(resData[key].availableTo),
-                  resData[key].userId
-                )
-              );
-            }
+    const url = environment.DB_URL + 'offered-places.json';
+    console.log('fetchPlaces', url);
+    // TODO: add error handling
+    return this.http.get<{ [key: string]: PlaceData }>(url).pipe(
+      map((resData) => {
+        const places = [];
+        for (const key in resData) {
+          if (resData.hasOwnProperty(key)) {
+            places.push(
+              new Place(
+                key,
+                resData[key].title,
+                resData[key].description,
+                resData[key].imageUrl,
+                resData[key].price,
+                new Date(resData[key].availableFrom),
+                new Date(resData[key].availableTo),
+                resData[key].userId
+              )
+            );
           }
-          return places;
-        }),
-        tap(places => this._places.next(places))
-      );
+        }
+        return places;
+      }),
+      tap((places) => this._places.next(places))
+    );
   }
 
   getPlace(id: string) {
