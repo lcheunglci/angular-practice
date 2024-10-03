@@ -63,7 +63,7 @@ export class PlacesService {
   fetchPlaces() {
     console.log('fetchPlaces', this.dbUrl + '.json');
     // TODO: add error handling
-    return this.http.get<{ [key: string]: PlaceData }>(this.dbUrl).pipe(
+    return this.http.get<{ [key: string]: PlaceData }>(this.dbUrl + '.json').pipe(
       map((resData) => {
         const places = [];
         for (const key in resData) {
