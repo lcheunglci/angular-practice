@@ -52,6 +52,8 @@ export class PlacesService {
     // ),
   ]);
 
+  private dbUrl = environment.DB_URL + 'offered-places';
+
   get places() {
     return this._places.asObservable();
   }
@@ -59,10 +61,9 @@ export class PlacesService {
   constructor(private authService: AuthService, private http: HttpClient) {}
 
   fetchPlaces() {
-    const url = environment.DB_URL + 'offered-places.json';
-    console.log('fetchPlaces', url);
+    console.log('fetchPlaces', this.dbUrl + '.json');
     // TODO: add error handling
-    return this.http.get<{ [key: string]: PlaceData }>(url).pipe(
+    return this.http.get<{ [key: string]: PlaceData }>(this.dbUrl).pipe(
       map((resData) => {
         const places = [];
         for (const key in resData) {
@@ -116,7 +117,7 @@ export class PlacesService {
     );
 
     return this.http
-      .post<{ name: string }>(process.env['DB_URL'] + 'offered-places.json', {
+      .post<{ name: string }>(this.dbUrl + '.json', {
         ...newPlace,
         id: null,
       })
@@ -134,12 +135,12 @@ export class PlacesService {
   }
 
   updatePlace(placeId: string, title: string, description: string) {
+    let updatedPlaces: Place[];
     return this.places.pipe(
       take(1),
-      delay(1000),
-      tap((places) => {
+      switchMap((places) => {
         const updatedPlaceIndex = places.findIndex((pl) => pl.id === placeId);
-        const updatedPlaces = [...places];
+        updatedPlaces = [...places];
         const oldPlace = updatedPlaces[updatedPlaceIndex];
         updatedPlaces[updatedPlaceIndex] = new Place(
           oldPlace.id,
@@ -151,6 +152,13 @@ export class PlacesService {
           oldPlace.availableTo,
           oldPlace.userId
         );
+
+        return this.http.put(`${this.dbUrl}/${placeId}.json`, {
+          ...updatedPlaces[updatedPlaceIndex],
+          id: null,
+        });
+      }),
+      tap(() => {
         this._places.next(updatedPlaces);
       })
     );
