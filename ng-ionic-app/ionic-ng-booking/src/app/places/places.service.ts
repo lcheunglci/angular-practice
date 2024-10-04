@@ -63,38 +63,54 @@ export class PlacesService {
   fetchPlaces() {
     console.log('fetchPlaces', this.dbUrl + '.json');
     // TODO: add error handling
-    return this.http.get<{ [key: string]: PlaceData }>(this.dbUrl + '.json').pipe(
-      map((resData) => {
-        const places = [];
-        for (const key in resData) {
-          if (resData.hasOwnProperty(key)) {
-            places.push(
-              new Place(
-                key,
-                resData[key].title,
-                resData[key].description,
-                resData[key].imageUrl,
-                resData[key].price,
-                new Date(resData[key].availableFrom),
-                new Date(resData[key].availableTo),
-                resData[key].userId
-              )
-            );
+    return this.http
+      .get<{ [key: string]: PlaceData }>(this.dbUrl + '.json')
+      .pipe(
+        map((resData) => {
+          const places = [];
+          for (const key in resData) {
+            if (resData.hasOwnProperty(key)) {
+              places.push(
+                new Place(
+                  key,
+                  resData[key].title,
+                  resData[key].description,
+                  resData[key].imageUrl,
+                  resData[key].price,
+                  new Date(resData[key].availableFrom),
+                  new Date(resData[key].availableTo),
+                  resData[key].userId
+                )
+              );
+            }
           }
-        }
-        return places;
-      }),
-      tap((places) => this._places.next(places))
-    );
+          return places;
+        }),
+        tap((places) => this._places.next(places))
+      );
   }
 
   getPlace(id: string) {
-    return this.places.pipe(
-      take(1),
-      map((places) => {
-        return { ...places.find((p) => p.id === id) };
+    return this.http.get<PlaceData>(`${this.dbUrl}/${id}.json`).pipe(
+      map((placeData) => {
+        return new Place(
+          id,
+          placeData.title,
+          placeData.description,
+          placeData.imageUrl,
+          placeData.price,
+          new Date(placeData.availableFrom),
+          new Date(placeData.availableTo),
+          placeData.userId
+        );
       })
     );
+    // return this.places.pipe(
+    //   take(1),
+    //   map((places) => {
+    //     return { ...places.find((p) => p.id === id) };
+    //   })
+    // );
   }
 
   addPlace(

@@ -15,6 +15,8 @@ export class EditOfferPage implements OnInit, OnDestroy {
   place!: Place;
   form!: FormGroup;
   private placeSub: Subscription = new Subscription();
+  isLoading = false;
+  placeId: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +36,10 @@ export class EditOfferPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack('/places/tabs/offers');
         return;
       }
+      
       const placeId = paramsMap.get('placeId')!;
+      this.isLoading = true;
+      
       this.placeSub.add(
         this.placesService.getPlace(placeId).subscribe((place) => {
           this.place = place as Place;
@@ -48,6 +53,7 @@ export class EditOfferPage implements OnInit, OnDestroy {
               validators: [Validators.required, Validators.maxLength(180)],
             }),
           });
+          this.isLoading = false;
         })
       );
     });
