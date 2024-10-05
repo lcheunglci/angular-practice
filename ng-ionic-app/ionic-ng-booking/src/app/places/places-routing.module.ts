@@ -54,14 +54,6 @@ const routes: Routes = [
               ),
             // loadChildren: './offers/edit-offer/edit-offer.module#EditOfferPageModule
           },
-          {
-            path: ':placeId',
-            loadChildren: () =>
-              import('./offers/offer-bookings/offer-bookings.module').then(
-                (m) => m.OfferBookingsPageModule
-              ),
-            // loadChildren: './offers/offer-bookings/offer-bookings.module#OfferBookingsPageModule
-          },
         ],
       },
       {
