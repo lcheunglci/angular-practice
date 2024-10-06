@@ -1,9 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Booking } from './booking.model';
-import { BehaviorSubject, delay, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, delay, map, switchMap, take, tap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+
+interface BookingData {
+  bookedFrom: string;
+  bookedTo: string;
+  firstName: string;
+  guestNumber: number;
+  lastName: string;
+  placeId: string;
+  placeImage: string;
+  placeTitle: string;
+  userId: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class BookingService {
@@ -65,5 +77,41 @@ export class BookingService {
         this._bookings.next(bookings.filter((b) => b.id !== bookingId));
       })
     );
+  }
+
+  fetchBookings() {
+    return this.http
+      .get<{ [key: string]: BookingData }>(
+        environment.DB_URL +
+          `bookings.json?orderBy="userId"=&equalTo="${this.auth.userId}"`
+      )
+      .pipe(
+        map((bookingData) => {
+          const bookings = [];
+          for (const key in bookingData) {
+            if (bookingData.hasOwnProperty(key)) {
+              const booking = bookingData[key];
+              bookings.push(
+                new Booking(
+                  key,
+                  booking.placeId,
+                  booking.userId,
+                  booking.placeTitle,
+                  booking.placeImage,
+                  booking.firstName,
+                  booking.lastName,
+                  booking.guestNumber,
+                  new Date(booking.bookedFrom),
+                  new Date(booking.bookedTo)
+                )
+              );
+            }
+          }
+          return bookings;
+        }),
+        tap((bookings) => {
+          this._bookings.next(bookings);
+        })
+      );
   }
 }
