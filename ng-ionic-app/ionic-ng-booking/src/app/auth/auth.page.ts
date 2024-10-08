@@ -45,8 +45,10 @@ export class AuthPage {
 
     if (this.isLogin) {
       // send a request to login servers
+      this.authService.login();
     } else {
       //  send a request to signup servers
+      this.authService.signup(email, password).subscribe();
     }
   }
 
