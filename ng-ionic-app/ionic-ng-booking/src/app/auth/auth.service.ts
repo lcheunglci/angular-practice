@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 interface AuthResponseData {
@@ -16,23 +17,29 @@ interface AuthResponseData {
 })
 export class AuthService {
   private _userIsAuthenticated = false;
-  private _userId = null;
+  private _userId!: string;
 
-  get userIsAuthenticated() {
+  get userIsAuthenticated(): boolean {
     return this._userIsAuthenticated;
   }
 
-  get userId() {
+  get userId(): string {
     return this._userId;
   }
 
   constructor(private http: HttpClient) {}
 
   signup(email: string, password: string) {
-    return this.http.post<AuthResponseData>(
-      environment.AUTH_SIGN_UP_URL + environment.FB_API_KEY,
-      { email: email, password: password, returnSecureToken: true }
-    );
+    return this.http
+      .post<AuthResponseData>(
+        environment.AUTH_SIGN_UP_URL + environment.FB_API_KEY,
+        { email: email, password: password, returnSecureToken: true }
+      )
+      .pipe(
+        tap((resData) => {
+          this._userId = resData.localId;
+        })
+      );
   }
 
   login() {
