@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { AuthService } from './auth.service';
+import { AuthResponseData, AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth',
@@ -22,33 +23,41 @@ export class AuthPage {
 
   authenticate(email: string, password: string) {
     this.isLoading = true;
-    this.authService.login();
     this.loadingCtrl
       .create({ keyboardClose: true, message: 'Logging in...' })
       .then((loadingEl) => {
         loadingEl.present();
 
+        let authObs: Observable<AuthResponseData>;
+
         if (this.isLogin) {
-          // send a request to login servers
-          this.authService.login();
+          authObs = this.authService.login(email, password);
         } else {
           //  send a request to signup servers
-          this.authService.signup(email, password).subscribe({
-            next: (resData) => {
-              this.isLoading = false;
-              loadingEl.dismiss();
-              this.router.navigateByUrl('/places/tabs/discover');
-            },
-            error: (errRes) => {
-              const code = errRes.error.error.message;
-              let message = 'Could not sign you up, please try again.';
-              if (code === 'EMAIL_EXISTS') {
-                message = 'This email address already exists!';
-              }
-              this.showAlert(message);
-            },
-          });
+          authObs = this.authService.signup(email, password);
         }
+        
+        authObs.subscribe({
+          next: (resData) => {
+            this.isLoading = false;
+            loadingEl.dismiss();
+            this.router.navigateByUrl('/places/tabs/discover');
+          },
+          error: (errRes) => {
+            const code = errRes.error.error.message;
+            let message = 'Could not sign you up, please try again.';
+            if (code === 'EMAIL_EXISTS') {
+              message = 'This email address already exists!';
+            } else if (code === 'EMAIL_NOT_FOUND') {
+              // TODO: group up the email not exist and the invalid password to make it more secure
+              message = 'Email address could not be found.';
+            } else if (code === 'INVALID_PASSWORD') {
+              message = 'This password is not correct';
+            }
+            this.showAlert(message);
+          },
+        });
+      
       });
   }
 

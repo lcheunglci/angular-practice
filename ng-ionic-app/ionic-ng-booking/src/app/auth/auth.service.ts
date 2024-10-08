@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-interface AuthResponseData {
+export interface AuthResponseData {
   idToken: string; //	A Firebase Auth ID token for the authenticated user.
   email: string; // 	The email for the authenticated user.
   refreshToken: string; //	A Firebase Auth refresh token for the authenticated user.
@@ -38,12 +38,23 @@ export class AuthService {
       .pipe(
         tap((resData) => {
           this._userId = resData.localId;
+          this._userIsAuthenticated = true;
         })
       );
   }
 
-  login() {
-    this._userIsAuthenticated = true;
+  login(email: string, password: string) {
+    return this.http
+      .post<AuthResponseData>(
+        environment.AUTH_SIGN_IN_URL + environment.FB_API_KEY,
+        { email: email, password: password, returnSecureToken: true }
+      )
+      .pipe(
+        tap((resData) => {
+          this._userId = resData.localId;
+          this._userIsAuthenticated = true;
+        })
+      );
   }
 
   logout() {
