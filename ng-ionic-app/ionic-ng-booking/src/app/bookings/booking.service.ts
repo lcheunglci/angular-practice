@@ -38,26 +38,35 @@ export class BookingService {
     dateTo: Date
   ) {
     let generatedId: string;
-    const newBooking = new Booking(
-      Math.random().toString(),
-      placeId,
-      this.auth.userId,
-      placeTitle,
-      placeImage,
-      firstName,
-      lastName,
-      guestNumber,
-      dateFrom,
-      dateTo
-    );
+    let newBooking: Booking;
+    this.auth.userId.pipe(
+      take(1),
+      switchMap(
+        userId => {
+          if (!userId) {
+            throw new Error('No user id found!');
+          }
 
-    return this.http
-      .post<{ name: string }>(environment.DB_URL + 'bookings.json', {
-        ...newBooking,
-        id: null,
-      })
-      .pipe(
-        switchMap((resData) => {
+          newBooking = new Booking(
+            Math.random().toString(),
+            placeId,
+            userId,
+            placeTitle,
+            placeImage,
+            firstName,
+            lastName,
+            guestNumber,
+            dateFrom,
+            dateTo
+          );
+
+          return this.http
+            .post<{ name: string }>(environment.DB_URL + 'bookings.json', {
+              ...newBooking,
+              id: null,
+          });
+      }),
+      switchMap((resData) => {
           generatedId = resData.name;
           return this.bookings;
         }),

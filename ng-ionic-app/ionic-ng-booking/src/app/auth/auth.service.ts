@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { BehaviorSubject, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { User } from './user.model';
 
 export interface AuthResponseData {
   idToken: string; //	A Firebase Auth ID token for the authenticated user.
@@ -16,15 +17,30 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  private _userIsAuthenticated = false;
-  private _userId!: string;
+  private _user = new BehaviorSubject<User|null>(null);
 
-  get userIsAuthenticated(): boolean {
-    return this._userIsAuthenticated;
+  get userIsAuthenticated() {
+    return this._user.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return !!user?.token;
+        } else {
+          return false;
+        }
+      })
+    );
   }
 
-  get userId(): string {
-    return this._userId;
+  get userId() {
+    return this._user.asObservable().pipe(
+      map((user) => {
+        if (user) {
+          return user.id;
+        } else {
+          return null;
+        }
+      })
+    );
   }
 
   constructor(private http: HttpClient) {}
@@ -35,12 +51,7 @@ export class AuthService {
         environment.AUTH_SIGN_UP_URL + environment.FB_API_KEY,
         { email: email, password: password, returnSecureToken: true }
       )
-      .pipe(
-        tap((resData) => {
-          this._userId = resData.localId;
-          this._userIsAuthenticated = true;
-        })
-      );
+      .pipe(tap(this.setUserData.bind(this)));
   }
 
   login(email: string, password: string) {
@@ -49,15 +60,23 @@ export class AuthService {
         environment.AUTH_SIGN_IN_URL + environment.FB_API_KEY,
         { email: email, password: password, returnSecureToken: true }
       )
-      .pipe(
-        tap((resData) => {
-          this._userId = resData.localId;
-          this._userIsAuthenticated = true;
-        })
-      );
+      .pipe(tap(this.setUserData.bind(this)));
   }
 
   logout() {
-    this._userIsAuthenticated = false;
+    this._user.next(null);
+  }
+
+  private setUserData(userData: AuthResponseData): User {
+    const expirationTime = new Date(
+      new Date().getTime() + +userData.expiresIn * 1000
+    );
+    const user = new User(
+      userData.localId,
+      userData.email,
+      userData.idToken,
+      expirationTime
+    );
+    return user;
   }
 }
