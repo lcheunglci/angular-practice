@@ -121,33 +121,39 @@ export class PlacesService {
     dateTo: Date
   ) {
     let generatedId: string;
-    const newPlace = new Place(
-      Math.random().toString(),
-      title,
-      description,
-      'https://unsplash.com/photos/nxc9KgICLRU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGZvZ2d5JTIwcGFsYWNlfGVufDB8fHx8MTcyNjEyNDI1NHww&force=true&w=640',
-      price,
-      dateFrom,
-      dateTo,
-      this.authService.userId
-    );
+    let newPlace: Place;
+    return this.authService.userId.pipe(
+      take(1),
+      switchMap((userId) => {
+        if (!userId) {
+          throw new Error('No user id found.');
+        }
+        newPlace = new Place(
+          Math.random().toString(),
+          title,
+          description,
+          'https://unsplash.com/photos/nxc9KgICLRU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGZvZ2d5JTIwcGFsYWNlfGVufDB8fHx8MTcyNjEyNDI1NHww&force=true&w=640',
+          price,
+          dateFrom,
+          dateTo,
+          userId
+        );
 
-    return this.http
-      .post<{ name: string }>(this.dbUrl + '.json', {
-        ...newPlace,
-        id: null,
+        return this.http.post<{ name: string }>(this.dbUrl + '.json', {
+          ...newPlace,
+          id: null,
+        });
+      }),
+      switchMap((resData) => {
+        generatedId = resData.name;
+        return this.places;
+      }),
+      take(1),
+      tap((places) => {
+        newPlace.id = generatedId;
+        this._places.next(places.concat(newPlace));
       })
-      .pipe(
-        switchMap((resData) => {
-          generatedId = resData.name;
-          return this.places;
-        }),
-        take(1),
-        tap((places) => {
-          newPlace.id = generatedId;
-          this._places.next(places.concat(newPlace));
-        })
-      );
+    );
   }
 
   updatePlace(placeId: string, title: string, description: string) {
@@ -161,7 +167,7 @@ export class PlacesService {
           return of(places);
         }
       }),
-      switchMap(places => {
+      switchMap((places) => {
         const updatedPlaceIndex = places.findIndex((pl) => pl.id === placeId);
         updatedPlaces = [...places];
         const oldPlace = updatedPlaces[updatedPlaceIndex];
