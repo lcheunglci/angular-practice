@@ -41,41 +41,42 @@ export class BookingService {
     let newBooking: Booking;
     return this.auth.userId.pipe(
       take(1),
-      switchMap(
-        userId => {
-          if (!userId) {
-            throw new Error('No user id found!');
+      switchMap((userId) => {
+        if (!userId) {
+          throw new Error('No user id found!');
+        }
+
+        newBooking = new Booking(
+          Math.random().toString(),
+          placeId,
+          userId,
+          placeTitle,
+          placeImage,
+          firstName,
+          lastName,
+          guestNumber,
+          dateFrom,
+          dateTo
+        );
+
+        return this.http.post<{ name: string }>(
+          environment.DB_URL + 'bookings.json',
+          {
+            ...newBooking,
+            id: null,
           }
-
-          newBooking = new Booking(
-            Math.random().toString(),
-            placeId,
-            userId,
-            placeTitle,
-            placeImage,
-            firstName,
-            lastName,
-            guestNumber,
-            dateFrom,
-            dateTo
-          );
-
-          return this.http
-            .post<{ name: string }>(environment.DB_URL + 'bookings.json', {
-              ...newBooking,
-              id: null,
-          });
+        );
       }),
       switchMap((resData) => {
-          generatedId = resData.name;
-          return this.bookings;
-        }),
-        take(1),
-        tap((bookings) => {
-          newBooking.id = generatedId;
-          this._bookings.next(bookings.concat(newBooking));
-        })
-      );
+        generatedId = resData.name;
+        return this.bookings;
+      }),
+      take(1),
+      tap((bookings) => {
+        newBooking.id = generatedId;
+        this._bookings.next(bookings.concat(newBooking));
+      })
+    );
   }
 
   cancelBooking(bookingId: string) {
@@ -93,38 +94,42 @@ export class BookingService {
   }
 
   fetchBookings() {
-    return this.http
-      .get<{ [key: string]: BookingData }>(
-        environment.DB_URL +
-          `bookings.json?orderBy="userId"=&equalTo="${this.auth.userId}"`
-      )
-      .pipe(
-        map((bookingData) => {
-          const bookings = [];
-          for (const key in bookingData) {
-            if (bookingData.hasOwnProperty(key)) {
-              const booking = bookingData[key];
-              bookings.push(
-                new Booking(
-                  key,
-                  booking.placeId,
-                  booking.userId,
-                  booking.placeTitle,
-                  booking.placeImage,
-                  booking.firstName,
-                  booking.lastName,
-                  booking.guestNumber,
-                  new Date(booking.bookedFrom),
-                  new Date(booking.bookedTo)
-                )
-              );
-            }
+    return this.auth.userId.pipe(
+      switchMap((userId) => {
+        if (!userId) {
+          throw new Error('User is not found.');
+        }
+        return this.http.get<{ [key: string]: BookingData }>(
+          environment.DB_URL +
+            `bookings.json?orderBy="userId"=&equalTo="${userId}"`
+        );
+      }),
+      map((bookingData) => {
+        const bookings = [];
+        for (const key in bookingData) {
+          if (bookingData.hasOwnProperty(key)) {
+            const booking = bookingData[key];
+            bookings.push(
+              new Booking(
+                key,
+                booking.placeId,
+                booking.userId,
+                booking.placeTitle,
+                booking.placeImage,
+                booking.firstName,
+                booking.lastName,
+                booking.guestNumber,
+                new Date(booking.bookedFrom),
+                new Date(booking.bookedTo)
+              )
+            );
           }
-          return bookings;
-        }),
-        tap((bookings) => {
-          this._bookings.next(bookings);
-        })
-      );
+        }
+        return bookings;
+      }),
+      tap((bookings) => {
+        this._bookings.next(bookings);
+      })
+    );
   }
 }
