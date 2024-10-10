@@ -54,6 +54,7 @@ export class AuthPage {
             } else if (code === 'INVALID_PASSWORD') {
               message = 'This password is not correct';
             }
+            loadingEl.dismiss();
             this.showAlert(message);
           },
         });

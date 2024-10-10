@@ -17,16 +17,15 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  private _user = new BehaviorSubject<User|null>(null);
+  private _user = new BehaviorSubject<User | null>(null);
 
   get userIsAuthenticated() {
     return this._user.asObservable().pipe(
       map((user) => {
         if (user) {
-          return !!user?.token;
-        } else {
-          return false;
+          return !!user.token;
         }
+        return false;
       })
     );
   }
