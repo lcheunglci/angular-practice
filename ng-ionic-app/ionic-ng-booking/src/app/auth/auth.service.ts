@@ -22,6 +22,7 @@ export class AuthService {
   get userIsAuthenticated() {
     return this._user.asObservable().pipe(
       map((user) => {
+        console.log('userIsAuthenticated', user);
         if (user) {
           return !!user.token;
         }
@@ -54,6 +55,7 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
+    console.log('login', email, password);
     return this.http
       .post<AuthResponseData>(
         environment.AUTH_SIGN_IN_URL + environment.FB_API_KEY,
@@ -66,7 +68,7 @@ export class AuthService {
     this._user.next(null);
   }
 
-  private setUserData(userData: AuthResponseData): User {
+  private setUserData(userData: AuthResponseData) {
     const expirationTime = new Date(
       new Date().getTime() + +userData.expiresIn * 1000
     );
@@ -76,6 +78,7 @@ export class AuthService {
       userData.idToken,
       expirationTime
     );
-    return user;
+
+    this._user.next(user);
   }
 }

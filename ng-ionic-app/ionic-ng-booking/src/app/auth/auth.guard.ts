@@ -1,10 +1,10 @@
 import {
-  CanMatch,
+  ActivatedRouteSnapshot,
+  CanActivate,
   GuardResult,
   MaybeAsync,
-  Route,
   Router,
-  UrlSegment,
+  RouterStateSnapshot,
 } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
@@ -13,10 +13,11 @@ import { take, tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuard implements CanMatch {
+export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canMatch(route: Route, segments: UrlSegment[]): MaybeAsync<GuardResult> {
+
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
     return this.authService.userIsAuthenticated.pipe(
       take(1),
       tap((isAuthenticated) => {
