@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user.model';
+import { Plugins } from '@capacitor/core';
 
 export interface AuthResponseData {
   idToken: string; //	A Firebase Auth ID token for the authenticated user.
@@ -80,5 +81,12 @@ export class AuthService {
     );
 
     this._user.next(user);
+
+    this.storeAuthData(userData.localId, userData.idToken, expirationTime.toISOString());
+  }
+
+  storeAuthData(userId: string, token: string, tokenExpirationDate: string) {
+    const data = JSON.stringify({userId: userId, token: token, tokenExpirationDate: tokenExpirationDate})
+    Plugins.Storage.set({key: 'authData', value: data});
   }
 }
