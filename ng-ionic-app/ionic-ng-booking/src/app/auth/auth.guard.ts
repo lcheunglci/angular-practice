@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { AuthService } from './auth.service';
 import { Injectable } from '@angular/core';
-import { take, tap } from 'rxjs';
+import { of, switchMap, take, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +16,19 @@ import { take, tap } from 'rxjs';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): MaybeAsync<GuardResult> {
     return this.authService.userIsAuthenticated.pipe(
       take(1),
+      switchMap((isAuthenticated) => {
+        if (!isAuthenticated) {
+          return this.authService.autoLogin();
+        } else {
+          return of(isAuthenticated);
+        }
+      }),
       tap((isAuthenticated) => {
         if (!isAuthenticated) {
           this.router.navigateByUrl('/auth');
