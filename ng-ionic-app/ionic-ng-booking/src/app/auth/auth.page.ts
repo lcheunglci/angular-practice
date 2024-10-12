@@ -70,6 +70,7 @@ export class AuthPage {
     const email = form.value.email;
     const password = form.value.password;
     this.authenticate(email, password);
+    form.reset();
   }
 
   onSwitchAuthMode() {
