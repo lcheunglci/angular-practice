@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, from, map, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { User } from './user.model';
 import { Preferences } from '@capacitor/preferences';
+import { clearTimeout } from 'timers';
 
 export interface AuthResponseData {
   idToken: string; //	A Firebase Auth ID token for the authenticated user.
@@ -17,8 +18,9 @@ export interface AuthResponseData {
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private _user = new BehaviorSubject<User | null>(null);
+  private activeLogoutTimer: any;
 
   get userIsAuthenticated() {
     return this._user.asObservable().pipe(
@@ -45,6 +47,12 @@ export class AuthService {
   }
 
   constructor(private http: HttpClient) {}
+  
+  ngOnDestroy(): void {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+  }
 
   autoLogin() {
     return from(Preferences.get({ key: 'authData' })).pipe(
@@ -75,6 +83,7 @@ export class AuthService {
       tap((user) => {
         if (user) {
           this._user.next(user);
+          this.authLogout(user.tokenDuration);
         }
       }),
       map((user) => {
@@ -103,8 +112,18 @@ export class AuthService {
   }
 
   logout() {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
     this._user.next(null);
     from(Preferences.remove({ key: 'authData'})).subscribe();
+  }
+
+  private authLogout(duration: number) {
+    if (this.activeLogoutTimer) {
+      clearTimeout(this.activeLogoutTimer);
+    }
+    this.activeLogoutTimer = setTimeout(() => this.logout(), duration);
   }
 
   private setUserData(userData: AuthResponseData) {
@@ -119,6 +138,7 @@ export class AuthService {
     );
 
     this._user.next(user);
+    this.authLogout(user.tokenDuration);
 
     this.storeAuthData(
       userData.localId,
