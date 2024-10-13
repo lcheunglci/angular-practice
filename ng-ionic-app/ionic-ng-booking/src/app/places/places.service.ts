@@ -62,11 +62,12 @@ export class PlacesService {
 
   fetchPlaces() {
     console.log('fetchPlaces', this.dbUrl + '.json');
-    // TODO: add error handling
-    return this.http
-      .get<{ [key: string]: PlaceData }>(this.dbUrl + '.json')
-      .pipe(
-        map((resData) => {
+    return this.authService.token.pipe(switchMap(token => {
+      return this.http
+        .get<{ [key: string]: PlaceData }>(this.dbUrl + '.json?auth=' + token );
+      }), map((resData) => {
+          // TODO: add error handling
+
           const places = [];
           for (const key in resData) {
             if (resData.hasOwnProperty(key)) {
