@@ -39,6 +39,8 @@ export class BookingService {
   ) {
     let generatedId: string;
     let newBooking: Booking;
+    let fetchedId: string;
+
     return this.auth.userId.pipe(
       take(1),
       switchMap((userId) => {
@@ -46,10 +48,16 @@ export class BookingService {
           throw new Error('No user id found!');
         }
 
+        fetchedId = userId;
+
+        return this.auth.token;
+      }),
+      take(1),
+      switchMap((token) => {
         newBooking = new Booking(
           Math.random().toString(),
           placeId,
-          userId,
+          fetchedId,
           placeTitle,
           placeImage,
           firstName,
@@ -60,7 +68,7 @@ export class BookingService {
         );
 
         return this.http.post<{ name: string }>(
-          environment.DB_URL + 'bookings.json',
+          environment.DB_URL + 'bookings.json&auth=' + token,
           {
             ...newBooking,
             id: null,
@@ -80,29 +88,41 @@ export class BookingService {
   }
 
   cancelBooking(bookingId: string) {
-    return this.http
-      .delete(environment.DB_URL + `bookings/${bookingId}.json`)
-      .pipe(
-        switchMap(() => {
-          return this.bookings;
-        }),
-        take(1),
-        tap((bookings) => {
-          this._bookings.next(bookings.filter((b) => b.id !== bookingId));
-        })
-      );
+    return this.auth.token.pipe(
+      take(1),
+      switchMap((token) => {
+        return this.http.delete(
+          environment.DB_URL + `bookings/${bookingId}.json&auth=${token}`
+        );
+      }),
+      switchMap(() => {
+        return this.bookings;
+      }),
+      take(1),
+      tap((bookings) => {
+        this._bookings.next(bookings.filter((b) => b.id !== bookingId));
+      })
+    );
   }
 
   fetchBookings() {
+    let fetchedUserId: string;
+
     return this.auth.userId.pipe(
       take(1),
       switchMap((userId) => {
         if (!userId) {
           throw new Error('User is not found.');
         }
+        fetchedUserId = userId;
+
+        return this.auth.token;
+      }),
+      take(1),
+      switchMap((token) => {
         return this.http.get<{ [key: string]: BookingData }>(
           environment.DB_URL +
-            `bookings.json?orderBy="userId"=&equalTo="${userId}"`
+            `bookings.json?orderBy="userId"=&equalTo="${fetchedUserId}"&auth=${token}`
         );
       }),
       map((bookingData) => {
