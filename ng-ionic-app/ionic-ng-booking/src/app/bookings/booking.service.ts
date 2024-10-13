@@ -121,7 +121,7 @@ export class BookingService {
       take(1),
       switchMap((token) => {
         return this.http.get<{ [key: string]: BookingData }>(
-          `${environment.DB_URL}bookings.json?orderBy="userId"=&equalTo="${fetchedUserId}"&auth=${token}`
+          `${environment.DB_URL}bookings.json?orderBy="userId"&equalTo="${fetchedUserId}"&auth=${token}`
         );
       }),
       map((bookingData) => {
