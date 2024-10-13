@@ -58,41 +58,50 @@ export class PlacesService {
     return this._places.asObservable();
   }
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(private auth: AuthService, private http: HttpClient) {}
 
   fetchPlaces() {
     console.log('fetchPlaces', this.dbUrl + '.json');
-    return this.authService.token.pipe(switchMap(token => {
-      return this.http
-        .get<{ [key: string]: PlaceData }>(this.dbUrl + '.json?auth=' + token );
-      }), map((resData) => {
-          // TODO: add error handling
+    return this.auth.token.pipe(
+      switchMap((token) => {
+        return this.http.get<{ [key: string]: PlaceData }>(
+          `${this.dbUrl}.json?auth=${token}`
+        );
+      }),
+      map((resData) => {
+        // TODO: add error handling
 
-          const places = [];
-          for (const key in resData) {
-            if (resData.hasOwnProperty(key)) {
-              places.push(
-                new Place(
-                  key,
-                  resData[key].title,
-                  resData[key].description,
-                  resData[key].imageUrl,
-                  resData[key].price,
-                  new Date(resData[key].availableFrom),
-                  new Date(resData[key].availableTo),
-                  resData[key].userId
-                )
-              );
-            }
+        const places = [];
+        for (const key in resData) {
+          if (resData.hasOwnProperty(key)) {
+            places.push(
+              new Place(
+                key,
+                resData[key].title,
+                resData[key].description,
+                resData[key].imageUrl,
+                resData[key].price,
+                new Date(resData[key].availableFrom),
+                new Date(resData[key].availableTo),
+                resData[key].userId
+              )
+            );
           }
-          return places;
-        }),
-        tap((places) => this._places.next(places))
-      );
+        }
+        return places;
+      }),
+      tap((places) => this._places.next(places))
+    );
   }
 
   getPlace(id: string) {
-    return this.http.get<PlaceData>(`${this.dbUrl}/${id}.json`).pipe(
+    return this.auth.token.pipe(
+      take(1),
+      switchMap((token) => {
+        return this.http.get<PlaceData>(
+          `${this.dbUrl}/${id}.json?auth=${token}`
+        );
+      }),
       map((placeData) => {
         return new Place(
           id,
@@ -123,12 +132,20 @@ export class PlacesService {
   ) {
     let generatedId: string;
     let newPlace: Place;
-    return this.authService.userId.pipe(
+    let fetchedUserId: string;
+
+    return this.auth.userId.pipe(
       take(1),
       switchMap((userId) => {
         if (!userId) {
           throw new Error('No user id found.');
         }
+
+        fetchedUserId = userId;
+        return this.auth.token;
+      }),
+      take(1),
+      switchMap((token) => {
         newPlace = new Place(
           Math.random().toString(),
           title,
@@ -137,13 +154,16 @@ export class PlacesService {
           price,
           dateFrom,
           dateTo,
-          userId
+          fetchedUserId
         );
 
-        return this.http.post<{ name: string }>(this.dbUrl + '.json', {
-          ...newPlace,
-          id: null,
-        });
+        return this.http.post<{ name: string }>(
+          `${this.dbUrl}.json?auth=${token}`,
+          {
+            ...newPlace,
+            id: null,
+          }
+        );
       }),
       switchMap((resData) => {
         generatedId = resData.name;
@@ -159,6 +179,7 @@ export class PlacesService {
 
   updatePlace(placeId: string, title: string, description: string) {
     let updatedPlaces: Place[];
+    let updatedPlaceIndex: number;
     return this.places.pipe(
       take(1),
       switchMap((places) => {
@@ -169,7 +190,7 @@ export class PlacesService {
         }
       }),
       switchMap((places) => {
-        const updatedPlaceIndex = places.findIndex((pl) => pl.id === placeId);
+        updatedPlaceIndex = places.findIndex((pl) => pl.id === placeId);
         updatedPlaces = [...places];
         const oldPlace = updatedPlaces[updatedPlaceIndex];
         updatedPlaces[updatedPlaceIndex] = new Place(
@@ -183,7 +204,11 @@ export class PlacesService {
           oldPlace.userId
         );
 
-        return this.http.put(`${this.dbUrl}/${placeId}.json`, {
+        return this.auth.token;
+      }),
+      take(1),
+      switchMap((token) => {
+        return this.http.put(`${this.dbUrl}/${placeId}.json?auth=${token}`, {
           ...updatedPlaces[updatedPlaceIndex],
           id: null,
         });

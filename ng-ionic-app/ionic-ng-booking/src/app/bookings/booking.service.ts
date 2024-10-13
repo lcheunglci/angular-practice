@@ -68,7 +68,7 @@ export class BookingService {
         );
 
         return this.http.post<{ name: string }>(
-          environment.DB_URL + 'bookings.json&auth=' + token,
+          `${environment.DB_URL}bookings.json?auth=${token}`,
           {
             ...newBooking,
             id: null,
@@ -92,7 +92,7 @@ export class BookingService {
       take(1),
       switchMap((token) => {
         return this.http.delete(
-          environment.DB_URL + `bookings/${bookingId}.json&auth=${token}`
+          `${environment.DB_URL}bookings/${bookingId}.json?auth=${token}`
         );
       }),
       switchMap(() => {
@@ -121,8 +121,7 @@ export class BookingService {
       take(1),
       switchMap((token) => {
         return this.http.get<{ [key: string]: BookingData }>(
-          environment.DB_URL +
-            `bookings.json?orderBy="userId"=&equalTo="${fetchedUserId}"&auth=${token}`
+          `${environment.DB_URL}bookings.json?orderBy="userId"=&equalTo="${fetchedUserId}"&auth=${token}`
         );
       }),
       map((bookingData) => {
