@@ -13,8 +13,11 @@ export class LocationPickerComponent implements OnInit {
   ngOnInit() {}
 
   onPickLocation() {
-    this.modalCtrl
-      .create({ component: MapModalComponent })
-      .then((modalEl) => modalEl.present());
+    this.modalCtrl.create({ component: MapModalComponent }).then((modalEl) => {
+      modalEl.onDidDismiss().then((modalData) => {
+        console.log(modalData.data);
+      });
+      modalEl.present();
+    });
   }
 }
