@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { BehaviorSubject, delay, map, of, switchMap, take, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { PlaceLocation } from './location.model';
 
 interface PlaceData {
   availableFrom: string;
@@ -13,6 +14,7 @@ interface PlaceData {
   title: string;
   price: number;
   userId: string;
+  location: PlaceLocation;
 }
 
 @Injectable({
@@ -83,7 +85,8 @@ export class PlacesService {
                 resData[key].price,
                 new Date(resData[key].availableFrom),
                 new Date(resData[key].availableTo),
-                resData[key].userId
+                resData[key].userId,
+                resData[key].location
               )
             );
           }
@@ -111,7 +114,8 @@ export class PlacesService {
           placeData.price,
           new Date(placeData.availableFrom),
           new Date(placeData.availableTo),
-          placeData.userId
+          placeData.userId,
+          placeData.location
         );
       })
     );
@@ -128,7 +132,8 @@ export class PlacesService {
     description: string,
     price: number,
     dateFrom: Date,
-    dateTo: Date
+    dateTo: Date,
+    location: PlaceLocation
   ) {
     let generatedId: string;
     let newPlace: Place;
@@ -154,7 +159,8 @@ export class PlacesService {
           price,
           dateFrom,
           dateTo,
-          fetchedUserId
+          fetchedUserId,
+          location
         );
 
         return this.http.post<{ name: string }>(
@@ -201,7 +207,8 @@ export class PlacesService {
           oldPlace.price,
           oldPlace.availableFrom,
           oldPlace.availableTo,
-          oldPlace.userId
+          oldPlace.userId,
+          oldPlace.location
         );
 
         return this.auth.token;
