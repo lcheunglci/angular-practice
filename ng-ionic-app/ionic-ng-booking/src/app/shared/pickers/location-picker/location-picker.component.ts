@@ -12,11 +12,16 @@ import { PlaceLocation } from 'src/app/places/location.model';
   styleUrls: ['./location-picker.component.scss'],
 })
 export class LocationPickerComponent implements OnInit {
+
+  selectedLocationImage: string = '';
+  isLoading = false;
+
   constructor(private modalCtrl: ModalController, private http: HttpClient) {}
 
   ngOnInit() {}
 
   onPickLocation() {
+
     this.modalCtrl.create({ component: MapModalComponent }).then((modalEl) => {
       modalEl.onDidDismiss().then((modalData) => {
         if (!modalData.data) {
@@ -30,6 +35,7 @@ export class LocationPickerComponent implements OnInit {
           staticMapImageUrl: '',
         };
 
+        this.isLoading = true;
         this.getAddress(modalData.data.lat, modalData.data.lng)
           .pipe(
             switchMap((address) => {
@@ -42,6 +48,8 @@ export class LocationPickerComponent implements OnInit {
           )
           .subscribe((staticMapImageUrl) => {
             pickedLocation.staticMapImageUrl = staticMapImageUrl;
+            this.selectedLocationImage = staticMapImageUrl;
+            this.isLoading = false;
           });
       });
       modalEl.present();
