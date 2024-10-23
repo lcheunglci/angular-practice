@@ -41,7 +41,7 @@ export class NewOfferPage implements OnInit {
         updateOn: 'blur',
         validators: [Validators.required],
       }),
-      localtion: new FormControl(null, { validators: [Validators.required] }),
+      location: new FormControl(null, { validators: [Validators.required] }),
     });
   }
 
