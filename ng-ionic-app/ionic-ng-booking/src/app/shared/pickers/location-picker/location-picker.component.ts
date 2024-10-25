@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import {
   ActionSheetController,
   AlertController,
@@ -20,6 +20,7 @@ import { Capacitor } from '@capacitor/core';
 export class LocationPickerComponent implements OnInit {
   @Output() locationPick: EventEmitter<PlaceLocation> =
     new EventEmitter<PlaceLocation>();
+  @Input() showPreview = false;
 
   selectedLocationImage: string = '';
   isLoading = false;

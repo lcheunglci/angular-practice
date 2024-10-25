@@ -76,6 +76,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <app-location-picker
+            [showPreview]="form.get('location')?.value"
             (locationPick)="onLocationPick($event)"
           ></app-location-picker>
         </ion-col>
@@ -83,6 +84,7 @@
       <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <app-image-picker
+            [showPreview]="form.get('location')?.value"
             (imagePick)="onImagePicked($event)"
           ></app-image-picker>
         </ion-col>
