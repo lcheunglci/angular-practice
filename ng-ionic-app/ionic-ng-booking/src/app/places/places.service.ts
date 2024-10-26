@@ -127,13 +127,21 @@ export class PlacesService {
     // );
   }
 
+  uploadImage(image: File) {
+    const uploadData = new FormData();
+    uploadData.append('image', image);
+
+    return this.http.post<{imageUrl: string, imagePath: string}>(environment.UPLOAD_URL, uploadData)
+  }
+
   addPlace(
     title: string,
     description: string,
     price: number,
     dateFrom: Date,
     dateTo: Date,
-    location: PlaceLocation
+    location: PlaceLocation,
+    imageUrl: string
   ) {
     let generatedId: string;
     let newPlace: Place;
@@ -155,7 +163,7 @@ export class PlacesService {
           Math.random().toString(),
           title,
           description,
-          'https://unsplash.com/photos/nxc9KgICLRU/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTF8fGZvZ2d5JTIwcGFsYWNlfGVufDB8fHx8MTcyNjEyNDI1NHww&force=true&w=640',
+          imageUrl,
           price,
           dateFrom,
           dateTo,

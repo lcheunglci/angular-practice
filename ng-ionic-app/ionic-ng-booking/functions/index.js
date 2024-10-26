@@ -9,7 +9,7 @@ const uuid = require('uuid/v4');
 const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage({
-  projectId: 'YOUR_FIREBASE_PROJECT_ID'
+  projectId: 'ing-papaya-bnb'
 });
 
 exports.storeImage = functions.https.onRequest((req, res) => {
