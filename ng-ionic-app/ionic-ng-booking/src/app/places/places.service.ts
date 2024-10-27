@@ -60,11 +60,16 @@ export class PlacesService {
     return this._places.asObservable();
   }
 
-  constructor(private auth: AuthService, private http: HttpClient) {}
+  constructor(
+    private auth: AuthService,
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   fetchPlaces() {
     console.log('fetchPlaces', this.dbUrl + '.json');
     return this.auth.token.pipe(
+      take(1),
       switchMap((token) => {
         return this.http.get<{ [key: string]: PlaceData }>(
           `${this.dbUrl}.json?auth=${token}`
@@ -131,7 +136,16 @@ export class PlacesService {
     const uploadData = new FormData();
     uploadData.append('image', image);
 
-    return this.http.post<{imageUrl: string, imagePath: string}>(environment.UPLOAD_URL, uploadData)
+    return this.authService.token.pipe(
+      take(1),
+      switchMap((token) => {
+        return this.http.post<{ imageUrl: string; imagePath: string }>(
+          environment.UPLOAD_URL,
+          uploadData,
+          { headers: { Authorization: 'Bearer ' + token } }
+        );
+      })
+    );
   }
 
   addPlace(
