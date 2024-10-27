@@ -10,7 +10,7 @@ import { eventNames } from 'process';
   styleUrls: ['./image-picker.component.scss'],
 })
 export class ImagePickerComponent implements OnInit {
-  @ViewChild('filePicker') filePickerRef: ElementRef<HTMLInputElement>;
+  @ViewChild('filePicker') filePickerRef!: ElementRef<HTMLInputElement>;
   @Output() imagePick = new EventEmitter<string| File>();
   @Input() showPreview = false;
   selectedImage: string | undefined = '';
@@ -59,7 +59,7 @@ export class ImagePickerComponent implements OnInit {
   }
 
   onFileChosen(event: Event) {
-    const pickedFile = (event.target as HTMLInputElement).files[0];
+    const pickedFile = (event.target as HTMLInputElement).files?.[0];
     if (!pickedFile) {
       return;
     }
