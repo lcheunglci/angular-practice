@@ -84,6 +84,32 @@ export class LocationPickerComponent implements OnInit {
       });
   }
 
+
+  private createPlace(lat: number, lng: number) {
+    const pickedLocation: PlaceLocation = {
+      lat: lat,
+      lng: lng,
+      address: '',
+      staticMapImageUrl: ''
+    };
+    this.isLoading = true;
+    this.getAddress(lat, lng)
+      .pipe(
+        switchMap(address => {
+          pickedLocation.address = address;
+          return of(
+            this.getMapImage(pickedLocation.lat, pickedLocation.lng, 14)
+          );
+        })
+      )
+      .subscribe(staticMapImageUrl => {
+        pickedLocation.staticMapImageUrl = staticMapImageUrl;
+        this.selectedLocationImage = staticMapImageUrl;
+        this.isLoading = false;
+        this.locationPick.emit(pickedLocation);
+      });
+  }
+
   showErrorAlert() {
     this.alertCtrl
       .create({
