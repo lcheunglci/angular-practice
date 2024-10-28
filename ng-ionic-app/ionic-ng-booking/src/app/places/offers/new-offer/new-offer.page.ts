@@ -6,7 +6,7 @@ import { LoadingController } from '@ionic/angular';
 import { PlaceLocation } from '../../location.model';
 import { switchMap } from 'rxjs';
 
-function base64ToBlog(base64Data: string, contentType: any): File {
+function base64toBlob(base64Data: string, contentType: any) {
   contentType = contentType || '';
   const sliceSize = 1024;
   const byteCharacters = window.atob(base64Data);
@@ -111,7 +111,7 @@ export class NewOfferPage implements OnInit {
     let imageFile: File | Blob;
     if (typeof imageData === 'string') {
       try {
-        imageFile = base64ToBlog(
+        imageFile = base64toBlob(
           imageData.replace('data:image/jpeg;base64,', ''),
           'image/jpeg'
         );
