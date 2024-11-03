@@ -49,6 +49,6 @@
 
     <mat-checkbox ngModel name="agree">Agree to Terms and Conditions.</mat-checkbox>
 
-    <button type="submit" mat-raised-button color="primary">Submit</button>
+    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Submit</button>
   </form>
 </section>
