@@ -3,8 +3,18 @@
     <p>I'm the side nav</p>
   </mat-sidenav>
   <mat-sidenav-content>
-    <button (click)="sidenav.toggle()">Show Sidenav</button>
-    <router-outlet></router-outlet>
+    <mat-toolbar color="primary">
+      <div>
+        <button (click)="sidenav.toggle()">Toggle sidenav</button>
+      </div> 
+      <div>LOGO</div>
+      <div><a routerLink="/signup">Signup</a></div>
+      <div><a routerLink="/login">Login</a></div>
+      <div><a routerLink="/training">Training</a></div>
+    </mat-toolbar>
+    <main><router-outlet></router-outlet>
+    </main>
+    
   </mat-sidenav-content>
 </mat-sidenav-container>
 
