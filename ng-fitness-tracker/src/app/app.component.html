@@ -5,16 +5,19 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary">
       <div>
-        <button (click)="sidenav.toggle()">Toggle sidenav</button>
-      </div> 
-      <div>LOGO</div>
-      <div><a routerLink="/signup">Signup</a></div>
-      <div><a routerLink="/login">Login</a></div>
-      <div><a routerLink="/training">Training</a></div>
+        <button mat-icon-button (click)="sidenav.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+      </div>
+      <div><a routerLink="/">LOGO</a></div>
+      <div class="nav-container">
+        <ul class="navigation-items">
+          <li><a routerLink="/signup">Signup</a></li>
+          <li><a routerLink="/login">Login</a></li>
+          <li><a routerLink="/training">Training</a></li>
+        </ul>
+      </div>
     </mat-toolbar>
-    <main><router-outlet></router-outlet>
-    </main>
-    
+    <main><router-outlet></router-outlet></main>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
