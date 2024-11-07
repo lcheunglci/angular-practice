@@ -1,0 +1,9 @@
+
+new-training {
+  display: flex;
+  align-content: center;
+}
+
+.training-card {
+  width: 400px;
+}
