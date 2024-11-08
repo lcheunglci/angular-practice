@@ -1,9 +1,23 @@
-
-new-training {
+.new-training {
   display: flex;
   align-content: center;
+  padding: 30px;
 }
 
 .training-card {
   width: 400px;
+}
+
+.title {
+  align-items: center;
+}
+
+.content {
+  align-items: center;
+}
+
+@media all and (max-width: ) {
+  .training-card {
+    width: 100%;
+  }
 }
