@@ -1,45 +1,32 @@
-<section class="signup-form">
-  <form #f="ngForm" (ngSubmit)="onSubmit()">
+<section>
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
       <input
         type="email"
         matInput
         placeholder="Your email"
-        ngModel
-        name="email"
-        email
-        required
-        #emailInput="ngModel"
+        formControlName="email"
       />
-      <mat-error *ngIf="!emailInput.hasError('required')"
-        >E-mail is invalid.</mat-error
-      >
-      <mat-error *ngIf="emailInput.hasError('required')"
-        >Field must not be empty.</mat-error
-      >
+      <mat-hint>Please enter a valid email.</mat-hint>
+      <mat-error>Invalid or missing email.</mat-error>
     </mat-form-field>
-    <mat-form-field hintLabel="Should be at least 6 characters long">
+    <mat-form-field>
       <input
         type="password"
         matInput
         placeholder="Your password"
-        ngModel
-        name="password"
-        required
-        minlength="6"
-        #pwInput="ngModel"
+        formControlName="password"
       />
-
-      <mat-hint align="end">{{ pwInput.value?.length }} / 6 </mat-hint>
+      <mat-hint>Please enter your password.</mat-hint>
+      <mat-error>Missing password.</mat-error>
     </mat-form-field>
-
     <button
       type="submit"
       mat-raised-button
       color="primary"
-      [disabled]="f.invalid"
+      [disabled]="loginForm.invalid"
     >
-      Login
+      Submit
     </button>
   </form>
 </section>
