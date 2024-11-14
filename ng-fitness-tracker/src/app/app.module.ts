@@ -39,7 +39,7 @@ import { AuthService } from './auth/auth.service';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [provideAnimationsAsync(), AuthService],
+  providers: [provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

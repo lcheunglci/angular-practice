@@ -5,7 +5,7 @@ import { Exercise } from './exercise.model';
   providedIn: 'root',
 })
 export class TrainingService {
-  availableExercises: Exercise[] = [
+  private availableExercises: Exercise[] = [
     {
       id: 'crunches',
       name: 'Crunches',
@@ -31,4 +31,8 @@ export class TrainingService {
   ];
 
   constructor() {}
+
+  getAvailableExercises() {
+    return this.availableExercises.slice();
+  }
 }
