@@ -25,4 +25,8 @@ export class PastTrainingsComponent implements OnInit, AfterViewInit {
     this.dataSource.data =
       this.trainingService.getCompletedOrCancelledExercises();
   }
+
+  doFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
