@@ -1,11 +1,11 @@
 export const environment = {
   production: false,
   firebase: {
-    projectId: process.env['FB_PROJECTID'],
-    appId: process.env['FB_APPID'],
-    storageBucket: process.env['FB_STORAGEBUCKET'],
-    apiKey: process.env['FB_APIKEY'],
-    authDomain: process.env['FB_AUTHDOMAIN'],
-    messagingSenderId: process.env['FB_MESSAGINGSENDERID'],
+    projectId: import.meta.env['NG_APP_FB_PROJECTID'],
+    appId: import.meta.env['NG_APP_FB_APPID'],
+    storageBucket: import.meta.env['NG_APP_FB_STORAGEBUCKET'],
+    apiKey: import.meta.env['NG_APP_FB_APIKEY'],
+    authDomain: import.meta.env['NG_APP_FB_AUTHDOMAIN'],
+    messagingSenderId: process.env['NG_APP_FB_MESSAGINGSENDERID'],
   },
 };
