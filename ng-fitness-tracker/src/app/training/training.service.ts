@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
 import { map, Subject } from 'rxjs';
-import {
-  collectionChanges,
-  collectionData,
-  collectionSnapshots,
-} from '@angular/fire/firestore';
-import { collection, Firestore } from '@angular/fire/firestore/firebase';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
@@ -20,17 +14,20 @@ export class TrainingService {
   private runningExercise: Exercise | null = null;
   private exercises: Exercise[] = [];
 
-  constructor(private db: Firestore, private firestore: AngularFirestore) {}
+  constructor(private db: AngularFirestore) {}
 
   fetchAvailableExercises() {
-    const itemCollection = collection(this.db, 'availableExercises');
-    return collectionSnapshots(itemCollection)
+    return this.db
+      .collection('availableExercises')
+      .snapshotChanges()
       .pipe(
         map((docArray) => {
           return docArray.map((doc) => {
             return {
-              id: doc.id,
-              ...doc.data(),
+              id: doc.payload.doc.id,
+              name: (doc.payload.doc.data() as any).name,
+              duration: (doc.payload.doc.data() as any).duration,
+              calories: (doc.payload.doc.data() as any).calories,
             } as Exercise;
           });
         })
@@ -85,7 +82,7 @@ export class TrainingService {
   }
 
   private addDataToDatabase(exercise: Exercise) {
-    this.firestore.collection('finishedExercises').add(exercise);
+    this.db.collection('finishedExercises').add(exercise);
     // this.exercises.push(exercise);
   }
 }
