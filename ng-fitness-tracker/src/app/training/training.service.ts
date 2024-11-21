@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
-import { map, Observable, Subject } from 'rxjs';
-import { collectionSnapshots } from '@angular/fire/firestore';
+import { map, Subject } from 'rxjs';
+import {
+  collectionChanges,
+  collectionData,
+  collectionSnapshots,
+} from '@angular/fire/firestore';
 import { collection, Firestore } from '@angular/fire/firestore/firebase';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +20,7 @@ export class TrainingService {
   private runningExercise: Exercise | null = null;
   private exercises: Exercise[] = [];
 
-  constructor(private db: Firestore) {}
+  constructor(private db: Firestore, private firestore: AngularFirestore) {}
 
   fetchAvailableExercises() {
     const itemCollection = collection(this.db, 'availableExercises');
@@ -47,7 +52,7 @@ export class TrainingService {
 
   completeExercise() {
     if (this.runningExercise) {
-      this.exercises.push({
+      this.addDataToDatabase({
         ...this.runningExercise,
         date: new Date(),
         state: 'completed',
@@ -59,7 +64,7 @@ export class TrainingService {
 
   cancelExercise(progress: number) {
     if (this.runningExercise) {
-      this.exercises.push({
+      this.addDataToDatabase({
         ...this.runningExercise,
         duration: this.runningExercise.duration * (progress / 100),
         calories: this.runningExercise.calories * (progress / 100),
@@ -77,5 +82,10 @@ export class TrainingService {
 
   getCompletedOrCancelledExercises() {
     return this.exercises.slice();
+  }
+
+  private addDataToDatabase(exercise: Exercise) {
+    this.firestore.collection('finishedExercises').add(exercise);
+    // this.exercises.push(exercise);
   }
 }
