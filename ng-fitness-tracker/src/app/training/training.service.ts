@@ -9,25 +9,25 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 export class TrainingService {
   exerciseChanged = new Subject<Exercise | null>();
   exercisesChanged = new Subject<Exercise[]>();
+  finishedExercisesChanged = new Subject<Exercise[]>();
   private availableExercises: Exercise[] = [];
 
   private runningExercise: Exercise | null = null;
-  private exercises: Exercise[] = [];
 
   constructor(private db: AngularFirestore) {}
 
   fetchAvailableExercises() {
     return this.db
-      .collection('availableExercises')
+      .collection<Exercise>('availableExercises')
       .snapshotChanges()
       .pipe(
         map((docArray) => {
           return docArray.map((doc) => {
             return {
               id: doc.payload.doc.id,
-              name: (doc.payload.doc.data() as any).name,
-              duration: (doc.payload.doc.data() as any).duration,
-              calories: (doc.payload.doc.data() as any).calories,
+              name: doc.payload.doc.data().name,
+              duration: doc.payload.doc.data().duration,
+              calories: doc.payload.doc.data().calories,
             } as Exercise;
           });
         })
@@ -77,8 +77,14 @@ export class TrainingService {
     return { ...this.runningExercise };
   }
 
-  getCompletedOrCancelledExercises() {
-    return this.exercises.slice();
+  fetchCompletedOrCancelledExercises() {
+    this.db
+      .collection<Exercise>('finishedExercises')
+      .valueChanges()
+      .subscribe((exercises: Exercise[]) => {
+        this.finishedExercisesChanged.next(exercises);
+      });
+    //return this.finishedExercises.slice();
   }
 
   private addDataToDatabase(exercise: Exercise) {
