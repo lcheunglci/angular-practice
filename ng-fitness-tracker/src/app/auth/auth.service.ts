@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private user: User | null = null;
+  isAuthenticated = false;
   authChange = new Subject<boolean>();
   authenticated = signal(false);
 
@@ -34,8 +35,10 @@ export class AuthService {
   }
 
   private authSuccessfully() {
+    this.isAuthenticated = true;
     this.authChange.next(true);
     this.authenticated.set(true);
+    this.router.navigate(['/training']);
   }
 
   login(authData: AuthData) {
@@ -57,7 +60,7 @@ export class AuthService {
   }
 
   logout() {
-    this.user = null;
+    this.isAuthenticated = false;
     this.authChange.next(false);
     this.authenticated.set(false);
   }
@@ -67,6 +70,6 @@ export class AuthService {
   }
 
   isAuth() {
-    return this.user != null;
+    return this.isAuthenticated;
   }
 }
