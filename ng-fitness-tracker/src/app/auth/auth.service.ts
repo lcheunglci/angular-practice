@@ -3,6 +3,7 @@ import { AuthData } from './auth-data.model';
 import { Observable, Subject, Subscription } from 'rxjs';
 import {
   Auth,
+  authState,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
@@ -36,11 +37,26 @@ export class AuthService {
     });
   }
 
+  initAuthListener() {
+    authState(this.auth).subscribe((user) => {
+      if (user) {
+        this.isAuthenticated = true;
+        this.authChange.next(true);
+        this.router.navigate(['/training']);
+      } else {
+        this.trainingService.cancelSubscriptions();
+        this.isAuthenticated = false;
+        this.authChange.next(false);
+        this.authenticated.set(false);
+        this.router.navigate(['/login']);
+      }
+    });
+  }
+
   registerUser(authData: AuthData) {
     createUserWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         console.log(results);
-        this.authSuccessfully();
       })
       .catch((error) => {
         console.log(error);
@@ -53,13 +69,6 @@ export class AuthService {
     // this.authSuccessfully();
   }
 
-  private authSuccessfully() {
-    this.isAuthenticated = true;
-    this.authChange.next(true);
-    this.authenticated.set(true);
-    this.router.navigate(['/training']);
-  }
-
   login(authData: AuthData) {
     // this.user = {
     //   email: authData.email,
@@ -68,22 +77,14 @@ export class AuthService {
     signInWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         console.log(results);
-        this.authSuccessfully();
       })
       .catch((error) => {
         console.log(error);
       });
-
-    this.authSuccessfully();
   }
 
   logout() {
-    this.trainingService.cancelSubscriptions();
-    this.isAuthenticated = false;
-    this.authChange.next(false);
-    this.authenticated.set(false);
     signOut(this.auth);
-    this.router.navigate(['/login']);
   }
 
   getUser() {
