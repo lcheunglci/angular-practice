@@ -42,6 +42,7 @@ export class AuthService {
       if (user) {
         this.isAuthenticated = true;
         this.authChange.next(true);
+        this.authenticated = signal(true);
         this.router.navigate(['/training']);
       } else {
         this.trainingService.cancelSubscriptions();

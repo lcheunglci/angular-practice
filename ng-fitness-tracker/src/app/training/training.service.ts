@@ -26,12 +26,11 @@ export class TrainingService {
 
   fetchAvailableExercises() {
     const exerciseCollection = collection(this.db, 'availableExercises');
-
     this.fbSubs.push(
       collectionSnapshots(exerciseCollection)
         .pipe(
           map((docArray) => {
-            return docArray.map((doc) => {
+            const exerciseList: Exercise[] = docArray.map((doc) => {
               return {
                 id: doc.id,
                 name: doc.data()['name'] as string,
@@ -39,6 +38,7 @@ export class TrainingService {
                 calories: doc.data()['calories'] as number,
               } as Exercise;
             });
+            return exerciseList;
           })
         )
         .subscribe({
@@ -102,6 +102,7 @@ export class TrainingService {
     this.fbSubs.push(
       data$.subscribe({
         next: (exercises: Exercise[]) => {
+          console.log('fetchCompletedOrCancelled', exercises);
           this.finishedExercisesChanged.next(exercises);
         },
       })
