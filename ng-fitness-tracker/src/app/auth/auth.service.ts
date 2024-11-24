@@ -5,10 +5,12 @@ import {
   Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
   User,
   user,
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { TrainingService } from '../training/training.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +22,11 @@ export class AuthService {
   authChange = new Subject<boolean>();
   authenticated = signal(false);
 
-  constructor(private router: Router, private auth: Auth) {
+  constructor(
+    private router: Router,
+    private auth: Auth,
+    private trainingService: TrainingService
+  ) {
     const user$ = user(this.auth);
 
     this.userSub = user$.subscribe((aUser: User | null) => {
@@ -72,9 +78,12 @@ export class AuthService {
   }
 
   logout() {
+    this.trainingService.cancelSubscriptions();
     this.isAuthenticated = false;
     this.authChange.next(false);
     this.authenticated.set(false);
+    signOut(this.auth);
+    this.router.navigate(['/login']);
   }
 
   getUser() {
