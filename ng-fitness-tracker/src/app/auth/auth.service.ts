@@ -1,24 +1,37 @@
 import { Injectable, signal } from '@angular/core';
-import { User } from './user.model';
 import { AuthData } from './auth-data.model';
-import { Subject } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Observable, Subject, Subscription } from 'rxjs';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  User,
+  user,
+} from '@angular/fire/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private user: User | null = null;
+  userSub!: Subscription;
+  authUser!: User | null;
   isAuthenticated = false;
   authChange = new Subject<boolean>();
   authenticated = signal(false);
 
-  constructor(private router: Router, private fireAuth: AngularFireAuth) {}
+  constructor(private router: Router, private auth: Auth) {
+    const user$ = user(this.auth);
+
+    this.userSub = user$.subscribe((aUser: User | null) => {
+      // handle user state changes here.
+      console.log(aUser);
+      this.authUser = aUser;
+    });
+  }
 
   registerUser(authData: AuthData) {
-    this.fireAuth
-      .createUserWithEmailAndPassword(authData.email, authData.password)
+    createUserWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         console.log(results);
         this.authSuccessfully();
@@ -46,8 +59,7 @@ export class AuthService {
     //   email: authData.email,
     //   userId: Math.round(Math.random() * 10000).toString(),
     // };
-    this.fireAuth
-      .signInWithEmailAndPassword(authData.email, authData.password)
+    signInWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         console.log(results);
         this.authSuccessfully();
@@ -66,7 +78,7 @@ export class AuthService {
   }
 
   getUser() {
-    return { ...this.user };
+    return { ...this.authUser };
   }
 
   isAuth() {

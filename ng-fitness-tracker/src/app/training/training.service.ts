@@ -1,7 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
-import { map, Subject } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { map, Observable, Subject } from 'rxjs';
+
+import {
+  collection,
+  collectionData,
+  Firestore,
+  collectionSnapshots,
+  collectionChanges,
+  addDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -14,20 +22,20 @@ export class TrainingService {
 
   private runningExercise: Exercise | null = null;
 
-  constructor(private db: AngularFirestore) {}
+  constructor(private db: Firestore) {}
 
   fetchAvailableExercises() {
-    return this.db
-      .collection<Exercise>('availableExercises')
-      .snapshotChanges()
+    const exerciseCollection = collection(this.db, 'availableExercises');
+
+    collectionSnapshots(exerciseCollection)
       .pipe(
         map((docArray) => {
           return docArray.map((doc) => {
             return {
-              id: doc.payload.doc.id,
-              name: doc.payload.doc.data().name,
-              duration: doc.payload.doc.data().duration,
-              calories: doc.payload.doc.data().calories,
+              id: doc.id,
+              name: doc.data()['name'] as string,
+              duration: doc.data()['duration'] as number,
+              calories: doc.data()['calories'] as number,
             } as Exercise;
           });
         })
@@ -78,17 +86,20 @@ export class TrainingService {
   }
 
   fetchCompletedOrCancelledExercises() {
-    this.db
-      .collection<Exercise>('finishedExercises')
-      .valueChanges()
-      .subscribe((exercises: Exercise[]) => {
-        this.finishedExercisesChanged.next(exercises);
-      });
+    const finishedExerciseCollection = collection(this.db, 'finishedExercises');
+    const data$ = collectionData(finishedExerciseCollection) as Observable<
+      Exercise[]
+    >;
+
+    data$.subscribe((exercises: Exercise[]) => {
+      this.finishedExercisesChanged.next(exercises);
+    });
     //return this.finishedExercises.slice();
   }
 
   private addDataToDatabase(exercise: Exercise) {
-    this.db.collection('finishedExercises').add(exercise);
+    const finishedExerciseCollection = collection(this.db, 'finishedExercises');
+    addDoc(finishedExerciseCollection, exercise);
     // this.exercises.push(exercise);
   }
 }
