@@ -12,6 +12,7 @@ import {
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { TrainingService } from '../training/training.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,8 @@ export class AuthService {
   constructor(
     private router: Router,
     private auth: Auth,
-    private trainingService: TrainingService
+    private trainingService: TrainingService,
+    private snackbar: MatSnackBar
   ) {
     const user$ = user(this.auth);
 
@@ -60,7 +62,7 @@ export class AuthService {
         console.log(results);
       })
       .catch((error) => {
-        console.log(error);
+        this.snackbar.open(error.message, '', { duration: 3000 });
       });
 
     // this.user = {
@@ -80,7 +82,7 @@ export class AuthService {
         console.log(results);
       })
       .catch((error) => {
-        console.log(error);
+        this.snackbar.open(error.message, '', { duration: 3000 });
       });
   }
 
