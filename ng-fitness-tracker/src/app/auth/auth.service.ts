@@ -13,6 +13,7 @@ import {
 import { Router } from '@angular/router';
 import { TrainingService } from '../training/training.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UIService } from '../shared/ui.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,8 @@ export class AuthService {
     private router: Router,
     private auth: Auth,
     private trainingService: TrainingService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private uiService: UIService
   ) {
     const user$ = user(this.auth);
 
@@ -57,11 +59,13 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
+    this.uiService.loadingStateChanged.next(true);
     createUserWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
-        console.log(results);
+        this.uiService.loadingStateChanged.next(false);
       })
       .catch((error) => {
+        this.uiService.loadingStateChanged.next(false);
         this.snackbar.open(error.message, '', { duration: 3000 });
       });
 
@@ -77,11 +81,13 @@ export class AuthService {
     //   email: authData.email,
     //   userId: Math.round(Math.random() * 10000).toString(),
     // };
+    this.uiService.loadingStateChanged.next(true);
     signInWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
-        console.log(results);
+        this.uiService.loadingStateChanged.next(false);
       })
       .catch((error) => {
+        this.uiService.loadingStateChanged.next(false);
         this.snackbar.open(error.message, '', { duration: 3000 });
       });
   }
