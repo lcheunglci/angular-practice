@@ -9,6 +9,7 @@ import {
   collectionSnapshots,
   addDoc,
 } from '@angular/fire/firestore';
+import { UIService } from '../shared/ui.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class TrainingService {
 
   private runningExercise: Exercise | null = null;
 
-  constructor(private db: Firestore) {}
+  constructor(private db: Firestore, private uiService: UIService) {}
 
   fetchAvailableExercises() {
     const exerciseCollection = collection(this.db, 'availableExercises');
@@ -46,8 +47,14 @@ export class TrainingService {
             this.availableExercises = exercises;
             this.exercisesChanged.next([...this.availableExercises]);
           },
-          error: (error) => {
-            console.log(error);
+          error: () => {
+            this.uiService.loadingStateChanged.next(false);
+            this.uiService.showSnackbar(
+              'Fetching Exercises failed, please try again later',
+              '',
+              3000
+            );
+            this.exerciseChanged.next(null);
           },
         })
     );

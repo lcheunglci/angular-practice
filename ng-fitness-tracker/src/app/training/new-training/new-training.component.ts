@@ -19,6 +19,7 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   @Output() trainingStart = new EventEmitter<void>();
   exercises!: Exercise[];
   exerciseSub!: Subscription;
+  isLoading = false;
 
   constructor(private trainingService: TrainingService) {}
 
@@ -27,15 +28,21 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.exerciseSub = this.trainingService.exercisesChanged.subscribe(
       (exercises) => {
         this.exercises = exercises;
+        this.isLoading = false;
       }
     );
-    this.trainingService.fetchAvailableExercises();
+    this.fetchExercises();
   }
 
   onStartTraining(form: NgForm) {
     this.trainingService.startExercise(form.value.exercise);
+  }
+
+  fetchExercises() {
+    this.trainingService.fetchAvailableExercises();
   }
 }
