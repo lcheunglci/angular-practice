@@ -45,7 +45,9 @@ export class PastTrainingsComponent
   }
 
   ngOnDestroy(): void {
-    this.exerciseChangedSub.unsubscribe();
+    if (this.exerciseChangedSub) {
+      this.exerciseChangedSub.unsubscribe();
+    }
   }
 
   doFilter(event: any) {
