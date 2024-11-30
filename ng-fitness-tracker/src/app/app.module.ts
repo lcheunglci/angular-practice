@@ -14,6 +14,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 import { AuthModule } from './auth/auth.module';
 import { TrainingModule } from './training/training.module';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,7 @@ import { TrainingModule } from './training/training.module';
     MaterialModule,
     AuthModule,
     TrainingModule,
+    StoreModule.forRoot({ ui: appReducer }, {}),
   ],
   providers: [
     provideAnimationsAsync(),
