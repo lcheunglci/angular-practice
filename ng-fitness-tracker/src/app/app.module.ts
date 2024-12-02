@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 import { AuthModule } from './auth/auth.module';
 import { TrainingModule } from './training/training.module';
 import { StoreModule } from '@ngrx/store';
-import { appReducer } from './app.reducer';
+import { reducers } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { appReducer } from './app.reducer';
     MaterialModule,
     AuthModule,
     TrainingModule,
-    StoreModule.forRoot({ ui: appReducer }, {}),
+    StoreModule.forRoot(reducers),
   ],
   providers: [
     provideAnimationsAsync(),

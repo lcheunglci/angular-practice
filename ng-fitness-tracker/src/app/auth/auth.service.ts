@@ -1,4 +1,5 @@
 import * as fromApp from './../app.reducer';
+import * as UI from '../shared/ui.actions';
 import { Injectable, signal } from '@angular/core';
 import { AuthData } from './auth-data.model';
 import { Subject, Subscription } from 'rxjs';
@@ -31,7 +32,7 @@ export class AuthService {
     private auth: Auth,
     private trainingService: TrainingService,
     private uiService: UIService,
-    private store: Store<{ ui: fromApp.State }>
+    private store: Store<fromApp.State>
   ) {
     const user$ = user(this.auth);
 
@@ -61,15 +62,15 @@ export class AuthService {
 
   registerUser(authData: AuthData) {
     // this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch({ type: 'START_LOADING' });
+    this.store.dispatch(new UI.StartLoading());
     createUserWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch({ type: 'STOP_LOADING' });
+        this.store.dispatch(new UI.StopLoading());
       })
       .catch((error) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch({ type: 'STOP_LOADING' });
+        this.store.dispatch(new UI.StopLoading());
         this.uiService.showSnackbar(error.message, '', 3000);
       });
 
@@ -86,15 +87,15 @@ export class AuthService {
     //   userId: Math.round(Math.random() * 10000).toString(),
     // };
     // this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch({ type: 'START_LOADING' });
+    this.store.dispatch(new UI.StartLoading());
     signInWithEmailAndPassword(this.auth, authData.email, authData.password)
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch({ type: 'STOP_LOADING' });
+        this.store.dispatch(new UI.StopLoading());
       })
       .catch((error) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch({ type: 'STOP_LOADING' });
+        this.store.dispatch(new UI.StopLoading());
         this.uiService.showSnackbar(error.message, '', 3000);
       });
   }
