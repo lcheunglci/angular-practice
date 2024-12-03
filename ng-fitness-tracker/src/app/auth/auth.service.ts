@@ -1,8 +1,9 @@
 import * as fromApp from './../app.reducer';
 import * as UI from '../shared/ui.actions';
-import { Injectable, signal } from '@angular/core';
+import * as AUTH from './auth.actions';
+import { Injectable } from '@angular/core';
 import { AuthData } from './auth-data.model';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   Auth,
   authState,
@@ -23,18 +24,15 @@ import { Store } from '@ngrx/store';
 export class AuthService {
   userSub!: Subscription;
   authUser!: User | null;
-  isAuthenticated = false;
-  authChange = new Subject<boolean>();
-  authenticated = signal(false);
 
   constructor(
     private router: Router,
-    private auth: Auth,
+    private afAuth: Auth,
     private trainingService: TrainingService,
     private uiService: UIService,
     private store: Store<fromApp.State>
   ) {
-    const user$ = user(this.auth);
+    const user$ = user(this.afAuth);
 
     this.userSub = user$.subscribe((aUser: User | null) => {
       // handle user state changes here.
@@ -44,17 +42,13 @@ export class AuthService {
   }
 
   initAuthListener() {
-    authState(this.auth).subscribe((user) => {
+    authState(this.afAuth).subscribe((user) => {
       if (user) {
-        this.isAuthenticated = true;
-        this.authChange.next(true);
-        this.authenticated = signal(true);
+        this.store.dispatch(new AUTH.SetAuthenticated());
         this.router.navigate(['/training']);
       } else {
         this.trainingService.cancelSubscriptions();
-        this.isAuthenticated = false;
-        this.authChange.next(false);
-        this.authenticated.set(false);
+        this.store.dispatch(new AUTH.SetUnauthenticated());
         this.router.navigate(['/login']);
       }
     });
@@ -63,7 +57,11 @@ export class AuthService {
   registerUser(authData: AuthData) {
     // this.uiService.loadingStateChanged.next(true);
     this.store.dispatch(new UI.StartLoading());
-    createUserWithEmailAndPassword(this.auth, authData.email, authData.password)
+    createUserWithEmailAndPassword(
+      this.afAuth,
+      authData.email,
+      authData.password
+    )
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
         this.store.dispatch(new UI.StopLoading());
@@ -88,7 +86,7 @@ export class AuthService {
     // };
     // this.uiService.loadingStateChanged.next(true);
     this.store.dispatch(new UI.StartLoading());
-    signInWithEmailAndPassword(this.auth, authData.email, authData.password)
+    signInWithEmailAndPassword(this.afAuth, authData.email, authData.password)
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
         this.store.dispatch(new UI.StopLoading());
@@ -101,14 +99,10 @@ export class AuthService {
   }
 
   logout() {
-    signOut(this.auth);
+    signOut(this.afAuth);
   }
 
   getUser() {
     return { ...this.authUser };
-  }
-
-  isAuth() {
-    return this.isAuthenticated;
   }
 }
