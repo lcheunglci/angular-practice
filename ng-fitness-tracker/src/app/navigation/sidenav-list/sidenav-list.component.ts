@@ -1,16 +1,8 @@
-import { getAuthState, getIsAuth } from './../../app.reducer';
-import { getAuth } from '@angular/fire/auth';
 import { AuthService } from './../../auth/auth.service';
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromRoot from '../app.reducer';
+import * as fromRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-sidenav-list',
