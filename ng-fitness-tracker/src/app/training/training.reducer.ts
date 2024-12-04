@@ -11,7 +11,7 @@ import * as fromRoot from '../app.reducer';
 export interface TrainingState {
   availableExercises: Exercise[];
   finishedExercises: Exercise[];
-  activeTraining: null;
+  activeTraining: Exercise | null;
 }
 
 export interface State extends fromRoot.State {
@@ -24,15 +24,15 @@ const initialState: TrainingState = {
   activeTraining: null,
 };
 
-export function authReducer(
+export function trainingReducer(
   state = initialState,
   action: TrainingActions
-): State {
+): TrainingState {
   switch (action.type) {
     case SET_AVAILABLE_TRAININGS:
-      return { ...state, availableExercise: action.payload };
+      return { ...state, availableExercises: action.payload };
     case SET_FINISHED_TRAININGS:
-      return { ...state, finishedExercise: action.payload };
+      return { ...state, finishedExercises: action.payload };
     case START_TRAINING:
       return { ...state, activeTraining: action.payload };
     case STOP_TRAINING:
@@ -42,4 +42,8 @@ export function authReducer(
   }
 }
 
-// export const getIsAuth = (state: State) => state.isAuthenticated;
+export const getAvailableExercises = (state: TrainingState) =>
+  state.availableExercises;
+export const getFinishedExercises = (state: TrainingState) =>
+  state.finishedExercises;
+export const getActiveTraining = (state: TrainingState) => state.activeTraining;
