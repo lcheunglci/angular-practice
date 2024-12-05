@@ -35,7 +35,12 @@ export function trainingReducer(
     case SET_FINISHED_TRAININGS:
       return { ...state, finishedExercises: action.payload };
     case START_TRAINING:
-      return { ...state, activeTraining: action.payload };
+      return {
+        ...state,
+        activeTraining: {
+          ...state.availableExercises.find((ex) => ex.id === action.payload)!,
+        },
+      };
     case STOP_TRAINING:
       return { ...state, activeTraining: null };
     default:
