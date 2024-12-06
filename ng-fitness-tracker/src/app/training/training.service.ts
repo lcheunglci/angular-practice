@@ -1,7 +1,7 @@
 import { reducers } from './../app.reducer';
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
-import { map, Observable, Subject, Subscription } from 'rxjs';
+import { map, Observable, Subject, Subscription, take } from 'rxjs';
 import * as UI from '../shared/ui.actions';
 import * as Training from './training.actions';
 import * as fromTraining from './training.reducer';
@@ -83,35 +83,37 @@ export class TrainingService {
   }
 
   completeExercise() {
-    if (this.runningExercise) {
-      this.addDataToDatabase({
-        ...this.runningExercise,
-        date: new Date(),
-        state: 'completed',
+    this.store
+      .select(fromTraining.getActiveTraining)
+      .pipe(take(1))
+      .subscribe((ex) => {
+        if (ex) {
+          this.addDataToDatabase({
+            ...ex,
+            date: new Date(),
+            state: 'completed',
+          });
+          this.store.dispatch(new Training.StopTraining());
+        }
       });
-      // this.runningExercise = null;
-      // this.exerciseChanged.next(null);
-      this.store.dispatch(new Training.StopTraining());
-    }
   }
 
   cancelExercise(progress: number) {
-    if (this.runningExercise) {
-      this.addDataToDatabase({
-        ...this.runningExercise,
-        duration: this.runningExercise.duration * (progress / 100),
-        calories: this.runningExercise.calories * (progress / 100),
-        date: new Date(),
-        state: 'cancelled',
+    this.store
+      .select(fromTraining.getActiveTraining)
+      .pipe(take(1))
+      .subscribe((ex) => {
+        if (ex) {
+          this.addDataToDatabase({
+            ...ex,
+            duration: ex.duration * (progress / 100),
+            calories: ex.calories * (progress / 100),
+            date: new Date(),
+            state: 'cancelled',
+          });
+        }
       });
-      // this.runningExercise = null;
-      // this.exerciseChanged.next(null);
-      this.store.dispatch(new Training.StopTraining());
-    }
-  }
-
-  getRunningExercise() {
-    return { ...this.runningExercise };
+    this.store.dispatch(new Training.StopTraining());
   }
 
   fetchCompletedOrCancelledExercises() {
