@@ -1,4 +1,4 @@
-import { CanActivateFn, CanLoadFn, CanMatchFn } from '@angular/router';
+import { CanActivateFn, CanMatchFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../app.reducer';

@@ -1,9 +1,8 @@
-import { reducers } from './../../app.reducer';
 import { Exercise } from './../exercise.model';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { TrainingService } from '../training.service';
 import { NgForm } from '@angular/forms';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UIService } from '../../shared/ui.service';
 import { Store } from '@ngrx/store';
 import * as fromTraining from '../training.reducer';
