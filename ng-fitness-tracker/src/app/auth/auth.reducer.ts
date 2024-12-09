@@ -1,11 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import { AuthActions } from './auth.actions';
 
-export interface State {
+export interface AuthState {
   isAuthenticated: boolean;
 }
 
-const initialState: State = {
+const initialState: AuthState = {
   isAuthenticated: false,
 };
 
@@ -21,4 +21,4 @@ export const authReducer = createReducer(
   }))
 );
 
-export const getIsAuth = (state: State) => state.isAuthenticated;
+export const getIsAuth = (state: AuthState) => state.isAuthenticated;
