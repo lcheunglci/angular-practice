@@ -1,6 +1,6 @@
 import * as fromApp from './../app.reducer';
 import * as UI from '../shared/ui.actions';
-import * as AUTH from './auth.actions';
+import { AuthActions } from './auth.actions';
 import { Injectable } from '@angular/core';
 import { AuthData } from './auth-data.model';
 import { Subscription } from 'rxjs';
@@ -44,11 +44,11 @@ export class AuthService {
   initAuthListener() {
     authState(this.afAuth).subscribe((user) => {
       if (user) {
-        this.store.dispatch(new AUTH.SetAuthenticated());
+        this.store.dispatch(AuthActions.setAuthenticated());
         this.router.navigate(['/training']);
       } else {
         this.trainingService.cancelSubscriptions();
-        this.store.dispatch(new AUTH.SetUnauthenticated());
+        this.store.dispatch(AuthActions.setUnauthenticated());
         this.router.navigate(['/login']);
       }
     });

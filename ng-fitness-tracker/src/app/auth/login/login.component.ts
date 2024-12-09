@@ -1,9 +1,9 @@
 import * as fromRoot from '../../app.reducer';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UIService } from '../../shared/ui.service';
-import { Observable, Subscription, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 @Component({

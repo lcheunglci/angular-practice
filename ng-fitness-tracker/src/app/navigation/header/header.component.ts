@@ -11,15 +11,13 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
   @Output() sidenavToggle = new EventEmitter<void>();
-  isAuth$!: Observable<boolean>;
+  isAuth$: Observable<boolean> = this.store.select(fromRoot.getIsAuth);
 
   constructor(
     private store: Store<fromRoot.State>,
     private auth: AuthService
   ) {}
-  ngOnInit(): void {
-    this.isAuth$ = this.store.select(fromRoot.getIsAuth);
-  }
+  ngOnInit(): void {}
 
   onToggleSidenav() {
     this.sidenavToggle.emit();
