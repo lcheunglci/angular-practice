@@ -1,14 +1,9 @@
-import { Action } from '@ngrx/store';
+import { createActionGroup, emptyProps } from '@ngrx/store';
 
-export const START_LOADING = '[UI] Start Loading';
-export const STOP_LOADING = '[UI] Stop';
-
-export class StartLoading implements Action {
-  readonly type = START_LOADING;
-}
-
-export class StopLoading implements Action {
-  readonly type = STOP_LOADING;
-}
-
-export type UIActions = StartLoading | StopLoading;
+export const UIActions = createActionGroup({
+  source: 'UI',
+  events: {
+    'Start Loading': emptyProps(),
+    'Stop Loading': emptyProps(),
+  },
+});

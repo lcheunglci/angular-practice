@@ -1,5 +1,5 @@
 import * as fromApp from './../app.reducer';
-import * as UI from '../shared/ui.actions';
+import { UIActions } from '../shared/ui.actions';
 import { AuthActions } from './auth.actions';
 import { Injectable } from '@angular/core';
 import { AuthData } from './auth-data.model';
@@ -56,7 +56,7 @@ export class AuthService {
 
   registerUser(authData: AuthData) {
     // this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch(new UI.StartLoading());
+    this.store.dispatch(UIActions.startLoading());
     createUserWithEmailAndPassword(
       this.afAuth,
       authData.email,
@@ -64,11 +64,11 @@ export class AuthService {
     )
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading());
+        this.store.dispatch(UIActions.stopLoading());
       })
       .catch((error) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading());
+        this.store.dispatch(UIActions.stopLoading());
         this.uiService.showSnackbar(error.message, '', 3000);
       });
 
@@ -85,15 +85,15 @@ export class AuthService {
     //   userId: Math.round(Math.random() * 10000).toString(),
     // };
     // this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch(new UI.StartLoading());
+    this.store.dispatch(UIActions.startLoading());
     signInWithEmailAndPassword(this.afAuth, authData.email, authData.password)
       .then((results) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading());
+        this.store.dispatch(UIActions.stopLoading());
       })
       .catch((error) => {
         // this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading());
+        this.store.dispatch(UIActions.stopLoading());
         this.uiService.showSnackbar(error.message, '', 3000);
       });
   }

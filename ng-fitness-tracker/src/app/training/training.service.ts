@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
 import { map, Observable, Subscription, take } from 'rxjs';
-import * as UI from '../shared/ui.actions';
+import { UIActions } from '../shared/ui.actions';
 import * as Training from './training.actions';
 import * as fromTraining from './training.reducer';
 
@@ -46,7 +46,7 @@ export class TrainingService {
         )
         .subscribe({
           next: (exercises: Exercise[]) => {
-            this.store.dispatch(new UI.StopLoading());
+            this.store.dispatch(UIActions.stopLoading());
             this.store.dispatch(new Training.SetAvailableTrainings(exercises));
           },
           error: () => {
