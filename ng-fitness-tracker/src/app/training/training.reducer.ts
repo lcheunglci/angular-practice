@@ -1,13 +1,12 @@
 import { Exercise } from './exercise.model';
-import {
-  SET_AVAILABLE_TRAININGS,
-  SET_FINISHED_TRAININGS,
-  STOP_TRAINING,
-  START_TRAINING,
-  TrainingActions,
-} from './training.actions';
+import { TrainingActions } from './training.actions';
 import * as fromRoot from '../app.reducer';
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import {
+  createFeatureSelector,
+  createReducer,
+  createSelector,
+  on,
+} from '@ngrx/store';
 
 export interface TrainingState {
   availableExercises: Exercise[];
@@ -25,28 +24,50 @@ const initialState: TrainingState = {
   activeTraining: null,
 };
 
-export function trainingReducer(
-  state = initialState,
-  action: TrainingActions
-): TrainingState {
-  switch (action.type) {
-    case SET_AVAILABLE_TRAININGS:
-      return { ...state, availableExercises: action.payload };
-    case SET_FINISHED_TRAININGS:
-      return { ...state, finishedExercises: action.payload };
-    case START_TRAINING:
-      return {
-        ...state,
-        activeTraining: {
-          ...state.availableExercises.find((ex) => ex.id === action.payload)!,
-        },
-      };
-    case STOP_TRAINING:
-      return { ...state, activeTraining: null };
-    default:
-      return state;
-  }
-}
+export const trainingReducer = createReducer(
+  initialState,
+  on(TrainingActions.setAvailableTrainings, (state, action) => ({
+    ...state,
+    availableExercises: action.availableExercises,
+  })),
+  on(TrainingActions.setFinishedTrainings, (state, action) => ({
+    ...state,
+    finishedExercises: action.finishedExercises,
+  })),
+  on(TrainingActions.startTraining, (state, action) => ({
+    ...state,
+    activeTraining: {
+      ...state.availableExercises.find((ex) => ex.id === action.id)!,
+    },
+  })),
+  on(TrainingActions.stopTraining, (state) => ({
+    ...state,
+    activeTraining: null,
+  }))
+);
+
+// export function trainingReducer(
+//   state = initialState,
+//   action: TrainingActions
+// ): TrainingState {
+//   switch (action.type) {
+//     case SET_AVAILABLE_TRAININGS:
+//       return { ...state, availableExercises: action.payload };
+//     case SET_FINISHED_TRAININGS:
+//       return { ...state, finishedExercises: action.payload };
+//     case START_TRAINING:
+//       return {
+//         ...state,
+//         activeTraining: {
+//           ...state.availableExercises.find((ex) => ex.id === action.payload)!,
+//         },
+//       };
+//     case STOP_TRAINING:
+//       return { ...state, activeTraining: null };
+//     default:
+//       return state;
+//   }
+// }
 
 export const getTrainingState =
   createFeatureSelector<TrainingState>('training');

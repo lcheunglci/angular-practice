@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Exercise } from './exercise.model';
 import { map, Observable, Subscription, take } from 'rxjs';
 import { UIActions } from '../shared/ui.actions';
-import * as Training from './training.actions';
+import { TrainingActions } from './training.actions';
 import * as fromTraining from './training.reducer';
 
 import {
@@ -47,7 +47,11 @@ export class TrainingService {
         .subscribe({
           next: (exercises: Exercise[]) => {
             this.store.dispatch(UIActions.stopLoading());
-            this.store.dispatch(new Training.SetAvailableTrainings(exercises));
+            this.store.dispatch(
+              TrainingActions.setAvailableTrainings({
+                availableExercises: exercises,
+              })
+            );
           },
           error: () => {
             this.uiService.loadingStateChanged.next(false);
@@ -62,7 +66,7 @@ export class TrainingService {
   }
 
   startExercise(selectedId: string) {
-    this.store.dispatch(new Training.StartTraining(selectedId));
+    this.store.dispatch(TrainingActions.startTraining({ id: selectedId }));
   }
 
   completeExercise() {
@@ -76,7 +80,7 @@ export class TrainingService {
             date: new Date(),
             state: 'completed',
           });
-          this.store.dispatch(new Training.StopTraining());
+          this.store.dispatch(TrainingActions.stopTraining());
         }
       });
   }
@@ -96,7 +100,7 @@ export class TrainingService {
           });
         }
       });
-    this.store.dispatch(new Training.StopTraining());
+    this.store.dispatch(TrainingActions.stopTraining());
   }
 
   fetchCompletedOrCancelledExercises() {
@@ -108,7 +112,11 @@ export class TrainingService {
     this.fbSubs.push(
       data$.subscribe({
         next: (exercises: Exercise[]) => {
-          this.store.dispatch(new Training.SetFinishedTrainings(exercises));
+          this.store.dispatch(
+            TrainingActions.setFinishedTrainings({
+              finishedExercises: exercises,
+            })
+          );
         },
       })
     );
