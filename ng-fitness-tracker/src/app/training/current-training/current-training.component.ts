@@ -31,7 +31,7 @@ export class CurrentTrainingComponent implements OnInit {
       .pipe(take(1))
       .subscribe((ex) => {
         const duration = ex?.duration;
-        let step = duration ? duration / 100 : 1000;
+        let step = duration ? (duration * 1000) / 100 : 1000;
         this.timer = setInterval(() => {
           this.progress = this.progress + 5;
           if (this.progress >= 100) {
