@@ -1,13 +1,21 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>home</ion-title>
+    <ion-title mode="md"
+      ><span>home</span> <ion-icon name="chevron-down-outline"></ion-icon
+    ></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">home</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <swiper-container
+    [modules]="swiperModule"
+    [slidesPerView]="1.2"
+    [centerSlides]="true"
+    [spaceBetween]="20"
+    [pagination]="{clickable: true, dynamicBullets: true}"
+  >
+    <swiper-slide><img src="assets/imgs/1.jpg" alt="" /></swiper-slide>
+    <swiper-slide><img src="assets/imgs/2.jpg" alt="" /></swiper-slide>
+    <swiper-slide><img src="assets/imgs/3.jpg" alt="" /></swiper-slide>
+  </swiper-container>
 </ion-content>
