@@ -7,15 +7,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <swiper-container
-    [modules]="swiperModule"
-    [slidesPerView]="1.2"
-    [spaceBetween]="20"
-    [keyboard]="true"
-    [pagination]="{clickable: true, dynamicBullets: true}"
-  >
-    <swiper-slide><img src="assets/imgs/1.jpg" alt="" /></swiper-slide>
-    <swiper-slide><img src="assets/imgs/2.jpg" alt="" /></swiper-slide>
-    <swiper-slide><img src="assets/imgs/3.jpg" alt="" /></swiper-slide>
-  </swiper-container>
+  <div class="borderBottom">
+    <swiper-container
+      [modules]="swiperModule"
+      [slidesPerView]="1.2"
+      [spaceBetween]="20"
+      [keyboard]="true"
+      [pagination]="{clickable: true, dynamicBullets: true}"
+    >
+      <swiper-slide><img src="assets/imgs/1.jpg" alt="" /></swiper-slide>
+      <swiper-slide><img src="assets/imgs/2.jpg" alt="" /></swiper-slide>
+      <swiper-slide><img src="assets/imgs/3.jpg" alt="" /></swiper-slide>
+    </swiper-container>
+  </div>
 </ion-content>
