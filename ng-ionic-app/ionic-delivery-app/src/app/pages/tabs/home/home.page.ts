@@ -9,7 +9,15 @@ import { IonicSlides } from '@ionic/angular';
 export class HomePage implements OnInit {
   swiperModule = [IonicSlides];
 
+  banners: any[] = [];
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.banners = [
+      { banner: 'assets/imgs/1.jpg' },
+      { banner: 'assets/imgs/2.jpg' },
+      { banner: 'assets/imgs/3.jpg' },
+    ];
+  }
 }
