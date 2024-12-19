@@ -36,6 +36,28 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+ion-title {
+  font-weight: bold;
+}
+
+ion-label {
+  font-weight: bold !important;
+  font-size: 0.9rem;
+}
+
+ion-note,
+p {
+  font-size: 0.8rem;
+}
+
+h5 {
+  font-size: 0.85rem;
+}
+
+h6 {
+  font-size: 0.82rem;
+}
+
 .borderBottom {
   border-bottom: 1.5vh solid var(--ion-color-light);
 }
