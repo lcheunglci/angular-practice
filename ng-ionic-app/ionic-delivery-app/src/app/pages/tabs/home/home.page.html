@@ -14,7 +14,11 @@
         <h4>Restaurants Nearby</h4>
         <p>Discover unique tastes near you</p>
       </ion-label>
-      <app-restaurant></app-restaurant>
+
+      <app-restaurant
+        *ngFor="let restaurant of restaurants"
+        [restaurant]="restaurant"
+      ></app-restaurant>
     </ion-list-header>
   </ion-list>
 </ion-content>

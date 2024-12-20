@@ -1,18 +1,21 @@
 <ion-item lines="none">
   <ion-thumbnail slot="start">
-    <img src="assets/img/1.png" alt="" />
+    <img
+      [src]="restaurant.cover ? restaurant.cover : 'assets/img/1.png'"
+      alt=""
+    />
   </ion-thumbnail>
   <ion-label>
-    <h4>Stayfit</h4>
+    <h4>{{ restaurant.name }}</h4>
     <ion-text color="medium">
-      <p class="pStyle">Italian, Mexican</p>
+      <p class="pStyle">{{ restaurant.cuisines.join(", ") }}</p>
       <span>
         <ion-icon name="star"></ion-icon>
-        5 .
+        {{ restaurant.rating }} .
       </span>
-      25 mins . $100 for two
+      {{ restaurant.delivery_time }} mins . $ {{ restaurant.price }} for two
       <ion-text color="tertiary">
-        <p class="distance">2.59 kms away</p>
+        <p class="distance">{{ restaurant.distance }} kms away</p>
       </ion-text>
     </ion-text>
   </ion-label>
