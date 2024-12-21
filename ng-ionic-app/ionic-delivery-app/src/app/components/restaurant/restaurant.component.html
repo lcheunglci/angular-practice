@@ -14,8 +14,10 @@
         {{ restaurant.rating }} .
       </span>
       {{ restaurant.delivery_time }} mins . $ {{ restaurant.price }} for two
-      <ion-text color="tertiary">
-        <p class="distance">{{ restaurant.distance }} kms away</p>
+      <ion-text color="tertiary" *ngIf="restaurant.distance !== 0">
+        <p class="distance">
+          {{ restaurant.distance | number : "0.0-2" }} kms away
+        </p>
       </ion-text>
     </ion-text>
   </ion-label>
