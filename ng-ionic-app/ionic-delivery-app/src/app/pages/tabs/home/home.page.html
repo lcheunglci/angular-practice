@@ -7,18 +7,24 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <app-banner [bannerImages]="banners"></app-banner>
-  <ion-list>
+  <div *ngIf="isLoading">
+    <ion-skeleton-text animated style="height: 25vh"></ion-skeleton-text>
+  </div>
+  <app-loading-restaurant *ngIf="isLoading"></app-loading-restaurant>
+  <app-banner [bannerImages]="banners" *ngIf="!isLoading"></app-banner>
+  <ion-list *ngIf="!isLoading">
     <ion-list-header class="ion-margin-bottom">
       <ion-label>
         <h4>Restaurants Nearby</h4>
         <p>Discover unique tastes near you</p>
       </ion-label>
 
-      <app-restaurant
-        *ngFor="let restaurant of restaurants"
-        [restaurant]="restaurant"
-      ></app-restaurant>
+      <ion-item-group *ngIf="restaurants.length > 0">
+        <app-restaurant
+          *ngFor="let restaurant of restaurants"
+          [restaurant]="restaurant"
+        ></app-restaurant>
+      </ion-item-group>
     </ion-list-header>
   </ion-list>
 </ion-content>
