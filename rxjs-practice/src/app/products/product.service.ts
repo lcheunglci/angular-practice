@@ -18,4 +18,11 @@ export class ProductService {
       })
     );
   }
+
+  getProduct(id: number) {
+    const productUrl = this.productsUrl + '/' + id;
+    return this.http
+      .get<Product>(productUrl)
+      .pipe(tap(() => console.log('In http.get by id pipeline')));
+  }
 }

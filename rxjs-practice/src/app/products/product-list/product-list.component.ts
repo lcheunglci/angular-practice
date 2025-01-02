@@ -30,6 +30,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       .pipe(tap(() => console.log('In component pipeline')))
       .subscribe((products) => {
         this.products = products;
+        console.log(this.products);
       });
   }
 
