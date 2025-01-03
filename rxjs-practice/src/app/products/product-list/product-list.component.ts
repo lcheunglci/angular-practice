@@ -28,9 +28,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.sub = this.productService
       .getProducts()
       .pipe(tap(() => console.log('In component pipeline')))
-      .subscribe((products) => {
-        this.products = products;
-        console.log(this.products);
+      .subscribe({
+        next: (products) => {
+          this.products = products;
+          console.log(this.products);
+        },
+        error: (err) => (this.errorMessage = err),
       });
   }
 
