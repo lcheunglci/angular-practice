@@ -25,18 +25,27 @@ export class ProductService {
   private errorService = inject(HttpErrorService);
   private reviewService = inject(ReviewService);
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.productsUrl).pipe(
-      tap(() => {
-        console.log('In http.get pipeline');
-      }),
-      catchError(this.handleError)
-      // catchError((error) => {
-      //   console.error(error);
-      //   return of(ProductData.products);
-      // })
-    );
-  }
+  // Declarative approach
+  readonly products$ = this.http.get<Product[]>(this.productsUrl).pipe(
+    tap(() => {
+      console.log('In http.get pipeline');
+    }),
+    catchError(this.handleError)
+  );
+
+  // Procedural approach
+  // getProducts(): Observable<Product[]> {
+  //   return this.http.get<Product[]>(this.productsUrl).pipe(
+  //     tap(() => {
+  //       console.log('In http.get pipeline');
+  //     }),
+  //     catchError(this.handleError)
+  //     // catchError((error) => {
+  //     //   console.error(error);
+  //     //   return of(ProductData.products);
+  //     // })
+  //   );
+  // }
 
   getProduct(id: number) {
     const productUrl = this.productsUrl + '/' + id;
