@@ -5,6 +5,7 @@ import {
   map,
   Observable,
   of,
+  shareReplay,
   switchMap,
   tap,
   throwError,
@@ -27,9 +28,9 @@ export class ProductService {
 
   // Declarative approach
   readonly products$ = this.http.get<Product[]>(this.productsUrl).pipe(
-    tap((p) => {
-      console.log(JSON.stringify(p));
-    }),
+    tap((p) => console.log(JSON.stringify(p))),
+    shareReplay(1),
+    // tap(() => console.log('After share replay')),
     catchError(this.handleError)
   );
 
