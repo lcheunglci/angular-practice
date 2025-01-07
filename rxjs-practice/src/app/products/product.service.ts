@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import {
+  BehaviorSubject,
   catchError,
   map,
   Observable,
@@ -25,6 +26,12 @@ export class ProductService {
   private http = inject(HttpClient);
   private errorService = inject(HttpErrorService);
   private reviewService = inject(ReviewService);
+
+  private productSelectedSubject = new BehaviorSubject<number | undefined>(
+    undefined
+  );
+
+  readonly productSelected$ = this.productSelectedSubject.asObservable();
 
   // Declarative approach
   readonly products$ = this.http.get<Product[]>(this.productsUrl).pipe(
@@ -55,6 +62,10 @@ export class ProductService {
       switchMap((product) => this.getProductWithReviews(product)),
       catchError(this.handleError)
     );
+  }
+
+  productSelected(selectedProductId: number): void {
+    this.productSelectedSubject.next(selectedProductId);
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
