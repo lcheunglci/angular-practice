@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
+  filter,
   map,
   Observable,
   of,
@@ -63,6 +64,17 @@ export class ProductService {
       catchError(this.handleError)
     );
   }
+
+  product$ = this.productSelected$.pipe(
+    filter(Boolean),
+    switchMap((id) => {
+      const productUrl = this.productsUrl + '/' + id;
+      return this.http.get<Product>(productUrl).pipe(
+        switchMap((product) => this.getProductWithReviews(product)),
+        catchError(this.handleError)
+      );
+    })
+  );
 
   productSelected(selectedProductId: number): void {
     this.productSelectedSubject.next(selectedProductId);
