@@ -56,16 +56,16 @@ export class ProductService {
   //   );
   // }
 
-  getProduct(id: number) {
-    const productUrl = this.productsUrl + '/' + id;
-    return this.http.get<Product>(productUrl).pipe(
-      tap(() => console.log('In http.get by id pipeline')),
-      switchMap((product) => this.getProductWithReviews(product)),
-      catchError(this.handleError)
-    );
-  }
+  // getProduct(id: number) {
+  //   const productUrl = this.productsUrl + '/' + id;
+  //   return this.http.get<Product>(productUrl).pipe(
+  //     tap(() => console.log('In http.get by id pipeline')),
+  //     switchMap((product) => this.getProductWithReviews(product)),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
-  product$ = this.productSelected$.pipe(
+  readonly product$ = this.productSelected$.pipe(
     filter(Boolean),
     switchMap((id) => {
       const productUrl = this.productsUrl + '/' + id;
