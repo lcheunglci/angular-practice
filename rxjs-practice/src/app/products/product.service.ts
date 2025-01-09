@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   BehaviorSubject,
   catchError,
+  combineLatest,
   filter,
   map,
   Observable,
@@ -65,7 +66,7 @@ export class ProductService {
   //   );
   // }
 
-  readonly product$ = this.productSelected$.pipe(
+  readonly product1$ = this.productSelected$.pipe(
     filter(Boolean),
     switchMap((id) => {
       const productUrl = this.productsUrl + '/' + id;
@@ -74,6 +75,15 @@ export class ProductService {
         catchError(this.handleError)
       );
     })
+  );
+
+  product$ = combineLatest([this.productSelected$, this.products$]).pipe(
+    map(([selectedProductId, products]) => {
+      return products.find((product) => product.id === selectedProductId);
+    }),
+    filter(Boolean),
+    switchMap((product) => this.getProductWithReviews(product)),
+    catchError((err) => this.handleError(err))
   );
 
   productSelected(selectedProductId: number): void {
