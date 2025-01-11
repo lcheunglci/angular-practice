@@ -12,6 +12,24 @@ export class CartService {
     this.cartItems().reduce((accQty, item) => accQty + item.quantity, 0)
   );
 
+  subTotal = computed(() =>
+    this.cartItems().reduce(
+      (accTotal, item) => accTotal + item.quantity * item.product.price,
+      0
+    )
+  );
+
+  // if the subTotal is less than 50, then the delivery fee is 5.99, otherwise it's free
+  deliveryFee = computed<number>(() => (this.subTotal() < 50 ? 5.99 : 0));
+
+  tax = computed(() =>
+    Math.round(((this.subTotal() + this.deliveryFee()) * 13.0) / 100)
+  );
+
+  totalPrice = computed(
+    () => this.subTotal() + this.deliveryFee() + this.tax()
+  );
+
   eLength = effect(() => 'Cart array length: ' + this.cartItems().length);
 
   addToCart(product: Product) {
