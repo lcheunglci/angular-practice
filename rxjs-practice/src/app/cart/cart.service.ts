@@ -37,4 +37,18 @@ export class CartService {
     // this.cartItems().push({ product, quantity: 1 });
     this.cartItems.update((items) => [...items, { product, quantity: 1 }]);
   }
+
+  updateQuantity(cartItem: CartItem, quantity: number) {
+    this.cartItems.update((items) =>
+      items.map((item) =>
+        item.product.id === cartItem.product.id ? { ...item, quantity } : item
+      )
+    );
+  }
+
+  removeFromCart(cartItem: CartItem) {
+    this.cartItems.update((items) =>
+      items.filter((item) => item.product.id !== cartItem.product.id)
+    );
+  }
 }
