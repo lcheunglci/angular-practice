@@ -14,7 +14,7 @@ import {
   tap,
   throwError,
 } from 'rxjs';
-import { Product } from './product';
+import { Product, Result } from './product';
 import { ProductData } from './product-data';
 import { HttpErrorService } from '../utilities/http-error.service';
 import { ReviewService } from '../reviews/review.service';
@@ -37,21 +37,33 @@ export class ProductService {
   readonly productSelected$ = this.productSelectedSubject.asObservable();
 
   // Declarative approach
-  private products$ = this.http.get<Product[]>(this.productsUrl).pipe(
+  private productsResult$ = this.http.get<Product[]>(this.productsUrl).pipe(
+    map((p) => ({ data: p } as Result<Product[]>)),
     tap((p) => console.log(JSON.stringify(p))),
     shareReplay(1),
     // tap(() => console.log('After share replay')),
-    catchError(this.handleError)
+    catchError((err) =>
+      of({
+        data: [],
+        error: this.errorService.formatError(err),
+      } as Result<Product[]>)
+    )
   );
 
-  // products = toSignal(this.products$, { initialValue: [] as Product[] });
-  products = computed(() => {
-    try {
-      return toSignal(this.products$, { initialValue: [] as Product[] })();
-    } catch (error) {
-      return [] as Product[];
-    }
+  private productsResult = toSignal(this.productsResult$, {
+    initialValue: { data: [] } as Result<Product[]>,
   });
+
+  products = computed(() => this.productsResult().data);
+  productsError = computed(() => this.productsResult().error);
+
+  // products = computed(() => {
+  //   try {
+  //     return toSignal(this.products$, { initialValue: [] as Product[] })();
+  //   } catch (error) {
+  //     return [] as Product[];
+  //   }
+  // });
 
   // Procedural approach
   // getProducts(): Observable<Product[]> {

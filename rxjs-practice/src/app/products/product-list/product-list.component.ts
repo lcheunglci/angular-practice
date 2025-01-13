@@ -13,7 +13,6 @@ import { catchError, EMPTY, tap } from 'rxjs';
 })
 export class ProductListComponent {
   pageTitle = 'Products';
-  errorMessage = '';
   productService = inject(ProductService);
 
   // Products
@@ -25,6 +24,7 @@ export class ProductListComponent {
   // );
 
   products = this.productService.products;
+  errorMessage = this.productService.productsError;
 
   // Selected product id to highlight the entry
   readonly selectedProductId$ = this.productService.productSelected$;
