@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
@@ -44,7 +44,14 @@ export class ProductService {
     catchError(this.handleError)
   );
 
-  products = toSignal(this.products$, { initialValue: [] as Product[] });
+  // products = toSignal(this.products$, { initialValue: [] as Product[] });
+  products = computed(() => {
+    try {
+      return toSignal(this.products$, { initialValue: [] as Product[] })();
+    } catch (error) {
+      return [] as Product[];
+    }
+  });
 
   // Procedural approach
   // getProducts(): Observable<Product[]> {
@@ -69,7 +76,7 @@ export class ProductService {
   //   );
   // }
 
-  readonly product1$ = this.productSelected$.pipe(
+  readonly product$ = this.productSelected$.pipe(
     filter(Boolean),
     switchMap((id) => {
       const productUrl = this.productsUrl + '/' + id;
@@ -80,14 +87,14 @@ export class ProductService {
     })
   );
 
-  product$ = combineLatest([this.productSelected$, this.products$]).pipe(
-    map(([selectedProductId, products]) => {
-      return products.find((product) => product.id === selectedProductId);
-    }),
-    filter(Boolean),
-    switchMap((product) => this.getProductWithReviews(product)),
-    catchError((err) => this.handleError(err))
-  );
+  // product$ = combineLatest([this.productSelected$, this.products$]).pipe(
+  //   map(([selectedProductId, products]) => {
+  //     return products.find((product) => product.id === selectedProductId);
+  //   }),
+  //   filter(Boolean),
+  //   switchMap((product) => this.getProductWithReviews(product)),
+  //   catchError((err) => this.handleError(err))
+  // );
 
   productSelected(selectedProductId: number): void {
     this.productSelectedSubject.next(selectedProductId);
