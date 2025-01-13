@@ -1,5 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
   catchError,
@@ -36,12 +37,14 @@ export class ProductService {
   readonly productSelected$ = this.productSelectedSubject.asObservable();
 
   // Declarative approach
-  readonly products$ = this.http.get<Product[]>(this.productsUrl).pipe(
+  private products$ = this.http.get<Product[]>(this.productsUrl).pipe(
     tap((p) => console.log(JSON.stringify(p))),
     shareReplay(1),
     // tap(() => console.log('After share replay')),
     catchError(this.handleError)
   );
+
+  products = toSignal(this.products$, { initialValue: [] as Product[] });
 
   // Procedural approach
   // getProducts(): Observable<Product[]> {

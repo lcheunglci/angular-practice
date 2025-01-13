@@ -17,12 +17,14 @@ export class ProductListComponent {
   productService = inject(ProductService);
 
   // Products
-  readonly products$ = this.productService.products$.pipe(
-    catchError((error) => {
-      this.errorMessage = error;
-      return EMPTY;
-    })
-  );
+  // readonly products$ = this.productService.products$.pipe(
+  //   catchError((error) => {
+  //     this.errorMessage = error;
+  //     return EMPTY;
+  //   })
+  // );
+
+  products = this.productService.products;
 
   // Selected product id to highlight the entry
   readonly selectedProductId$ = this.productService.productSelected$;
