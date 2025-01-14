@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
@@ -35,6 +35,7 @@ export class ProductService {
   );
 
   readonly productSelected$ = this.productSelectedSubject.asObservable();
+  selectedProductId = signal<number | undefined>(undefined);
 
   // Declarative approach
   private productsResult$ = this.http.get<Product[]>(this.productsUrl).pipe(
@@ -110,6 +111,7 @@ export class ProductService {
 
   productSelected(selectedProductId: number): void {
     this.productSelectedSubject.next(selectedProductId);
+    this.selectedProductId.set(selectedProductId);
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {
