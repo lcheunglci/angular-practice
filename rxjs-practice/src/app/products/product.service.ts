@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import {
   BehaviorSubject,
   catchError,
@@ -30,11 +30,6 @@ export class ProductService {
   private errorService = inject(HttpErrorService);
   private reviewService = inject(ReviewService);
 
-  private productSelectedSubject = new BehaviorSubject<number | undefined>(
-    undefined
-  );
-
-  readonly productSelected$ = this.productSelectedSubject.asObservable();
   selectedProductId = signal<number | undefined>(undefined);
 
   // Declarative approach
@@ -89,7 +84,7 @@ export class ProductService {
   //   );
   // }
 
-  readonly product$ = this.productSelected$.pipe(
+  readonly product$ = toObservable(this.selectedProductId).pipe(
     filter(Boolean),
     switchMap((id) => {
       const productUrl = this.productsUrl + '/' + id;
@@ -110,7 +105,6 @@ export class ProductService {
   // );
 
   productSelected(selectedProductId: number): void {
-    this.productSelectedSubject.next(selectedProductId);
     this.selectedProductId.set(selectedProductId);
   }
 
