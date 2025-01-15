@@ -13,6 +13,6 @@ export interface Product {
 }
 
 export interface Result<T> {
-  data: T;
+  data?: T;
   error?: string;
 }

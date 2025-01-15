@@ -84,16 +84,26 @@ export class ProductService {
   //   );
   // }
 
-  readonly product$ = toObservable(this.selectedProductId).pipe(
+  private productResult$ = toObservable(this.selectedProductId).pipe(
     filter(Boolean),
     switchMap((id) => {
       const productUrl = this.productsUrl + '/' + id;
       return this.http.get<Product>(productUrl).pipe(
         switchMap((product) => this.getProductWithReviews(product)),
-        catchError(this.handleError)
+        catchError((err) =>
+          of({
+            data: undefined,
+            error: this.errorService.formatError(err),
+          } as Result<Product>)
+        )
       );
-    })
+    }),
+    map((p) => ({ data: p } as Result<Product>))
   );
+
+  private productResult = toSignal(this.productResult$);
+  product = this.productResult()?.data;
+  productError = this.productResult()?.error;
 
   // product$ = combineLatest([this.productSelected$, this.products$]).pipe(
   //   map(([selectedProductId, products]) => {
