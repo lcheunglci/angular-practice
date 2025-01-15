@@ -92,7 +92,7 @@ export class ProductService {
         switchMap((product) => this.getProductWithReviews(product)),
         catchError((err) =>
           of({
-            data: undefined,
+            data: {},
             error: this.errorService.formatError(err),
           } as Result<Product>)
         )
@@ -102,8 +102,8 @@ export class ProductService {
   );
 
   private productResult = toSignal(this.productResult$);
-  product = this.productResult()?.data;
-  productError = this.productResult()?.error;
+  product = computed(() => this.productResult()?.data);
+  productError = computed(() => this.productResult()?.error);
 
   // product$ = combineLatest([this.productSelected$, this.products$]).pipe(
   //   map(([selectedProductId, products]) => {
