@@ -6,7 +6,11 @@ import { AppComponent } from './app.component';
 import { LineBarChartComponent } from './line-bar-chart/line-bar-chart.component';
 import { PieDoughnutChartComponent } from './pie-doughnut-chart/pie-doughnut-chart.component';
 import { RadarChartComponent } from './radar-chart/radar-chart.component';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import {
+  BaseChartDirective,
+  provideCharts,
+  withDefaultRegisterables,
+} from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -15,7 +19,7 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     PieDoughnutChartComponent,
     RadarChartComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, BaseChartDirective],
   providers: [provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent],
 })
