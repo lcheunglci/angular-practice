@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LineBarChartComponent } from './line-bar-chart/line-bar-chart.component';
 import { PieDoughnutChartComponent } from './pie-doughnut-chart/pie-doughnut-chart.component';
 import { RadarChartComponent } from './radar-chart/radar-chart.component';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -14,11 +15,8 @@ import { RadarChartComponent } from './radar-chart/radar-chart.component';
     PieDoughnutChartComponent,
     RadarChartComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, AppRoutingModule],
+  providers: [provideCharts(withDefaultRegisterables())],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
