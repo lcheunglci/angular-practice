@@ -9,58 +9,52 @@ import { ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
 export class LineBarChartComponent {
   chartType: ChartType = 'line';
 
+  labels = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  dataset1 = [85, 72, 78, 75, 77, 75, 85, 72, 78, 75, 88, 90];
+  label1 = 'YES';
+  dataset2 = [15, 28, 22, 25, 23, 25, 15, 28, 22, 25, 12, 10];
+  label2 = 'NO';
+
   barChartData: ChartConfiguration<'bar'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
+    labels: this.labels,
     datasets: [
       {
-        data: [85, 72, 78, 75, 77, 75, 85, 72, 78, 75, 88, 90],
-        label: 'YES',
+        data: this.dataset1,
+        label: this.label1,
       },
       {
-        data: [15, 28, 22, 25, 23, 25, 15, 28, 22, 25, 12, 10],
-        label: 'NO',
+        data: this.dataset2,
+        label: this.label2,
       },
     ],
   };
 
   lineChartData: ChartConfiguration<'line'>['data'] = {
-    labels: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
+    labels: this.labels,
     datasets: [
       {
-        data: [85, 72, 78, 75, 77, 75, 85, 72, 78, 75, 88, 90],
-        label: 'YES',
+        data: this.dataset1,
+        label: this.label1,
         fill: true,
         tension: 0.5,
       },
       {
-        data: [15, 28, 22, 25, 23, 25, 15, 28, 22, 25, 12, 10],
-        label: 'NO',
+        data: this.dataset2,
+        label: this.label2,
         fill: true,
         tension: 0.5,
       },
