@@ -1,1 +1,30 @@
-<p>pie-doughnut-chart works!</p>
+<div class="chart-wrapper">
+  <canvas
+    *ngIf="this.chartType === 'pie'"
+    baseChart
+    width="500"
+    height="500"
+    [type]="'pie'"
+    [data]="pieChartData"
+    [options]="pieChartOptions"
+    [legend]="chartLegend"
+  >
+  </canvas>
+  <canvas
+    *ngIf="this.chartType === 'doughnut'"
+    baseChart
+    width="500"
+    height="500"
+    [type]="'doughnut'"
+    [data]="doughnutChartData"
+    [options]="doughnutChartOptions"
+    [legend]="chartLegend"
+  >
+  </canvas>
+</div>
+
+<div class="text-center">
+  <button class="btn btn-light" (click)="switchChartType($event)">
+    Switch to {{ this.chartType === "pie" ? "doughnut" : "pie" }}
+  </button>
+</div>
