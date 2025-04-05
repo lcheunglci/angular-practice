@@ -1,12 +1,30 @@
 <div class="chart-wrapper">
   <canvas
+    *ngIf="this.chartType === 'line'"
     baseChart
     width="500"
     height="500"
     [type]="'line'"
     [data]="lineChartData"
     [options]="lineChartOptions"
-    [legend]="lineChartLegend"
+    [legend]="chartLegend"
   >
   </canvas>
+  <canvas
+    *ngIf="this.chartType === 'bar'"
+    baseChart
+    width="500"
+    height="500"
+    [type]="'bar'"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [legend]="chartLegend"
+  >
+  </canvas>
+</div>
+
+<div class="text-center">
+  <button class="btn btn-light" (click)="switchChartType($event)">
+    Switch to {{ this.chartType === "line" ? "bar" : "line" }}
+  </button>
 </div>
