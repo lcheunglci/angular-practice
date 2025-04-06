@@ -8,6 +8,8 @@
     [data]="lineChartData"
     [options]="lineChartOptions"
     [legend]="chartLegend"
+    (chartClick)="onChartClick($event)"
+    (chartHover)="onChartHover($event)"
   >
   </canvas>
   <canvas
