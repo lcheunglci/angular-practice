@@ -9,7 +9,7 @@ import { ChartConfiguration, ChartOptions, ChartType } from 'chart.js';
 export class PieDoughnutChartComponent {
   chartType: ChartType = 'pie';
 
-  labels = [['YES'], ['NO'], 'N/A'];
+  labels = ['YES', 'NO', 'N/A'];
 
   dataset1 = [80, 15, 5];
 
