@@ -158,4 +158,16 @@ export class LineBarChartComponent {
     //   this.lineChartData.datasets[1].pointBorderColor = this.chartColors[1];
     // }
   }
+
+  colors = ['red', 'green', 'blue', 'yellow', 'purple'];
+  colorIndex = 0;
+
+  randomColor($event: MouseEvent) {
+    this.lineChartData.datasets[1].backgroundColor =
+      this.colors[this.colorIndex++];
+    if (this.colorIndex >= this.colors.length) {
+      this.colorIndex = 0;
+    }
+    this.chart?.update();
+  }
 }
