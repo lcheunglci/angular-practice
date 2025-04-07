@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import {
-  Chart,
   ChartConfiguration,
   ChartEvent,
   ChartOptions,
@@ -8,6 +7,7 @@ import {
   Color,
   PointElement,
 } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-line-bar-chart',
@@ -16,6 +16,8 @@ import {
 })
 export class LineBarChartComponent {
   chartType: ChartType = 'line';
+
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   labels = [
     'January',
@@ -146,8 +148,14 @@ export class LineBarChartComponent {
       console.log('hover', $event);
       //this.chartColors[0].pointBorderColor = 'red';
       // this.chartColors[0].borderColor = 'red';
+
       this.lineChartData.datasets[0].backgroundColor = 'red';
       this.lineChartData.datasets[1].pointBorderColor = 'red';
+      this.chart?.update();
     }
+    // else {
+    //   this.lineChartData.datasets[0].backgroundColor = this.chartColors[0];
+    //   this.lineChartData.datasets[1].pointBorderColor = this.chartColors[1];
+    // }
   }
 }
