@@ -1,0 +1,25 @@
+<div class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
+  <a [routerLink]="['/']" class="navbar-brand">Workout Tracker</a>
+
+  <div class="collapse navbar-collapse xnavbar-nav xnav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a
+          [routerLink]="['/']"
+          [routerLinkActive]="['link-active']"
+          class="nav-item nav-link"
+          >Home</a
+        >
+      </li>
+
+      <li class="nav-item">
+        <a
+          [routerLink]="['/workouts']"
+          [routerLinkActive]="['link-active']"
+          class="nav-item nav-link"
+          >Workouts</a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
