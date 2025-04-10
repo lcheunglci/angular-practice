@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+// third party imports
+import { NgxLoadingModule } from 'ngx-loading';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -18,7 +21,12 @@ import { WorkoutApiService } from './services/workout-api.service';
     EntryEditorComponent,
     NavMenuComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    NgxLoadingModule.forRoot({}),
+  ],
   providers: [WorkoutApiService],
   bootstrap: [AppComponent],
 })
