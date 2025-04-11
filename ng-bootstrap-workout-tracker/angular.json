@@ -29,7 +29,11 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css", "src/css/bootstrap.superhero.min.css"],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
+              "src/css/bootstrap.superhero.min.css"
+            ],
             "scripts": []
           },
           "configurations": {
