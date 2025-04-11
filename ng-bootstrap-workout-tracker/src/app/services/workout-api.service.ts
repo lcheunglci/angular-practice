@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +11,19 @@ export class WorkoutApiService {
   constructor(private http: HttpClient) {}
 
   getWorkouts() {
-    return this.http.get<any[]>(`${this.baseUrl}/workouts`);
+    return this.http.get<any[]>(`${this.baseUrl}/workouts`).pipe(
+      tap((data) => {
+        console.log('getWorkouts', data);
+      })
+    );
   }
 
   getWorkout(id: number) {
-    return this.http.get<any[]>(`${this.baseUrl}/workouts/${id}`);
+    return this.http.get<any[]>(`${this.baseUrl}/workouts/${id}`).pipe(
+      tap((data) => {
+        console.log('getWorkout', data);
+      })
+    );
   }
 
   addWorkout(workout: any) {

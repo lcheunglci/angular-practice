@@ -34,7 +34,7 @@
           <tr *ngFor="let entry of workouts">
             <td>{{ entry.date }}</td>
             <td>{{ entry.type }}</td>
-            <td>{{ entry.distance }}f</td>
+            <td>{{ entry.distance }}</td>
             <td>
               <a
                 [routerLink]="['/workouts', entry.id]"

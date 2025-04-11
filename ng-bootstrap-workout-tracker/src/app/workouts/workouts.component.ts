@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkoutApiService } from '../services/workout-api.service';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'app-workouts',
@@ -8,7 +7,7 @@ import * as _ from 'lodash';
   styleUrl: './workouts.component.css',
 })
 export class WorkoutsComponent implements OnInit {
-  public workouts = [];
+  public workouts: any[] = [];
   public loading = false;
 
   constructor(private api: WorkoutApiService) {}
@@ -16,14 +15,15 @@ export class WorkoutsComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.api.getWorkouts().subscribe((data) => {
-      this.workouts;
+      console.log('app-workouts', 'ngOnInit', 'getWorkouts', data);
+      this.workouts = data;
       this.loading = false;
     });
   }
 
   deleteWorkout(id: number) {
-    this.api
-      .deleteWorkout(id)
-      .subscribe((data) => _.remove(this.workouts, { id: id }));
+    this.api.deleteWorkout(id).subscribe((data) => {
+      this.workouts = this.workouts.filter((workout) => workout.id !== id);
+    });
   }
 }

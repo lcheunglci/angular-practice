@@ -12,6 +12,7 @@ import { EntryEditorComponent } from './entry-editor/entry-editor.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HttpClientModule } from '@angular/common/http';
 import { WorkoutApiService } from './services/workout-api.service';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { WorkoutApiService } from './services/workout-api.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FormsModule,
     NgxLoadingModule.forRoot({}),
   ],
   providers: [WorkoutApiService],
