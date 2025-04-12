@@ -23,17 +23,32 @@
               <option value="row">Row</option>
             </select> -->
             <div
-              class="btn-group btn-group-toggle"
-              ngbRadioGroup
+              class="btn-group"
+              role="group"
               name="wtype"
               [(ngModel)]="workout.type"
             >
-              <label ngbButtonLabel class="btn-primary"
-                ><input ngbButton type="radio" value="bike" />Bike</label
-              ><label ngbButtonLabel class="btn-primary"
-                ><input ngbButton type="radio" value="run" />Run</label
-              ><label ngbButtonLabel class="btn-primary"
-                ><input ngbButton type="radio" value="row" />Row</label
+              <label class="btn btn-primary" for="bike">
+                <input
+                  class="btn-check"
+                  type="radio"
+                  value="bike"
+                  id="bike"
+                />Bike</label
+              ><label class="btn btn-primary" for="run"
+                ><input
+                  class="btn-check"
+                  type="radio"
+                  value="run"
+                  id="run"
+                />Run</label
+              ><label class="btn btn-primary" for="row"
+                ><input
+                  class="btn-check"
+                  type="radio"
+                  value="row"
+                  id="row"
+                />Row</label
               >
             </div>
           </div>
