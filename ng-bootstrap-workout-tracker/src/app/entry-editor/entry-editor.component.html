@@ -11,7 +11,7 @@
         <div class="form-group row">
           <label class="col-form-label col-sm-2">Type:</label>
           <div class="col-sm-6">
-            <select
+            <!-- <select
               title="type"
               class="form-control"
               name="wtype"
@@ -21,7 +21,21 @@
               <option value="bike">Bike</option>
               <option value="run">Run</option>
               <option value="row">Row</option>
-            </select>
+            </select> -->
+            <div
+              class="btn-group btn-group-toggle"
+              ngbRadioGroup
+              name="wtype"
+              [(ngModel)]="workout.type"
+            >
+              <label ngbButtonLabel class="btn-primary"
+                ><input ngbButton type="radio" value="bike" />Bike</label
+              ><label ngbButtonLabel class="btn-primary"
+                ><input ngbButton type="radio" value="run" />Run</label
+              ><label ngbButtonLabel class="btn-primary"
+                ><input ngbButton type="radio" value="row" />Row</label
+              >
+            </div>
           </div>
         </div>
 
