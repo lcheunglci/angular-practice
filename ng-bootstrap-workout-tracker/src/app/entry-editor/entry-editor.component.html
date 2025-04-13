@@ -26,6 +26,7 @@
               class="btn-group"
               role="group"
               name="wtype"
+              ngbRadioGroup
               [(ngModel)]="workout.type"
             >
               <input
@@ -68,13 +69,18 @@
         <div class="form-group row">
           <label class="col-form-label col-sm-2">Date:</label>
           <div class="col-sm-3">
-            <input
+            <!-- <input
               type="text"
               class="form-control"
               placeholder="Date"
               name="wdate"
               [(ngModel)]="workout.date"
-            />
+            /> -->
+            <ngb-datepicker
+              #d
+              name="wdata"
+              [(ngModel)]="workout.date"
+            ></ngb-datepicker>
           </div>
         </div>
 
