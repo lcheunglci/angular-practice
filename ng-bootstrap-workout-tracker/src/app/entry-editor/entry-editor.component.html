@@ -28,27 +28,38 @@
               name="wtype"
               [(ngModel)]="workout.type"
             >
-              <label class="btn btn-primary" for="bike">
-                <input
-                  class="btn-check"
-                  type="radio"
-                  value="bike"
-                  id="bike"
-                />Bike</label
-              ><label class="btn btn-primary" for="run"
-                ><input
-                  class="btn-check"
-                  type="radio"
-                  value="run"
-                  id="run"
-                />Run</label
-              ><label class="btn btn-primary" for="row"
-                ><input
-                  class="btn-check"
-                  type="radio"
-                  value="row"
-                  id="row"
-                />Row</label
+              <input
+                class="btn-check"
+                type="radio"
+                name="wtype"
+                value="bike"
+                id="bike"
+                ngbButton
+              />
+              <label class="btn btn-primary" for="bike" ngbButtonLabel>
+                Bike</label
+              >
+              <input
+                class="btn-check"
+                type="radio"
+                name="wtype"
+                value="run"
+                id="run"
+                ngbButton
+              />
+              <label class="btn btn-primary" for="run" ngbButtonLabel
+                >Run</label
+              >
+              <input
+                class="btn-check"
+                type="radio"
+                name="wtype"
+                value="row"
+                id="row"
+                ngbButton
+              />
+              <label class="btn btn-primary" for="row" ngbButtonLabel
+                >Row</label
               >
             </div>
           </div>
