@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WorkoutApiService } from '../services/workout-api.service';
+import { WorkoutsApiService } from '../services/workouts-api.service';
 
 @Component({
   selector: 'app-workouts',
@@ -10,7 +10,7 @@ export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
   public loading = false;
 
-  constructor(private api: WorkoutApiService) {}
+  constructor(private api: WorkoutsApiService) {}
 
   ngOnInit(): void {
     this.loading = true;

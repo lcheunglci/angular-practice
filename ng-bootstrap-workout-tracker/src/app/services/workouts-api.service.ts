@@ -5,7 +5,7 @@ import { tap } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class WorkoutApiService {
+export class WorkoutsApiService {
   private baseUrl = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}

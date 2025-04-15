@@ -12,7 +12,7 @@ import { WorkoutsComponent } from './workouts/workouts.component';
 import { EntryEditorComponent } from './entry-editor/entry-editor.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HttpClientModule } from '@angular/common/http';
-import { WorkoutApiService } from './services/workout-api.service';
+import { WorkoutsApiService } from './services/workouts-api.service';
 import { FormsModule } from '@angular/forms';
 import { DateStringAdapterService } from './date-string-adapter.service';
 
@@ -33,7 +33,7 @@ import { DateStringAdapterService } from './date-string-adapter.service';
     NgbModule,
   ],
   providers: [
-    WorkoutApiService,
+    WorkoutsApiService,
     { provide: NgbDateAdapter, useClass: DateStringAdapterService },
   ],
   bootstrap: [AppComponent],

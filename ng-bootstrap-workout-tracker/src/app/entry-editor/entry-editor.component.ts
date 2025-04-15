@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WorkoutApiService } from '../services/workout-api.service';
+import { WorkoutsApiService } from '../services/workouts-api.service';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { debounceTime, distinctUntilChanged, map, Observable } from 'rxjs';
 
@@ -29,7 +29,7 @@ export class EntryEditorComponent implements OnInit {
   constructor(
     private router: ActivatedRoute,
     private nav: Router,
-    private api: WorkoutApiService
+    private api: WorkoutsApiService
   ) {
     const today = new Date();
     this.maxDate = NgbDate.from({
