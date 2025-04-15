@@ -160,7 +160,9 @@
               name="wlocation"
               placeholder="Location"
               [(ngModel)]="workout.location"
-              [ngbTypeahead]="locationSearch"
+              [ngbTypeahead]="locationsSearch"
+              [resultFormatter]="locationsFormatter"
+              [inputFormatter]="locationsFormatter"
             />
           </div>
         </div>

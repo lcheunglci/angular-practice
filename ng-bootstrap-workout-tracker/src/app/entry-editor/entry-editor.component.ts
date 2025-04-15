@@ -14,17 +14,7 @@ export class EntryEditorComponent implements OnInit {
   public loading = false;
   public startDate: any;
   public maxDate: NgbDateStruct;
-  public locations = [
-    'Main Gym',
-    'Home gym',
-    'Neighborhood 1 km course',
-    'Neighborhood 3 km course',
-    'Neighborhood 5 km course',
-    'Smallville 20 km course',
-    'Smallville 25 km course',
-    'Smallville 30 km course',
-    'Other',
-  ];
+  public locations: any[] = [];
 
   constructor(
     private router: ActivatedRoute,
@@ -40,6 +30,8 @@ export class EntryEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.api.getLocations().subscribe((data) => (this.locations = data));
+
     this.router.params.subscribe((params) => {
       const id = params['id'];
       if (id !== 'new') {
@@ -54,7 +46,7 @@ export class EntryEditorComponent implements OnInit {
     });
   }
 
-  locationSearch = (text$: Observable<string>) =>
+  locationsSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -63,11 +55,14 @@ export class EntryEditorComponent implements OnInit {
           ? []
           : this.locations
               .filter(
-                (v) => v.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
+                (v) =>
+                  v.name.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
               )
               .slice(0, 10)
       )
     );
+
+  locationsFormatter = (result: any) => result.name;
 
   save() {
     this.loading = true;
