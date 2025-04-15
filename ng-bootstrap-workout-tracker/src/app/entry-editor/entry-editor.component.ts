@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkoutApiService } from '../services/workout-api.service';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { debounceTime, distinctUntilChanged, map, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-entry-editor',
@@ -13,6 +14,17 @@ export class EntryEditorComponent implements OnInit {
   public loading = false;
   public startDate: any;
   public maxDate: NgbDateStruct;
+  public locations = [
+    'Main Gym',
+    'Home gym',
+    'Neighborhood 1 km course',
+    'Neighborhood 3 km course',
+    'Neighborhood 5 km course',
+    'Smallville 20 km course',
+    'Smallville 25 km course',
+    'Smallville 30 km course',
+    'Other',
+  ];
 
   constructor(
     private router: ActivatedRoute,
@@ -41,6 +53,21 @@ export class EntryEditorComponent implements OnInit {
       }
     });
   }
+
+  locationSearch = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map((term) =>
+        term.length < 2
+          ? []
+          : this.locations
+              .filter(
+                (v) => v.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
+              )
+              .slice(0, 10)
+      )
+    );
 
   save() {
     this.loading = true;
