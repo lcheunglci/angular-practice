@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -48,5 +48,9 @@ export class WorkoutsApiService {
 
   getLocations() {
     return this.http.get<any[]>(`${this.baseUrl}/locations`);
+  }
+
+  searchLocations(searchTerm: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/locations?q=${searchTerm}`);
   }
 }

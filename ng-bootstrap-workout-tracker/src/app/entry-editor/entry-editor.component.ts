@@ -2,7 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkoutsApiService } from '../services/workouts-api.service';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { debounceTime, distinctUntilChanged, map, Observable } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Observable,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-entry-editor',
@@ -30,7 +37,8 @@ export class EntryEditorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.api.getLocations().subscribe((data) => (this.locations = data));
+    // No longer required for server side
+    // this.api.getLocations().subscribe((data) => (this.locations = data));
 
     this.router.params.subscribe((params) => {
       const id = params['id'];
@@ -46,20 +54,32 @@ export class EntryEditorComponent implements OnInit {
     });
   }
 
+  // Client side filter
+  // locationsSearch = (text$: Observable<string>) =>
+  //   text$.pipe(
+  //     debounceTime(200),
+  //     distinctUntilChanged(),
+  //     map((term) =>
+  //       term.length < 2
+  //         ? []
+  //         : this.locations
+  //             .filter(
+  //               (v) =>
+  //                 v.name.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
+  //             )
+  //             .slice(0, 10)
+  //     )
+  //   );
+
+  // Server side filter
   locationsSearch = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map((term) =>
-        term.length < 2
-          ? []
-          : this.locations
-              .filter(
-                (v) =>
-                  v.name.toLocaleLowerCase().indexOf(term.toLowerCase()) > -1
-              )
-              .slice(0, 10)
-      )
+      tap(() => (this.loading = true)),
+      switchMap((term) => this.api.searchLocations(term)),
+      map((locations) => locations.map((m: { name: string }) => m.name)),
+      tap(() => (this.loading = false))
     );
 
   locationsFormatter = (result: any) => result.name;
