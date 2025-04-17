@@ -9,6 +9,7 @@ import { WorkoutsApiService } from '../services/workouts-api.service';
 export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
   public loading = false;
+  public isCollapsed = false;
 
   constructor(private api: WorkoutsApiService) {}
 
