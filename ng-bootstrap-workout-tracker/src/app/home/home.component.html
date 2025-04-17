@@ -5,14 +5,17 @@
     <p>Welcome to Workout Tracker!</p>
   </div>
 
-  <ngb-accordion>
-    <ngb-panel title="First">
+  <ngb-accordion closeOthers="true" type="success" activeIds="panel1">
+    <ngb-panel id="panel1">
+      <ng-template ngbPanelTitle>
+        <p class="font-weight-bold">First</p>
+      </ng-template>
       <ng-template ngbPanelContent>First Panel</ng-template>
     </ngb-panel>
-    <ngb-panel title="Second">
+    <ngb-panel title="Second" id="panel2">
       <ng-template ngbPanelContent>Second Panel</ng-template>
     </ngb-panel>
-    <ngb-panel title="Third">
+    <ngb-panel title="Third" id="panel3">
       <ng-template ngbPanelContent>Third Panel</ng-template>
     </ngb-panel>
   </ngb-accordion>
