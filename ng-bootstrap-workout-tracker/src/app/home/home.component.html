@@ -10,6 +10,7 @@
     type="success"
     activeIds="panel1"
     #acc="ngbAccordion"
+    (panelChange)="beforeChange($event)"
   >
     <ngb-panel id="panel1">
       <ng-template ngbPanelTitle>
@@ -18,9 +19,7 @@
       <ng-template ngbPanelContent
         ><p>Welcome to workout tracker</p>
         <p class="float-right">
-          <button class="btn btn-info" (click)="acc.toggle('panel2')">
-            Next
-          </button>
+          <button class="btn btn-info" (click)="nextButton(1)">Next</button>
         </p>
       </ng-template>
     </ngb-panel>
@@ -30,9 +29,7 @@
           Click on the Workouts in the mehnu to start tracking your progress.
         </p>
         <p class="float-right">
-          <button class="btn btn-info" (click)="acc.toggle('panel3')">
-            Next
-          </button>
+          <button class="btn btn-info" (click)="nextButton(2)">Next</button>
         </p>
       </ng-template>
     </ngb-panel>
