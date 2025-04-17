@@ -5,18 +5,41 @@
     <p>Welcome to Workout Tracker!</p>
   </div>
 
-  <ngb-accordion closeOthers="true" type="success" activeIds="panel1">
+  <ngb-accordion
+    closeOthers="true"
+    type="success"
+    activeIds="panel1"
+    #acc="ngbAccordion"
+  >
     <ngb-panel id="panel1">
       <ng-template ngbPanelTitle>
-        <p class="font-weight-bold">First</p>
+        <p class="font-weight-bold">Welcome</p>
       </ng-template>
-      <ng-template ngbPanelContent>First Panel</ng-template>
+      <ng-template ngbPanelContent
+        ><p>Welcome to workout tracker</p>
+        <p class="float-right">
+          <button class="btn btn-info" (click)="acc.toggle('panel2')">
+            Next
+          </button>
+        </p>
+      </ng-template>
     </ngb-panel>
-    <ngb-panel title="Second" id="panel2">
-      <ng-template ngbPanelContent>Second Panel</ng-template>
+    <ngb-panel title="How To" id="panel2">
+      <ng-template ngbPanelContent
+        ><p>
+          Click on the Workouts in the mehnu to start tracking your progress.
+        </p>
+        <p class="float-right">
+          <button class="btn btn-info" (click)="acc.toggle('panel3')">
+            Next
+          </button>
+        </p>
+      </ng-template>
     </ngb-panel>
-    <ngb-panel title="Third" id="panel3">
-      <ng-template ngbPanelContent>Third Panel</ng-template>
+    <ngb-panel title="Enjoy" id="panel3">
+      <ng-template ngbPanelContent
+        ><p>We hop you enjoy Workout Tracker!</p></ng-template
+      >
     </ngb-panel>
   </ngb-accordion>
 </div>
