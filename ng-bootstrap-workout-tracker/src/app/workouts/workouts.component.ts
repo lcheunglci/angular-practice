@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkoutsApiService } from '../services/workouts-api.service';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-workouts',
@@ -11,16 +12,25 @@ export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
   public loading = false;
   public isCollapsed = false;
+  public perfTargets = {};
 
   constructor(private api: WorkoutsApiService, private modal: NgbModal) {}
 
   ngOnInit(): void {
     this.loading = true;
-    this.api.getWorkouts().subscribe((data) => {
-      console.log('app-workouts', 'ngOnInit', 'getWorkouts', data);
-      this.workouts = data;
-      this.loading = false;
-    });
+    forkJoin([this.api.getWorkouts(), this.api.getPerfTargets()]).subscribe(
+      ([workoutResults, perfTargetResults]) => {
+        this.workouts = workoutResults;
+        this.perfTargets = perfTargetResults;
+        this.loading = false;
+        console.log(
+          'app-workouts',
+          'ngOnInit',
+          this.workouts,
+          this.perfTargets
+        );
+      }
+    );
   }
 
   deleteWorkout(id: number, deleteModal: any) {
