@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { NgbAccordionDirective } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,7 @@ import { Component, ViewChild } from '@angular/core';
 })
 export class HomeComponent {
   public stepComplete = 0;
-  @ViewChild('acc') acc: any;
+  @ViewChild(NgbAccordionDirective) acc: any;
 
   nextButton(step: number) {
     this.stepComplete = step;

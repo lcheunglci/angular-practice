@@ -5,7 +5,44 @@
     <p>Welcome to Workout Tracker!</p>
   </div>
 
-  <ngb-accordion
+  <div ngbAccordion [closeOthers]="true">
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>Welcome</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template>Welcome to workout tracker</ng-template>
+        </div>
+      </div>
+    </div>
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>How To</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template
+            >Click on the Workouts in the menu to start tracking your
+            progress.</ng-template
+          >
+        </div>
+      </div>
+    </div>
+
+    <div ngbAccordionItem>
+      <h2 ngbAccordionHeader>
+        <button ngbAccordionButton>Enjoy</button>
+      </h2>
+      <div ngbAccordionCollapse>
+        <div ngbAccordionBody>
+          <ng-template>We hop you enjoy Workout Tracker!</ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <ngb-accordion
     closeOthers="true"
     type="success"
     activeIds="panel1"
@@ -26,7 +63,7 @@
     <ngb-panel title="How To" id="panel2">
       <ng-template ngbPanelContent
         ><p>
-          Click on the Workouts in the mehnu to start tracking your progress.
+          Click on the Workouts in the menu to start tracking your progress.
         </p>
         <p class="float-right">
           <button class="btn btn-info" (click)="nextButton(2)">Next</button>
@@ -38,5 +75,5 @@
         ><p>We hop you enjoy Workout Tracker!</p></ng-template
       >
     </ngb-panel>
-  </ngb-accordion>
+  </ngb-accordion> -->
 </div>
