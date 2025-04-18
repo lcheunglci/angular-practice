@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { WorkoutsApiService } from './services/workouts-api.service';
 import { FormsModule } from '@angular/forms';
 import { DateStringAdapterService } from './date-string-adapter.service';
+import { PerformanceTargetModalComponent } from './performance-target-modal/performance-target-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { DateStringAdapterService } from './date-string-adapter.service';
     WorkoutsComponent,
     EntryEditorComponent,
     NavMenuComponent,
+    PerformanceTargetModalComponent,
   ],
   imports: [
     BrowserModule,
