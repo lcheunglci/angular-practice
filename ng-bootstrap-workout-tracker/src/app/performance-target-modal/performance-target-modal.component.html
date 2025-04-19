@@ -10,6 +10,7 @@
         type="text"
         class="form-control"
         name="rowTarget"
+        placeholder="target in meters"
         [(ngModel)]="perfTargets.row"
       />
     </div>
@@ -19,6 +20,7 @@
         type="text"
         class="form-control"
         name="runTarget"
+        placeholder="target in meters"
         [(ngModel)]="perfTargets.run"
       />
     </div>
@@ -28,6 +30,7 @@
         type="text"
         class="form-control"
         name="bikeTarget"
+        placeholder="target in meters"
         [(ngModel)]="perfTargets.bike"
       />
     </div>
@@ -35,6 +38,8 @@
 </div>
 
 <div class="modal-footer">
-  <button class="btn btn-primary">Save</button>
-  <button class="btn btn-secondary">Cancel</button>
+  <button class="btn btn-primary" (click)="save()">Save</button>
+  <button class="btn btn-secondary" (click)="activeModal.dismiss()">
+    Cancel
+  </button>
 </div>

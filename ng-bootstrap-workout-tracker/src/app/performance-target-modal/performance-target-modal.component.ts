@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-performance-target-modal',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class PerformanceTargetModalComponent {
   perfTargets: any = {};
+
+  constructor(public activeModal: NgbActiveModal) {}
+
+  save() {
+    this.activeModal.close(this.perfTargets);
+  }
 }
