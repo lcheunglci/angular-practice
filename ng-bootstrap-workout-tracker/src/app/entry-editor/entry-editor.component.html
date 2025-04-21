@@ -146,8 +146,12 @@
               name="wdistance"
               placeholder="Distance"
               [(ngModel)]="workout.distance"
+              required pattern="\d+"
               #wdistance="ngModel"
+
             />
+
+            <div *ngIf="wdistance.invalid && (wdistance.dirty || wdistance.touched)"> <ngb-alert [dismissible]-"true" *ngIf="!isDismissible" (close)-"isDismissible !isDismissible">
           </div>
         </div>
 
