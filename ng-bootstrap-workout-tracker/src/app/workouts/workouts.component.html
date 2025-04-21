@@ -38,8 +38,27 @@
       Workout Entries<a
         [routerLink]="['/workouts', 'new']"
         class="btn btn-sm btn-primary float-right"
+        [ngbTooltip]="ttContent"
+        placement="left"
+        tooltipClass="custom-tooltip"
         >Add New Entry</a
       >
+      <ng-template #ttContent>
+        Log a new
+        <strong class="text-primary text-uppercase">workout</strong> into your
+        list
+      </ng-template>
+
+      <!-- <button
+        class="btn btn-success"
+        ngbTooltip="This is just a test"
+        triggers="manual"
+        #t="ngbTooltip"
+        (click)="t.open()"
+        [autoClose]="'inside'"
+      >
+        Tooltip Test
+      </button> -->
     </h3>
     <div class="card-body">
       <table class="table table-striped">
