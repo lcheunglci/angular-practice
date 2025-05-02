@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkoutsApiService } from '../services/workouts-api.service';
-import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -15,6 +15,7 @@ import {
   selector: 'app-entry-editor',
   templateUrl: './entry-editor.component.html',
   styleUrl: './entry-editor.component.css',
+  encapsulation: ViewEncapsulation.None,
 })
 export class EntryEditorComponent implements OnInit {
   public workout: any = {};
@@ -90,5 +91,9 @@ export class EntryEditorComponent implements OnInit {
       this.loading = false;
       this.nav.navigate(['/workouts']);
     });
+  }
+
+  popVisibilityChanged(pop: NgbPopover) {
+    console.log(`Popover open state: ${pop.isOpen()}`);
   }
 }

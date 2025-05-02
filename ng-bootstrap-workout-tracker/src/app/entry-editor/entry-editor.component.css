@@ -11,3 +11,11 @@
 .filled.bad {
   color: #ff1e1e;
 }
+
+.custom-popover {
+  background: #5bc0de;
+}
+
+.custom-popover .popover-header {
+  background: #5cb85c;
+}
