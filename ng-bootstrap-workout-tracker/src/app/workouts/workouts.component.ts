@@ -14,7 +14,11 @@ export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
   public loading = false;
   public isCollapsed = false;
-  public perfTargets = {};
+  public perfTargets: { bike: number; run: number; row: number } = {
+    bike: 0,
+    run: 0,
+    row: 0,
+  };
   public totals: any = {};
 
   constructor(private api: WorkoutsApiService, private modal: NgbModal) {}
@@ -24,7 +28,11 @@ export class WorkoutsComponent implements OnInit {
     forkJoin([this.api.getWorkouts(), this.api.getPerfTargets()]).subscribe(
       ([workoutResults, perfTargetResults]) => {
         this.workouts = workoutResults;
-        this.perfTargets = perfTargetResults;
+        this.perfTargets = perfTargetResults as {
+          bike: number;
+          run: number;
+          row: number;
+        };
         this.calculatePerformance();
         this.loading = false;
         console.log(
@@ -57,7 +65,7 @@ export class WorkoutsComponent implements OnInit {
         console.log('Modal Results', result);
         this.loading = true;
         this.api.savePerfTargets(result).subscribe((data) => {
-          this.perfTargets = data;
+          this.perfTargets = data as { bike: number; run: number; row: number };
           this.loading = false;
         });
       },
@@ -79,5 +87,20 @@ export class WorkoutsComponent implements OnInit {
       .reduce((sum, workout) => sum + +workout.distances, 0);
     this.totals = { bike: bikeTotal, row: rowTotal, run: runTotal };
     console.log('**totals', this.totals);
+  }
+
+  getPBType(total: number, target: number) {
+    let pct = (total / target) * 100;
+
+    if (pct <= 25) {
+      return 'success';
+    } else if (pct > 25 && pct <= 50) {
+      return 'info';
+    } else if (pct > 50 && pct <= 75) {
+      return 'warning';
+    } else if (pct > 75) {
+      return 'danger';
+    }
+    return '';
   }
 }
