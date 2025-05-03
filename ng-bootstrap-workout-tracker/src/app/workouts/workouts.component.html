@@ -29,7 +29,18 @@
         </div>
       </div>
 
-      <!-- TODO: Progress bar here -->
+      <hr />
+
+      <p><ngb-progressbar [value]="totals.bike" [max]=""perfTargets.bike" showValue="true" height="20"
+        
+        [type]="getPBTpe(totals.bike, perfTargets.bike)">
+      
+         <!-- striped="true" animated="true" -->
+        
+        {{totals.bike}}
+      </ngb-progressbar></p>
+      <p><ngb-progressbar [value]="totals.row" [max]=""perfTargets.bike" showValue="true" height="20"></ngb-progressbar></p>
+      <p><ngb-progressbar [value]="totals.run" [max]=""perfTargets.run" showValue="true" height="20"></ngb-progressbar></p>
     </div>
   </div>
 

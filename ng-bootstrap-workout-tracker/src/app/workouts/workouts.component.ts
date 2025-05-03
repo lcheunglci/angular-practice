@@ -15,6 +15,7 @@ export class WorkoutsComponent implements OnInit {
   public loading = false;
   public isCollapsed = false;
   public perfTargets = {};
+  public totals: any = {};
 
   constructor(private api: WorkoutsApiService, private modal: NgbModal) {}
 
@@ -24,6 +25,7 @@ export class WorkoutsComponent implements OnInit {
       ([workoutResults, perfTargetResults]) => {
         this.workouts = workoutResults;
         this.perfTargets = perfTargetResults;
+        this.calculatePerformance();
         this.loading = false;
         console.log(
           'app-workouts',
@@ -63,5 +65,19 @@ export class WorkoutsComponent implements OnInit {
         console.log(`Dismissed reason: ${reason}`);
       }
     );
+  }
+
+  calculatePerformance() {
+    let bikeTotal = this.workouts
+      .filter((w) => w.type == 'bike')
+      .reduce((sum, workout) => sum + +workout.distances, 0);
+    let rowTotal = this.workouts
+      .filter((w) => w.type == 'row')
+      .reduce((sum, workout) => sum + +workout.distances, 0);
+    let runTotal = this.workouts
+      .filter((w) => w.type == 'run')
+      .reduce((sum, workout) => sum + +workout.distances, 0);
+    this.totals = { bike: bikeTotal, row: rowTotal, run: runTotal };
+    console.log('**totals', this.totals);
   }
 }
