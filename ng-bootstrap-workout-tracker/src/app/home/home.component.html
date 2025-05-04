@@ -3,6 +3,15 @@
     <h1 class="display-3">Workout Tracker</h1>
     <hr class="my-4" />
     <p>Welcome to Workout Tracker!</p>
+
+    <div ngbDropdown>
+      <button class="btn btn-primary" ngbDropdownToggle>Navigation</button>
+      <div ngbDropdownMenu>
+        <button class="dropdown-item">Home</button>
+        <button class="dropdown-item">Workouts</button>
+        <button class="dropdown-item">Admin</button>
+      </div>
+    </div>
   </div>
 
   <div ngbAccordion [closeOthers]="true">
