@@ -12,6 +12,7 @@ import { PerformanceTargetModalComponent } from '../performance-target-modal/per
 })
 export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
+  public workoutsOrig: any[] = [];
   public loading = false;
   public isCollapsed = false;
   public perfTargets: { bike: number; run: number; row: number } = {
@@ -20,6 +21,8 @@ export class WorkoutsComponent implements OnInit {
     row: 0,
   };
   public totals: any = {};
+  public pageSize = 5;
+  currPage = 1;
 
   constructor(private api: WorkoutsApiService, private modal: NgbModal) {}
 
@@ -28,6 +31,7 @@ export class WorkoutsComponent implements OnInit {
     forkJoin([this.api.getWorkouts(), this.api.getPerfTargets()]).subscribe(
       ([workoutResults, perfTargetResults]) => {
         this.workouts = workoutResults;
+        this.refreshGrid();
         this.perfTargets = perfTargetResults as {
           bike: number;
           run: number;
@@ -43,6 +47,12 @@ export class WorkoutsComponent implements OnInit {
         );
       }
     );
+  }
+
+  refreshGrid() {
+    let offset = (this.currPage - 1) * this.pageSize;
+    // client side filtering
+    this.workouts = this.workouts.slice(offset);
   }
 
   deleteWorkout(id: number, deleteModal: any) {
