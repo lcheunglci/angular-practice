@@ -93,8 +93,9 @@
     <div class="card-body">
       <div class="row">
         <div class="col">
+          <!-- the collection size should come from the webapi but json server doesn't support it so it's hard coded for this example -->
           <ngb-pagination
-            [collectionSize]="workouts.length"
+            [collectionSize]="50"
             [boundaryLinks]="true"
             [pageSize]="pageSize"
             [maxSize]="5"

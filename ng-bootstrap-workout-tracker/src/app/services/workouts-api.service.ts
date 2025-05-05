@@ -18,6 +18,12 @@ export class WorkoutsApiService {
     );
   }
 
+  getWorkoutsPaged(currPage: number, pageSize: number) {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/workouts?_page=${currPage}&_limit=${pageSize}`
+    );
+  }
+
   getWorkout(id: number) {
     return this.http.get<any[]>(`${this.baseUrl}/workouts/${id}`).pipe(
       tap((data) => {

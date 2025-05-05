@@ -12,7 +12,7 @@ import { PerformanceTargetModalComponent } from '../performance-target-modal/per
 })
 export class WorkoutsComponent implements OnInit {
   public workouts: any[] = [];
-  public workoutsOrig: any[] = [];
+  // public workoutsOrig: any[] = [];
   public loading = false;
   public isCollapsed = false;
   public perfTargets: { bike: number; run: number; row: number } = {
@@ -28,31 +28,31 @@ export class WorkoutsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    forkJoin([this.api.getWorkouts(), this.api.getPerfTargets()]).subscribe(
-      ([workoutResults, perfTargetResults]) => {
-        this.workouts = workoutResults;
-        this.refreshGrid();
-        this.perfTargets = perfTargetResults as {
-          bike: number;
-          run: number;
-          row: number;
-        };
-        this.calculatePerformance();
-        this.loading = false;
-        console.log(
-          'app-workouts',
-          'ngOnInit',
-          this.workouts,
-          this.perfTargets
-        );
-      }
-    );
+    forkJoin([
+      this.api.getWorkoutsPaged(this.currPage, this.pageSize),
+      this.api.getPerfTargets(),
+    ]).subscribe(([workoutResults, perfTargetResults]) => {
+      this.workouts = workoutResults;
+      // this.refreshGrid();
+      this.perfTargets = perfTargetResults as {
+        bike: number;
+        run: number;
+        row: number;
+      };
+      this.calculatePerformance();
+      this.loading = false;
+      console.log('app-workouts', 'ngOnInit', this.workouts, this.perfTargets);
+    });
   }
 
   refreshGrid() {
-    let offset = (this.currPage - 1) * this.pageSize;
     // client side filtering
-    this.workouts = this.workouts.slice(offset);
+    // let offset = (this.currPage - 1) * this.pageSize;
+    // this.workouts = this.workouts.slice(offset);
+    // server side filtering
+    this.api
+      .getWorkoutsPaged(this.currPage, this.pageSize)
+      .subscribe((data) => (this.workouts = data));
   }
 
   deleteWorkout(id: number, deleteModal: any) {
