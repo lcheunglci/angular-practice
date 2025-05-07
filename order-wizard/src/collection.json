@@ -1,0 +1,9 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "order-wizard": {
+      "description": "A schematic for creating an order wizard using the Angular Material Stepper component.",
+      "factory": "./order-wizard/index#orderWizard"
+    }
+  }
+}
