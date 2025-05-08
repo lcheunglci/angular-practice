@@ -1,4 +1,4 @@
-import { normalize } from '@angular-devkit/core';
+import { normalize, strings } from '@angular-devkit/core';
 import {
   apply,
   MergeStrategy,
@@ -6,6 +6,7 @@ import {
   move,
   Rule,
   SchematicContext,
+  template,
   Tree,
   url,
 } from '@angular-devkit/schematics';
@@ -14,10 +15,15 @@ import {
 // per file.
 export function orderWizard(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
-    const folderPath = normalize(_options.path + '/' + _options.name);
+    const folderPath = normalize(
+      strings.dasherize(_options.path + '/' + _options.name),
+    );
     let files = url('./files');
 
-    const newTree = apply(files, [move(folderPath)]);
+    const newTree = apply(files, [
+      move(folderPath),
+      template({ ...strings, ..._options }),
+    ]);
 
     const templateRule = mergeWith(newTree, MergeStrategy.Default);
 
