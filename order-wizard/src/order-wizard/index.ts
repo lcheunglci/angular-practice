@@ -1,4 +1,9 @@
-import { normalize, strings } from '@angular-devkit/core';
+import {
+  normalize,
+  strings,
+  virtualFs,
+  workspaces,
+} from '@angular-devkit/core';
 import {
   apply,
   filter,
@@ -10,15 +15,21 @@ import {
   template,
   Tree,
   url,
+  SchematicsException,
 } from '@angular-devkit/schematics';
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
-export function orderWizard(_options: any): Rule {
-  return (tree: Tree, _context: SchematicContext) => {
+export function orderWizard(_options: any): Promise<Rule> {
+  return async (tree: Tree, _context: SchematicContext) => {
     const folderPath = normalize(
       strings.dasherize(_options.path + '/' + _options.name),
     );
+
+    const host = createHost(tree);
+    const { workspace } = await workspaces.readWorkspace('/', host);
+    console.log(workspace);
+
     let files = url('./files');
 
     const newTree = apply(files, [
@@ -42,3 +53,48 @@ function specFilter(_options: any): Rule {
     return filter((path) => !path.match(/\test\.ts$/));
   }
 }
+
+// old way:
+// function getWorkspace(_options: any, tree: Tree): experimental.workspace.WorkspaceSchema {
+//   const workspace = tree.read('/angular.json');
+
+//   if (!workspace) {
+//     throw new SchematicsException("angular.json file not found");
+//   }
+
+//   return JSON.parse(workspace.toString());
+// }
+
+// current way to get the workspace https://angular.dev/tools/cli/schematics-for-libraries
+function createHost(tree: Tree): workspaces.WorkspaceHost {
+  return {
+    async readFile(path: string): Promise<string> {
+      const data = tree.read(path);
+      if (!data) {
+        throw new SchematicsException('File not found.');
+      }
+      return virtualFs.fileBufferToString(data);
+    },
+    async writeFile(path: string, data: string): Promise<void> {
+      return tree.overwrite(path, data);
+    },
+    async isDirectory(path: string): Promise<boolean> {
+      return !tree.exists(path) && tree.getDir(path).subfiles.length > 0;
+    },
+    async isFile(path: string): Promise<boolean> {
+      return tree.exists(path);
+    },
+  };
+}
+
+// export function myService(options: MyServiceSchema): Rule {
+//   return async (tree: Tree) => {
+//     const host = createHost(tree);
+//     const {workspace} = await workspaces.readWorkspace('/', host);
+
+//   const project = options.project != null ? workspace.projects.get(options.project) : null;
+//     if (!project) {
+//       throw new SchematicsException(`Invalid project name: ${options.project}`);
+//     }
+
+// }
