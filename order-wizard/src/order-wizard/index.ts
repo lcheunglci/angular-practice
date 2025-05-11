@@ -110,3 +110,32 @@ async function getWorkspace(tree: Tree, options: any) {
 //     }
 
 // }
+
+function updateRootModule(_options: any, workspace: any): Rule {
+  return (tree: Tree, _context: SchematicContext): Tree => {
+    _options.project =
+      _options.project === 'defaultProject'
+        ? workspace.defaultProject
+        : _options.project;
+
+    const project = workspace.projects[_options.project];
+    const moduleName = strings.dasherize(_options.name);
+    const exportedModuleName = strings.classify(_options.name);
+    const modulePath = strings.classify(_options.path);
+    const rootModulePath =
+      `${project.root}/` +
+      `${project.sourceRoot}/` +
+      `${project.prefix}/` +
+      `${project.prefix}/module.ts`;
+
+    const importContent =
+      `import { ${exportedModuleName}Module }` +
+      `from './${modulePath}/${moduleName}/${moduleName}.module';`;
+
+    const rec = tree.beginUpdate(rootModulePath);
+    rec.insertLeft(0, importContent);
+    tree.commitUpdate(rec);
+
+    return tree;
+  };
+}
