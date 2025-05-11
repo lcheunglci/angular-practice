@@ -16,6 +16,7 @@ import {
   Tree,
   url,
   SchematicsException,
+  chain,
 } from '@angular-devkit/schematics';
 
 // You don't have to export the function as default. You can also have more than one rule factory
@@ -27,7 +28,6 @@ export function orderWizard(_options: any): Rule {
     );
 
     const workspace = getWorkspace(tree, _options);
-    console.log(workspace);
 
     let files = url('./files');
 
@@ -38,8 +38,10 @@ export function orderWizard(_options: any): Rule {
     ]);
 
     const templateRule = mergeWith(newTree, MergeStrategy.Default);
+    const updateModuleRule = updateRootModule(_options, workspace);
+    const chainedRule = chain([templateRule, updateModuleRule]);
 
-    return templateRule(tree, _context);
+    return chainedRule(tree, _context);
   };
 }
 
