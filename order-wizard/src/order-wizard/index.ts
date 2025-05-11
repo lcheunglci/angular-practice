@@ -20,14 +20,13 @@ import {
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
-export function orderWizard(_options: any): Promise<Rule> {
-  return async (tree: Tree, _context: SchematicContext) => {
+export function orderWizard(_options: any): Rule {
+  return (tree: Tree, _context: SchematicContext) => {
     const folderPath = normalize(
       strings.dasherize(_options.path + '/' + _options.name),
     );
 
-    const host = createHost(tree);
-    const { workspace } = await workspaces.readWorkspace('/', host);
+    const workspace = getWorkspace(tree, _options);
     console.log(workspace);
 
     let files = url('./files');
@@ -85,6 +84,19 @@ function createHost(tree: Tree): workspaces.WorkspaceHost {
       return tree.exists(path);
     },
   };
+}
+
+async function getWorkspace(tree: Tree, options: any) {
+  const host = createHost(tree);
+  const { workspace } = await workspaces.readWorkspace('/', host);
+
+  const project =
+    options.project != null ? workspace.projects.get(options.project) : null;
+  if (!project) {
+    throw new SchematicsException(`Invalid project name: ${options.project}`);
+  }
+
+  return workspace;
 }
 
 // export function myService(options: MyServiceSchema): Rule {
