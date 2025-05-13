@@ -17,15 +17,19 @@ import {
   url,
   SchematicsException,
   chain,
+  TaskId,
 } from '@angular-devkit/schematics';
 
-// TODO: update this import to be compatible with exiting version of angular
 import {
-  NodePackagetTaskOptions,
-  NodePckageInstallTask,
-} from '@angular/devkit/schematics/tasks';
+  NodePackageInstallTask,
+  RunSchematicTask,
+} from '@angular-devkit/schematics/tasks';
+
+import { NodePackageTaskOptions } from '@angular-devkit/schematics/tasks/package-manager/options';
 
 import * as ts from 'typescript';
+
+let materialTaskId: TaskId;
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
@@ -48,10 +52,12 @@ export function orderWizard(_options: any): Rule {
     const templateRule = mergeWith(newTree, MergeStrategy.Default);
     const updateModuleRule = updateRootModule(_options, workspace);
     const installMaterialRule = installMaterial();
+    const addMaterialRule = addMaterial();
     const chainedRule = chain([
       templateRule,
       updateModuleRule,
       installMaterialRule,
+      addMaterialRule,
     ]);
 
     return chainedRule(tree, _context);
@@ -241,9 +247,27 @@ function installMaterial(): Rule {
         packageName: materialDepName,
       };
 
-      _context.addTask(new NodePackageInstallTask(options));
+      materialTaskId = _context.addTask(new NodePackageInstallTask(options));
       _context.logger.info('Installing Angular Material');
     }
+
+    return tree;
+  };
+}
+
+function addMaterial(): Rule {
+  return (tree: Tree, _context: SchematicContext): Tree => {
+    const options = {
+      theme: 'indigo-pink',
+      gestures: true,
+      animations: true,
+    };
+
+    _context.addTask(
+      new RunSchematicTask('@angular/material', 'ng-add', options),
+      [materialTaskId],
+    );
+    _context.logger.info('Configuring Angular Material');
 
     return tree;
   };
