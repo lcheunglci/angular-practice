@@ -19,6 +19,12 @@ import {
   chain,
 } from '@angular-devkit/schematics';
 
+// TODO: update this import to be compatible with exiting version of angular
+import {
+  NodePackagetTaskOptions,
+  NodePckageInstallTask,
+} from '@angular/devkit/schematics/tasks';
+
 import * as ts from 'typescript';
 
 // You don't have to export the function as default. You can also have more than one rule factory
@@ -41,7 +47,12 @@ export function orderWizard(_options: any): Rule {
 
     const templateRule = mergeWith(newTree, MergeStrategy.Default);
     const updateModuleRule = updateRootModule(_options, workspace);
-    const chainedRule = chain([templateRule, updateModuleRule]);
+    const installMaterialRule = installMaterial();
+    const chainedRule = chain([
+      templateRule,
+      updateModuleRule,
+      installMaterialRule,
+    ]);
 
     return chainedRule(tree, _context);
   };
@@ -199,4 +210,41 @@ function findImportArray(file: ts.SourceFile): number {
   });
 
   return pos;
+}
+
+function installMaterial(): Rule {
+  return (tree: Tree, _context: SchematicContext): Tree => {
+    const packageJsonPath = '/package.json';
+    const materialDepName = '@angular/material';
+    const packageJson = getAsSourceFile(tree, packageJsonPath);
+    let materialInstalled = false;
+
+    packageJson.forEachChild((node: ts.Node) => {
+      if (node.kind == ts.SyntaxKind.ExpressionStatement) {
+        node.forEachChild((objectLiteral: ts.Node) => {
+          objectLiteral.forEachChild((property: ts.Node) => {
+            if (property.getFullText().includes('dependencies')) {
+              property.forEachChild((dependency) => {
+                if (dependency.getFullText().includes(materialDepName)) {
+                  _context.logger.info('Angular Material already installed');
+                  materialInstalled = true;
+                }
+              });
+            }
+          });
+        });
+      }
+    });
+
+    if (!materialInstalled) {
+      const options = <NodePackageTaskOptions>{
+        packageName: materialDepName,
+      };
+
+      _context.addTask(new NodePackageInstallTask(options));
+      _context.logger.info('Installing Angular Material');
+    }
+
+    return tree;
+  };
 }
