@@ -32,5 +32,45 @@ describe('order-wizard', () => {
 
       expect(tree.files.length).toEqual(10);
     });
+
+    it('gives files the correct names', async () => {
+      const nameOption = 'test';
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: nameOption },
+        testTree,
+      );
+
+      tree.files.slice(3).forEach((filePath: string) => {
+        expect(filePath.includes(`/${nameOption}/${nameOption}`)).toEqual(true);
+      });
+    });
+
+    it('can create files under a deeper path', async () => {
+      const nameOption = 'test';
+      const pathOption = 'fake-path';
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: nameOption, path: pathOption },
+        testTree,
+      );
+
+      tree.files.slice(3).forEach((filePath: string) => {
+        expect(filePath.startsWith(`/${pathOption}/`)).toEqual(true);
+      });
+    });
+
+    it('does not create the test files when spec is false', async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: 'test', spec: 'false' },
+        testTree,
+      );
+
+      expect(tree.files.length).toEqual(8);
+    });
   });
 });
