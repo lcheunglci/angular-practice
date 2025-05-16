@@ -73,4 +73,46 @@ describe('order-wizard', () => {
       expect(tree.files.length).toEqual(8);
     });
   });
+
+  describe('when inserting content', () => {
+    it('updates template files correctly', async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: 'test' },
+        testTree,
+      );
+
+      const servicePath = tree.files.pop() || '';
+      const service = tree.read(servicePath);
+
+      expect(service).toContain('export class TestService');
+    });
+
+    it('adds a new import to the root module', async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: 'test' },
+        testTree,
+      );
+      const module = tree.read('./src/app/app.module.ts');
+
+      expect(module).toContain(
+        `import { TestModule } from './/test/test.module';`,
+      );
+    });
+
+    it('adds a new module to the imports array in the root module', async () => {
+      const runner = new SchematicTestRunner('schematics', collectionPath);
+      const tree = await runner.runSchematic(
+        'order-wizard',
+        { name: 'test' },
+        testTree,
+      );
+      const module = tree.read('./src/app/app.module.ts');
+
+      expect(module).toContain(', TestModule');
+    });
+  });
 });
