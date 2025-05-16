@@ -1,10 +1,12 @@
-import { Tree } from '@angular-devkit/schematics';
+import { Tree, SchematicContext } from '@angular-devkit/schematics';
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as path from 'path';
 
+import { installMaterial } from '../order-wizard/index';
 import * as angularJsonStub from './stubs/angular.json';
 import * as appModuleStub from './stubs/app.module.json';
 import * as packageJsonStub from './stubs/package.json';
+import * as packageJsonMaterialStub from './stubs/package-material.json';
 
 const collectionPath = path.join(__dirname, '../collection.json');
 
@@ -113,6 +115,53 @@ describe('order-wizard', () => {
       const module = tree.read('./src/app/app.module.ts');
 
       expect(module).toContain(', TestModule');
+    });
+  });
+
+  describe('when installing dependencies', () => {
+    let contextStub: SchematicContext;
+
+    beforeEach(() => {
+      contextStub = {
+        debug: false,
+        engine: jasmine.createSpyObj('engine', [
+          'createCollection',
+          'createContext',
+          'createSchematic',
+          'createSourceFromUrl',
+          'transformOptions',
+          'executePostTasks',
+        ]),
+        logger: jasmine.createSpyObj('logger', ['info']),
+        schematic: jasmine.createSpyObj('schematic', ['call']),
+        strategy: 0,
+        interactive: false,
+        addTask: jasmine.createSpy(),
+      };
+    });
+
+    it('schedules an npm install task if Material is not installed', () => {
+      const rule = installMaterial();
+      rule(testTree, contextStub);
+
+      expect(contextStub.addTask).toHaveBeenCalled();
+      expect(contextStub.logger.info).toHaveBeenCalledWith(
+        'Installing Angular Material',
+      );
+    });
+
+    it('does not schedules an npm install task if Material is installed', () => {
+      testTree.overwrite(
+        './package.json',
+        JSON.stringify(packageJsonMaterialStub),
+      );
+      const rule = installMaterial();
+      rule(testTree, contextStub);
+
+      expect(contextStub.addTask).not.toHaveBeenCalled();
+      expect(contextStub.logger.info).toHaveBeenCalledWith(
+        'Angular Material already installed',
+      );
     });
   });
 });
