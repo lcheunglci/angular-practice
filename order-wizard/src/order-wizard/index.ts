@@ -35,11 +35,14 @@ let materialTaskId: TaskId;
 // per file.
 export function orderWizard(_options: any): Rule {
   return (tree: Tree, _context: SchematicContext) => {
-    const folderPath = normalize(
-      strings.dasherize(_options.path + '/' + _options.name),
-    );
-
     const workspace = getWorkspace(tree, _options);
+    const project = getProject(_options, workspace);
+    const appRoot =
+      `${project.root}/` + `${project.SourceRoot}/` + `${project.prefix}/`;
+
+    const folderPath = normalize(
+      strings.dasherize(appRoot + _options.path + '/' + _options.name),
+    );
 
     let files = url('./files');
 
@@ -132,6 +135,15 @@ async function getWorkspace(tree: Tree, options: any) {
 
 // }
 
+function getProject(_options: any, workspace: any) {
+  _options.project =
+    _options.project === 'defaultProject'
+      ? workspace.defaultProject
+      : _options.project;
+
+  return workspace.projects[_options.project];
+}
+
 function updateRootModule(_options: any, workspace: any): Rule {
   return (tree: Tree, _context: SchematicContext): Tree => {
     _options.project =
@@ -139,7 +151,7 @@ function updateRootModule(_options: any, workspace: any): Rule {
         ? workspace.defaultProject
         : _options.project;
 
-    const project = workspace.projects[_options.project];
+    const project = getProject(_options, workspace);
     const moduleName = strings.dasherize(_options.name);
     const exportedModuleName = strings.classify(_options.name);
     const modulePath = strings.classify(_options.path);
