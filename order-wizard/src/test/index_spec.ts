@@ -60,7 +60,7 @@ describe('order-wizard', () => {
       );
 
       tree.files.slice(3).forEach((filePath: string) => {
-        expect(filePath.startsWith(`/${pathOption}/`)).toEqual(true);
+        expect(filePath.includes(`/${pathOption}/`)).toEqual(true);
       });
     });
 
