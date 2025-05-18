@@ -1,0 +1,9 @@
+<help-banner (help)="showHelp()" *ngIf="err && handler"></help-banner>
+<help-banner *ngIf="err && !handler"></help-banner>
+<h1>{{widgetTitle}}</h1>
+<hr />
+<button (click)="toggleErr()">Toggle Error</button>
+<button (click)="toggleHandler()">Toggle Handler</button>
+
+
+

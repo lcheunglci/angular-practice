@@ -1,0 +1,7 @@
+<h1>{{widgetTitle}}</h1>
+
+<ul>
+    <li class='link' *ngFor="let item of linkList">
+        <a href='#' hsPaywall [requiredLicense]="item.licenseLevel">{{item.title}}</a>
+    </li>
+</ul>
