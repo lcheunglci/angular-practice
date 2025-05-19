@@ -1,0 +1,27 @@
+<div style='background-color:blanchedalmond;'>
+  <h4>Child Component</h4> 
+  <hr />
+  <div style='float: right; width:25%; padding-right:50px;'>
+      <button (click)="filterByGenre('Science Fiction')">Science Fiction</button>
+      <button (click)="addBook()">Add Book</button>
+      <button (click)="removeBook()">Remove Book</button>
+    </div>
+  
+  <div style='width:75%; height:100%'>
+    <div class='book' #book *ngFor="let oneBook of allBooks" id='{{oneBook.id}}'>
+      <div style='float:left; width:250px'>
+        <span class='label'>Title</span>:
+        <span class='value'>{{oneBook.title}}</span>
+      </div>
+      <div>
+        <span class='label'>Author</span>:
+        <span class='value'>{{oneBook.author}}</span>
+      </div>
+      <div style='clear:both'>
+        <span class='label'>Genre</span>:
+        <span class='value'>{{oneBook.genre}}</span>
+      </div>
+    </div>
+  </div>
+  
+</div>

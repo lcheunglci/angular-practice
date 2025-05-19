@@ -1,0 +1,23 @@
+<button (click)="countChildren()">Show Child Counts</button>
+<div *ngIf="showChildCounts">
+  <p>
+    There are {{allContent? allContent.length : 0}} content children
+  </p>
+  <p>
+    There are {{allViews? allViews.length : 0}} view children (includes Component template)
+  </p>
+  <p>
+      There are {{someContent? someContent.length : 0}} templates in "someContent"
+    </p>
+</div>
+
+
+<ng-template #view1>
+  View content #1
+</ng-template>
+<ng-template #view2>
+  View content #2
+</ng-template>
+<ng-template #view3>
+  View content #3
+</ng-template>

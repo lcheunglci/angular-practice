@@ -1,0 +1,17 @@
+<h1>ViewContainerRef</h1>
+<button (click)="addTemplate1()">Add Template1</button>
+<button (click)="addTemplate2()">Add Template2</button>
+<button [disabled]="vcr1IsEmpty()" (click)="clearVCR1()">Clear VCR1</button>
+
+<hr />
+<div #vcr1></div>
+<hr />
+<div #vcr2></div>
+
+
+<ng-template #t1>Template 1<br /></ng-template>
+<ng-template #t2>Template 2<br /></ng-template>
+<ng-template #t3>Template 3<br /></ng-template>
+    
+
+

@@ -1,0 +1,18 @@
+<h1>Selector Options - Read</h1>
+<div style='background-color: lightskyblue;'>
+    <div #title id='title'>Widget</div>
+    <hr />
+    <sor-child #child></sor-child>
+    <hr />
+    <h3>A. Child Component</h3>
+    <p>Select by type: {{child | json}}</p>
+    <p>Select by reference var: {{child2 | json}}</p>
+    <hr />
+    <h3>B. Child Component</h3>
+    <p>Select by type, force ElementRef: {{childElem | json}}</p>
+    <p>Select by reference var, force ElementRef: {{child2Elem | json}}</p>
+    <hr />
+    <h3>C. HTML Element</h3>
+    <p>Select by reference var: (see console)</p>
+    <p>Select by reference var, force ElementRef: (see console)</p>
+</div>

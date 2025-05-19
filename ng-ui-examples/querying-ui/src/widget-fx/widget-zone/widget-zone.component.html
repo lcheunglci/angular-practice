@@ -1,0 +1,21 @@
+<div class='widget-zone-body'>
+    <div [style.height]="height" [style.width]="width">
+        <div class='widget-header'>
+            {{activeWidgetTitle}}
+            <div class='widget-title-right'>
+                <i class="fa fa-bars" aria-hidden="true" 
+                    [matMenuTriggerFor]="menu"></i>
+            </div>
+        </div>
+        <div class='widget-content'>
+           <ng-container #vc></ng-container> 
+        </div>
+    </div>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="ChangeWidgetType(item)" 
+            *ngFor="let item of cfg.userSelectableWidgets;trackBy:customTrackBy">
+            {{item.displayName}}
+        </button>
+        
+    </mat-menu>
+</div>
