@@ -1,0 +1,24 @@
+{
+  "name": "super-lib",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/core": ">=17.0.0"
+  },
+  "module": "fesm2022/super-lib.mjs",
+  "typings": "index.d.ts",
+  "exports": {
+    "./package.json": {
+      "default": "./package.json"
+    },
+    ".": {
+      "types": "./index.d.ts",
+      "esm2022": "./esm2022/super-lib.mjs",
+      "esm": "./esm2022/super-lib.mjs",
+      "default": "./fesm2022/super-lib.mjs"
+    }
+  },
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^2.3.0"
+  }
+}
