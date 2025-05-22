@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'super-lib-component',
-  template: '<p>Hello from the library</p>',
+  templateUrl: 'super-lib.component.html',
+  standalone: true,
 })
 export class SuperLibComponent {}
