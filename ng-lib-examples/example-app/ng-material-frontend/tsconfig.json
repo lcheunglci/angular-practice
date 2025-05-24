@@ -3,6 +3,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
+      "angular-console-logger": [
+        "./dist/angular-console-logger"
+      ],
       "angular-rating": [
         "./dist/angular-rating"
       ]

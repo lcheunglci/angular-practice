@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 import { BookService } from '../../../core/services/book.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LoggingService } from '../../../core/services/logging.service';
+import { AngularConsoleLoggerService } from '../../../../../projects/angular-console-logger/src/public-api';
 
 @Component({
   selector: 'app-book-form',
@@ -19,7 +20,7 @@ export class BookFormComponent implements OnInit {
     private readonly bookService: BookService,
     private readonly notificationService: NotificationService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly loggingService: LoggingService
+    private readonly loggingService: AngularConsoleLoggerService
   ) {}
 
   ngOnInit() {

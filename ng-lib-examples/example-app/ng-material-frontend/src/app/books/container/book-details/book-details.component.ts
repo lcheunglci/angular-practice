@@ -1,3 +1,4 @@
+import { AngularConsoleLoggerService } from './../../../../../projects/angular-console-logger/src/lib/angular-console-logger.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -18,7 +19,7 @@ export class BookDetailsComponent implements OnInit {
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly bookService: BookService,
-    private readonly loggingService: LoggingService
+    private readonly loggingService: AngularConsoleLoggerService
   ) {}
 
   ngOnInit() {

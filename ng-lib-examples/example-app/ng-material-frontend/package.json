@@ -8,7 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "build-angular-rating": "ng build angular-rating",
-    "watch-angular-rating": "ng build angular-rating --watch"
+    "watch-angular-rating": "ng build angular-rating --watch",
+    "build-angular-console-logger": "ng build angular-console-logger",
+    "watch-angular-console-logger": "ng build angular-console-logger --watch"
   },
   "private": true,
   "dependencies": {

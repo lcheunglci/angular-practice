@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../../../shared/models/book';
 import { BookService } from '../../../core/services/book.service';
 import { LoggingService } from '../../../core/services/logging.service';
+import { AngularConsoleLoggerService } from '../../../../../projects/angular-console-logger/src/lib/angular-console-logger.service';
 
 @Component({
   selector: 'app-books-overview',
@@ -16,7 +17,7 @@ export class BooksOverviewComponent implements OnInit {
 
   constructor(
     private readonly bookService: BookService,
-    private readonly loggingService: LoggingService
+    private readonly loggingService: AngularConsoleLoggerService
   ) {}
 
   ngOnInit() {
