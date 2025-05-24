@@ -6,15 +6,11 @@
     </p>
 
     <p matLine>
-      <span class="rating-wrapper">
-        <span *ngFor="let option of options">
-          <span
-            (click)="changeRating(option, book)"
-            [ngClass]="{ rated: option <= book.rating }"
-            >&#9733;</span
-          >
-        </span>
-      </span>
+      <lib-angular-rating
+        [count]="10"
+        [rating]="book.rating"
+        (ratingChanged)="changeRating($event, book)"
+      ></lib-angular-rating>
     </p>
 
     <span class="fill-remaining-space"></span>
