@@ -1,11 +1,10 @@
-import { AngularConsoleLoggerService } from './../../../../../projects/angular-console-logger/src/lib/angular-console-logger.service';
+import { AngularConsoleLoggerService } from 'angular-console-logger';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { BookService } from '../../../core/services/book.service';
-import { LoggingService } from '../../../core/services/logging.service';
-import { Book } from '../../../shared/models/book';
+import { BookService } from '@app/core/services/book.service';
+import { Book } from '@app/shared/models/book';
 
 @Component({
   selector: 'app-book-details',

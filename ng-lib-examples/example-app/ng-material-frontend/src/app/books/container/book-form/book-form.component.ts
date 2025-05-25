@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { BookService } from '../../../core/services/book.service';
-import { NotificationService } from '../../../core/services/notification.service';
-import { LoggingService } from '../../../core/services/logging.service';
-import { AngularConsoleLoggerService } from '../../../../../projects/angular-console-logger/src/public-api';
+import { BookService } from '@app/core/services/book.service';
+import { NotificationService } from '@app/core/services/notification.service';
+import { AngularConsoleLoggerService } from 'angular-console-logger';
 
 @Component({
   selector: 'app-book-form',

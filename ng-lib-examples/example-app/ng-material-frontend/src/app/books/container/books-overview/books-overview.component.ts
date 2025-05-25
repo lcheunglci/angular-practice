@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Book } from '../../../shared/models/book';
-import { BookService } from '../../../core/services/book.service';
-import { LoggingService } from '../../../core/services/logging.service';
-import { AngularConsoleLoggerService } from '../../../../../projects/angular-console-logger/src/lib/angular-console-logger.service';
+import { Book } from '@app/shared/models/book';
+import { BookService } from '@app/core/services/book.service';
+import { AngularConsoleLoggerService } from 'angular-console-logger';
 
 @Component({
   selector: 'app-books-overview',

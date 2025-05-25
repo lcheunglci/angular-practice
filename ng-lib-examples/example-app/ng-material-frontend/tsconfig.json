@@ -3,12 +3,11 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "angular-console-logger": [
-        "./dist/angular-console-logger"
-      ],
-      "angular-rating": [
-        "./dist/angular-rating"
-      ]
+      "@app/*": ["./src/app/*"],
+      "angular-console-logger": ["./dist/angular-console-logger"],
+      "angular-console-logger/*": ["./dist/angular-console-logger/*"],
+      "angular-rating/*": ["./dist/angular-rating/*"],
+      "angular-rating": ["./dist/angular-rating"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -27,10 +26,7 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ]
+    "lib": ["ES2022", "dom"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
