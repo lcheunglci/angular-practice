@@ -1,4 +1,4 @@
 export class LoggerConfig {
-  isProduction: boolean = false;
-  appPrefix: string = '';
+  isProduction = false;
+  appPrefix = '';
 }

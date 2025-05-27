@@ -133,6 +133,16 @@
               "zone.js/testing"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular-rating/**/*.ts",
+              "projects/angular-rating/**/*.html"
+            ],
+            "eslintConfig": "projects/angular-rating/eslint.config.js"
+          }
         }
       }
     },
@@ -165,6 +175,16 @@
               "zone.js",
               "zone.js/testing"
             ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "projects/angular-console-logger/**/*.ts",
+              "projects/angular-console-logger/**/*.html"
+            ],
+            "eslintConfig": "projects/angular-console-logger/eslint.config.js"
           }
         }
       }

@@ -11,6 +11,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
         <span
           (click)="changeRating(option)"
           [ngClass]="{ rated: option <= rating }"
+          (keyup)="keyUp($event)"
+          (keydown)="keyDown($event)"
+          role="button"
+          tabindex="{0}"
           >&#9733;</span
         >
       </span>
@@ -41,5 +45,25 @@ export class AngularRatingComponent implements OnInit {
 
   changeRating(rating: number) {
     this.ratingChanged.emit(rating);
+  }
+
+  keyUp(event: KeyboardEvent) {
+    if (event.key === 'ArrowUp') {
+      console.log('keyup - arrow up');
+      this.rating++;
+    }
+    if (event.key === 'ArrowDown') {
+      console.log('keyup - arrow down');
+      this.rating--;
+    }
+  }
+
+  keyDown(event: KeyboardEvent) {
+    if (event.key === 'ArrowUp') {
+      console.log('keydown - arrow up');
+    }
+    if (event.key === 'ArrowDown') {
+      console.log('keydown - arrow down');
+    }
   }
 }
