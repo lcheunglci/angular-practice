@@ -23,13 +23,15 @@ describe('AngularRatingComponent', () => {
 
   it('should have 10 options if number 10 is passed as count', () => {
     component.count = 10;
+    component.ngOnInit();
     fixture.detectChanges();
     expect(component.options.length).toBe(10);
   });
 
-  it('should have 10 options if number 10 is passed as count', () => {
+  it('should have 5 rating if number 5 is passed as rating', () => {
     component.count = 10;
     component.rating = 5;
+    component.ngOnInit();
     fixture.detectChanges();
     const allWithClassRated = fixture.debugElement.queryAll(By.css('.rated'));
     expect(allWithClassRated.length).toBe(5);

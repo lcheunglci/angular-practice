@@ -32,15 +32,15 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class AngularRatingComponent implements OnInit {
   @Output() ratingChanged = new EventEmitter();
-  @Input() rating = 0;
-  @Input() count = 0;
+  @Input() rating!: number;
+  @Input() count!: number;
 
   options: number[] = [];
 
   ngOnInit(): void {
     // create an array with 'count' items
     // increase every item by one
-    this.options = Array.from({ length: this.count }, (v, k) => ++k);
+    this.options = Array.from({ length: this.count }, (_, k) => ++k);
   }
 
   changeRating(rating: number) {
