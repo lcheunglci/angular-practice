@@ -18,8 +18,8 @@
     "@angular/platform-browser": "^17.1.0",
     "@angular/platform-browser-dynamic": "^17.1.0",
     "@angular/router": "^17.1.0",
-    "angular-console-logger": "file:../ng-material-frontend/dist/angular-console-logger",
-    "angular-rating": "file:../ng-material-frontend/dist/angular-rating",
+    "angular-console-logger": "file:../ng-material-frontend/dist/angular-console-logger/angular-console-logger-0.0.1.tgz",
+    "angular-rating": "file:../ng-material-frontend/dist/angular-rating/angular-rating-0.0.1.tgz",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

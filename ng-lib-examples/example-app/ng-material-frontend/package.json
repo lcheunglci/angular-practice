@@ -7,14 +7,22 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "lint": "ng lint",
     "build-angular-rating": "ng build angular-rating",
     "watch-angular-rating": "ng build angular-rating --watch",
-    "build-angular-console-logger": "ng build angular-console-logger",
-    "watch-angular-console-logger": "ng build angular-console-logger --watch",
+    "build-angular-logging": "ng build angular-console-logger",
+    "watch-angular-logging": "ng build angular-console-logger --watch",
     "lint-angular-rating": "ng lint angular-rating",
+    "lint-angular-logging": "ng lint angular-console-logger",
     "lint-all-libs": "ng lint angular-rating && ng lint angular-console-logger",
-    "test-angular-rating": "ng test angular-rating",
-    "lint": "ng lint"
+    "test-angular-rating-watch": "ng test angular-rating --browsers=ChromeHeadless",
+    "test-angular-logging-watch": "ng test angular-console-logger --browsers=ChromeHeadless",
+    "test-all-libs-watch": "run-p test-angular-rating-watch test-angular-logging-watch",
+    "test-angular-rating-ci": "ng test angular-rating --watch=false --browsers=ChromeHeadless",
+    "test-angular-logging-ci": "ng test angular-console-logger --watch=false --browsers=ChromeHeadless",
+    "test-all-libs-ci": "npm run test-angular-rating-ci && npm run test-angular-logging-ci",
+    "pack-angular-logging": "cd dist/angular-console-logger && npm pack",
+    "pack-angular-rating": "cd dist/angular-rating && npm pack"
   },
   "private": true,
   "dependencies": {
@@ -46,7 +54,6 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "ng-packagr": "^17.3.0",
-    "npm-run-all": "^4.1.5",
     "typescript": "~5.3.2",
     "typescript-eslint": "8.32.1"
   }
