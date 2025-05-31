@@ -1,0 +1,16 @@
+.product-card{
+    padding-bottom: 15px;
+}
+
+.product-card-btn{
+    text-align: center;
+}
+
+footer{
+    bottom: 0;
+}
+
+div.card img{
+    max-height: 250px;
+    width: 100%;
+}
