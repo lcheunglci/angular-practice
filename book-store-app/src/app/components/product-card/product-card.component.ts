@@ -1,31 +1,29 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  styleUrls: ['./product-card.component.css'],
 })
 export class ProductCardComponent {
-
   @Input() product: any;
   @Output() orderProduct = new EventEmitter<any>();
   @Output() removeProduct = new EventEmitter<number>();
 
-  constructor(public userService: UserService,
-    public router: Router) {}
+  constructor(public userService: UserService, public router: Router) {}
 
   orderProductClick() {
     this.orderProduct.emit(this.product);
   }
 
-  removeProductClick(id:number){
+  removeProductClick(id: number) {
     this.removeProduct.emit(id);
   }
 
-  showDetails(id: number){
-    this.router.navigate([`products/${id}`])
+  showDetails(id: number) {
+    this.router.navigate([`products/${id}`]);
   }
 
   rating = 3; // Initialize to some default value between 1-5
@@ -48,6 +46,4 @@ export class ProductCardComponent {
         return 'badge';
     }
   }
-  
-
 }
