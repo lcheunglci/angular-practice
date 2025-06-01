@@ -1,8 +1,16 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-3" *ngFor="let product of products">
+  <div class="row">
+    <div class="col-md-3" *ngFor="let product of products$ | async">
+      <app-product-card
+        [product]="product"
+        (orderProduct)="orderProductNow($event)"
+        (removeProduct)="removeProductNow($event)"
+      ></app-product-card>
+    </div>
+
+    <!-- <div class="col-md-3" *ngFor="let product of products">
             <app-product-card [product]="product" (orderProduct)="orderProductNow($event)" (removeProduct)="removeProductNow($event)"></app-product-card>
 
-        </div>
-    </div>
+        </div> -->
+  </div>
 </div>

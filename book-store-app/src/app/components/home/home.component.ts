@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { hide, show } from '../../ngrx-state/actions/home.action';
+import { hide, show } from '../../ngrx-state/actions/home.actions';
 
 @Component({
   selector: 'app-home',

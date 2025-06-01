@@ -19,6 +19,8 @@ import { ProductsComponent } from './components/products/products.component';
 import { StoreModule } from '@ngrx/store';
 import { homeReducer } from './ngrx-state/reducers/home.reducer';
 import { EffectsModule } from '@ngrx/effects';
+import { productReducer } from './ngrx-state/reducers/products.reducer';
+import { ProductEffects } from './ngrx-state/effects/product.effect';
 
 @NgModule({
   declarations: [
@@ -39,8 +41,8 @@ import { EffectsModule } from '@ngrx/effects';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ home: homeReducer }),
-    EffectsModule.forRoot([]),
+    StoreModule.forRoot({ home: homeReducer, products: productReducer }),
+    EffectsModule.forRoot([ProductEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

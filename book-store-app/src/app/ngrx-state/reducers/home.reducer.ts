@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { show, hide } from '../actions/home.action';
+import { show, hide } from '../actions/home.actions';
 
 export const initialState = false;
 
