@@ -16,11 +16,14 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AboutComponent } from './components/about/about.component';
 import { ProductsComponent } from './components/products/products.component';
-import { StoreModule } from '@ngrx/store';
+import { MetaReducer, StoreModule } from '@ngrx/store';
 import { homeReducer } from './ngrx-state/reducers/home.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { productReducer } from './ngrx-state/reducers/products.reducer';
 import { ProductEffects } from './ngrx-state/effects/product.effect';
+import { logger } from './ngrx-state/logger.meta-reducer';
+
+export const metaReducers: MetaReducer<any>[] = [logger];
 
 @NgModule({
   declarations: [
@@ -41,7 +44,10 @@ import { ProductEffects } from './ngrx-state/effects/product.effect';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    StoreModule.forRoot({ home: homeReducer, products: productReducer }),
+    StoreModule.forRoot(
+      { home: homeReducer, products: productReducer },
+      { metaReducers }
+    ),
     EffectsModule.forRoot([ProductEffects]),
   ],
   providers: [],
