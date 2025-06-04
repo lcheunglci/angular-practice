@@ -16,6 +16,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { AboutComponent } from './components/about/about.component';
 import { ProductsComponent } from './components/products/products.component';
+import { NgxsModule } from '@ngxs/store';
+import { HomeState } from './state-ngxs/state/home.state';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,15 @@ import { ProductsComponent } from './components/products/products.component';
     ProductCardComponent,
     ProductDetailsComponent,
   ],
-  imports: [BrowserModule, HttpClientModule, AppRoutingModule, FormsModule],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    NgxsModule.forRoot([HomeState], {
+      developmentMode: /** !environment.production */ false,
+    }),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
