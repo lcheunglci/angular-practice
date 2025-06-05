@@ -18,6 +18,7 @@ import { AboutComponent } from './components/about/about.component';
 import { ProductsComponent } from './components/products/products.component';
 import { NgxsModule } from '@ngxs/store';
 import { HomeState } from './state-ngxs/state/home.state';
+import { ProductState } from './state-ngxs/state/product.state';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { HomeState } from './state-ngxs/state/home.state';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    NgxsModule.forRoot([HomeState], {
+    NgxsModule.forRoot([HomeState, ProductState], {
       developmentMode: /** !environment.production */ false,
     }),
   ],
