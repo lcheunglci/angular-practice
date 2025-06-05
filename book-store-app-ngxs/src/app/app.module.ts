@@ -19,6 +19,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { NgxsModule } from '@ngxs/store';
 import { HomeState } from './state-ngxs/state/home.state';
 import { ProductState } from './state-ngxs/state/product.state';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ProductState } from './state-ngxs/state/product.state';
     NgxsModule.forRoot([HomeState, ProductState], {
       developmentMode: /** !environment.production */ false,
     }),
+    NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],
