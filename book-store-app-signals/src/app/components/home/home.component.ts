@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,10 +8,14 @@ import { Component, signal } from '@angular/core';
 export class HomeComponent {
   // isShowMore: boolean = false;
   isShowMoreWithSignal = signal(false);
+  clickCount = signal(0);
+  clickCountComputed = computed(() => this.clickCount() * 2);
 
   showMore() {
     // this.isShowMore = true;
     this.isShowMoreWithSignal.set(true);
+
+    this.clickCount.update((value) => value + 1);
   }
 
   showLess() {
