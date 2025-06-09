@@ -3,6 +3,16 @@
 
   <div class="grid">
     <div class="row">
+      <div class="cellFull">
+        <select>
+          <option value="undefined" selected>--Select a product</option>
+          @for(product of products(); track product.id) {
+          <option [ngValue]="product">{{ product.productName }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="row">
       <div class="cellLeft"><label for="quantity">Quantity</label></div>
       <div class="cellRight">
         <input
