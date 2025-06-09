@@ -1,7 +1,17 @@
 <div class="content">
-  <div class="title">
-    {{pageTitle}}
+  <div class="title">{{pageTitle}}</div>
+
+  <div class="grid">
+    <div class="row">
+      <div class="cellLeft"><label for="quantity">Quantity</label></div>
+      <div class="cellRight">
+        <input
+          id="quantity"
+          type="number"
+          class="quantityInput"
+          [(ngModel)]="quantity"
+        />
+      </div>
+    </div>
   </div>
-
-
 </div>
