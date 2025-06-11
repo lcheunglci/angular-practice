@@ -45,6 +45,12 @@
           </button>
         </div>
       </div>
+      <div class="row">
+        <div class="cellLeft">Total:</div>
+        <div class="cellRight" [style.color]="color()">
+          {{ total() | currency }}
+        </div>
+      </div>
     </div>
   </div>
 </div>
