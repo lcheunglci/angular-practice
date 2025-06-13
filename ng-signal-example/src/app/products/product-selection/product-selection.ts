@@ -29,7 +29,8 @@ export class ProductSelection {
   });
 
   // products = signal(ProductData.products);
-  products = this.productService.productsResource.value;
+  productsResource = this.productService.createProductResource();
+  products = this.productsResource.value;
 
   total = computed(
     () => (this.selectedProduct()?.price ?? 0) * this.quantity()
