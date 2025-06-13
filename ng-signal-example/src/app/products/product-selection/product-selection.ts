@@ -2,13 +2,15 @@ import {
   Component,
   computed,
   effect,
+  inject,
   linkedSignal,
   signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ProductData } from '../product-data';
+// import { ProductData } from '../product-data';
 import { Product } from '../product';
 import { CurrencyPipe } from '@angular/common';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-product-selection',
@@ -18,6 +20,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductSelection {
   pageTitle = 'Product Selection';
+  private productService = inject(ProductService);
 
   selectedProduct = signal<Product | undefined>(undefined);
   quantity = linkedSignal({
@@ -25,7 +28,8 @@ export class ProductSelection {
     computation: (p) => 1,
   });
 
-  products = signal(ProductData.products);
+  // products = signal(ProductData.products);
+  products = this.productService.productsResource.value;
 
   total = computed(
     () => (this.selectedProduct()?.price ?? 0) * this.quantity()
