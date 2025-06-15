@@ -22,7 +22,8 @@ export class ProductSelection {
   pageTitle = 'Product Selection';
   private productService = inject(ProductService);
 
-  selectedProduct = signal<Product | undefined>(undefined);
+  selectedProduct = this.productService.selectedProduct;
+
   quantity = linkedSignal({
     source: this.selectedProduct,
     computation: (p) => 1,
