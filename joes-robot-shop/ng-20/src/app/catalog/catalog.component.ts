@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-catalog',
+  selector: 'bot-catalog',
   imports: [],
   templateUrl: './catalog.component.html',
-  styleUrl: './catalog.component.css'
+  styleUrl: './catalog.component.css',
 })
-export class CatalogComponent {
-
-}
+export class CatalogComponent {}
