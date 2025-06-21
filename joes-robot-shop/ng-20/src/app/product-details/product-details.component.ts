@@ -23,4 +23,8 @@ export class ProductDetailsComponent {
       discount: 0.2,
     };
   }
+
+  getImage(product: IProduct) {
+    return '/images/robot-parts/' + product.imageName;
+  }
 }
