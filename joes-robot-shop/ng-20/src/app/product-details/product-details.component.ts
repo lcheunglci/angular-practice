@@ -10,6 +10,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductDetailsComponent {
   product: IProduct;
+  availableInventory = 3;
 
   constructor() {
     this.product = {
@@ -29,6 +30,8 @@ export class ProductDetailsComponent {
   }
 
   addToCart(product: IProduct, event: MouseEvent) {
+    // Angular does not
+    // setTimeout(() => (this.availableInventory = 2), 3000);
     product.name += ' (Added to cart)';
     console.log(event);
   }

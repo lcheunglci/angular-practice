@@ -7,10 +7,12 @@
         {{ product.description }}
       </p>
       <p>Part Type: {{ product.category }}</p>
+      <p>Available Inventory: {{ availableInventory }}</p>
     </div>
     <div class="price">
       <p>{{ product.price | currency }}</p>
       <button class="cta" (click)="addToCart(product, $event)">Buy</button>
+      <button (click)="(false)">Do nothing</button>
     </div>
   </div>
 </div>
