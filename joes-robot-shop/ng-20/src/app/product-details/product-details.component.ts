@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CurrencyPipe } from '@angular/common';
 
@@ -10,7 +10,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductDetailsComponent {
   product: IProduct;
-  availableInventory = 3;
+  availableInventory = signal(3);
 
   constructor() {
     this.product = {
@@ -29,10 +29,9 @@ export class ProductDetailsComponent {
     return '/images/robot-parts/' + product.imageName;
   }
 
-  addToCart(product: IProduct, event: MouseEvent) {
-    // Angular does not
-    // setTimeout(() => (this.availableInventory = 2), 3000);
-    product.name += ' (Added to cart)';
+  addToCart(event: MouseEvent) {
+    //setTimeout(() => this.availableInventory.set(2), 3000);
+    setTimeout(() => this.availableInventory.update((p) => p - 2), 100);
     console.log(event);
   }
 }
