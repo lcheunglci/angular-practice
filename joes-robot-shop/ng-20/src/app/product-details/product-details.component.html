@@ -1,16 +1,16 @@
 <div class="product">
-  <img [src]="getImageUrl(product)" [alt]="product.name" />
+  <img [src]="getImageUrl(product())" [alt]="product().name" />
   <div class="details">
     <div>
-      <h2>{{ product.name }}</h2>
+      <h2>{{ product().name }}</h2>
       <p>
-        {{ product.description }}
+        {{ product().description }}
       </p>
-      <p>Part Type: {{ product.category }}</p>
+      <p>Part Type: {{ product().category }}</p>
       <p>Available Inventory: {{ availableInventory() }}</p>
     </div>
     <div class="price">
-      <p>{{ product.price | currency }}</p>
+      <p>{{ product().price | currency }}</p>
       <button class="cta" (click)="addToCart($event)">Buy</button>
     </div>
   </div>
