@@ -9,16 +9,15 @@
       <p>Part Type: {{ product().category }}</p>
       <p>Available Inventory: {{ availableInventory() }}</p>
     </div>
-    @if (product().discount > 0) {
+
     <div class="price">
-      <p>{{ product().price * (1 - product().discount) | currency }} (Sale)</p>
+      <p [class.strikethrough]="product().discount > 0">
+        {{ product().price | currency }}
+      </p>
+      @if (product().discount > 0) {
+      <p>{{ product().price * (1 - product().discount) | currency }}</p>
+      }
       <button class="cta" (click)="addToCart($event)">Buy</button>
     </div>
-    } @else {
-    <div class="price">
-      <p>{{ product().price | currency }}</p>
-      <button class="cta" (click)="addToCart($event)">Buy</button>
-    </div>
-    }
   </div>
 </div>
