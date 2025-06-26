@@ -1,0 +1,20 @@
+<img [src]="getImageUrl(product())" [alt]="product().name" />
+<div class="details">
+  <div>
+    <h2>{{ product().name }}</h2>
+    <p>
+      {{ product().description }}
+    </p>
+    <p>Part Type: {{ product().category }}</p>
+  </div>
+
+  <div class="price">
+    <p [ngClass]="getPriceClasses()">
+      {{ product().price | currency }}
+    </p>
+    @if (product().discount > 0) {
+    <p>{{ product().price * (1 - product().discount) | currency }}</p>
+    }
+    <button class="cta" (click)="removeFromCart()">Remove</button>
+  </div>
+</div>
