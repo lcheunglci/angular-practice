@@ -1,6 +1,7 @@
 import { Component, input, signal } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CurrencyPipe, NgClass } from '@angular/common';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'bot-product-details',
@@ -12,6 +13,8 @@ export class ProductDetailsComponent {
   product = input.required<IProduct>();
   availableInventory = signal(3);
 
+  constructor(private cartService: CartService) {}
+
   getImage(product: IProduct) {
     return '/images/robot-parts/' + product.imageName;
   }
@@ -19,7 +22,8 @@ export class ProductDetailsComponent {
   addToCart(event: MouseEvent) {
     //setTimeout(() => this.availableInventory.set(2), 3000);
     setTimeout(() => this.availableInventory.update((p) => p - 2), 100);
-    console.log(event);
+    //console.log(event);
+    this.cartService.addToCart(this.product());
   }
 
   getPriceClasses() {
