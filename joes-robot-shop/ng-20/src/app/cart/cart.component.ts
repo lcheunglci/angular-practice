@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { CartItemComponent } from '../cart-item/cart-item.component';
 import { IProduct } from '../product.model';
 import { CartService } from '../cart.service';
@@ -10,7 +10,7 @@ import { CartService } from '../cart.service';
   styleUrl: './cart.component.css',
 })
 export class CartComponent {
-  cartItems: IProduct[];
+  cartItems: Signal<IProduct[]>;
   constructor(private cartService: CartService) {
     this.cartItems = this.cartService.cart;
   }
