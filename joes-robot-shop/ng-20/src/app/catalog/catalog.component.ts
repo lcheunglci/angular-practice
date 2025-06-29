@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 
 import { ProductsService } from '../products.service';
@@ -11,7 +11,7 @@ import { IProduct } from '../product.model';
   styleUrl: './catalog.component.css',
 })
 export class CatalogComponent implements OnInit {
-  products: IProduct[] = [];
+  products!: Signal<IProduct[]>;
 
   constructor(private productsService: ProductsService) {}
   ngOnInit(): void {
