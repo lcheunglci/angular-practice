@@ -1,5 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpParams,
+} from '@angular/common/http';
 import { Coffee } from '../types/coffee';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, tap, map } from 'rxjs/operators';
@@ -26,10 +31,10 @@ export class CoffeeApiService {
 
   // GET
   getCoffees(): Observable<Coffee[]> {
-    console.log('getting coffees')
+    console.log('getting coffees');
     return this.http.get<Coffee[]>(this.apiURL, {
-      params: new HttpParams().set('sort', 'desc')
-    } )
+      params: new HttpParams().set('sort', 'desc'),
+    });
   }
 
   // GET by ID
@@ -42,21 +47,29 @@ export class CoffeeApiService {
   // POST
   createCoffee(coffee: Partial<Coffee>): Observable<Coffee> {
     return this.http
-      .post<{success: boolean, added: Coffee }>(
+      .post<{ success: boolean; added: Coffee }>(
         this.apiURL,
         JSON.stringify(coffee)
       )
-      .pipe(map(res => res.added), retry(1), catchError(this.handleError));
+      .pipe(
+        map((res) => res.added),
+        retry(1),
+        catchError(this.handleError)
+      );
   }
 
   // PUT
   updateCoffee(coffee: Partial<Coffee>): Observable<Coffee> {
     return this.http
-      .put<{ message: string, update: Coffee}>(
+      .put<{ message: string; update: Coffee }>(
         this.apiURL + '/' + coffee.id,
         JSON.stringify(coffee)
       )
-      .pipe(map(res => res.update), retry(1), catchError(this.handleError));
+      .pipe(
+        map((res) => res.update),
+        retry(1),
+        catchError(this.handleError)
+      );
   }
 
   // DELETE
@@ -69,12 +82,23 @@ export class CoffeeApiService {
   // Error handling
   private handleError(error: HttpErrorResponse) {
     let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
+    //if (error.error instanceof ErrorEvent) {
+    if (error.status === 0) {
       // Get client-side error
       errorMessage = error.error.message;
+      console.error(
+        '[CoffeeApiService] => Client-side HTTP occurred: ',
+        errorMessage,
+        error
+      );
     } else {
       // Get server-side error
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      console.error(
+        '[CoffeeApiService] => Server-side HTTP error occurred: ',
+        errorMessage,
+        error
+      );
     }
     return throwError(() => {
       return errorMessage;
