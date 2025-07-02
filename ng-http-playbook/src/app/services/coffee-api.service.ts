@@ -6,8 +6,9 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Coffee } from '../types/coffee';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError, tap, map } from 'rxjs/operators';
+import { Observable, Subject, throwError, TimeoutError, timer } from 'rxjs';
+import { retry, catchError, tap, map, takeUntil } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,8 @@ export class CoffeeApiService {
   private apiURL = 'https://fake-coffee-api.vercel.app/api';
 
   constructor(private http: HttpClient) {}
+
+  private cancelCoffeeFetch$ = new Subject<void>();
 
   /*
     CRUD Methods for consuming RESTful API
@@ -32,9 +35,20 @@ export class CoffeeApiService {
   // GET
   getCoffees(): Observable<Coffee[]> {
     console.log('getting coffees');
-    return this.http.get<Coffee[]>(this.apiURL, {
-      params: new HttpParams().set('sort', 'desc'),
-    });
+    return this.http.get<Coffee[]>(this.apiURL).pipe(
+      takeUntil(this.cancelCoffeeFetch$),
+      retry({
+        count: environment.coffeeServiceRetryCount,
+        delay: (err, attemptNum) => {
+          console.error(
+            `[CoffeeApiService] => Encountered an error while retrying request on attempt ${attemptNum}: `,
+            err
+          );
+          return timer(1000 * attemptNum);
+        },
+      }),
+      catchError(this.handleErrorWithTimeout)
+    );
   }
 
   // GET by ID
@@ -103,5 +117,17 @@ export class CoffeeApiService {
     return throwError(() => {
       return errorMessage;
     });
+  }
+
+  private handleErrorWithTimeout(error: HttpErrorResponse | TimeoutError) {
+    let errorMessage = '';
+    if (error instanceof TimeoutError) {
+      console.error('[CoffeeApiService] => Request timed out!', error);
+      return throwError(() => {
+        return errorMessage;
+      });
+    } else {
+      return this.handleError(error);
+    }
   }
 }
