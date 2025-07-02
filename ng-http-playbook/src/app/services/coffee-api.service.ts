@@ -6,8 +6,8 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Coffee } from '../types/coffee';
-import { Observable, Subject, throwError, TimeoutError, timer } from 'rxjs';
-import { retry, catchError, tap, map, takeUntil } from 'rxjs/operators';
+import { Observable, of, Subject, throwError, TimeoutError, timer } from 'rxjs';
+import { retry, catchError, tap, map, takeUntil, timeout } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -36,19 +36,24 @@ export class CoffeeApiService {
   getCoffees(): Observable<Coffee[]> {
     console.log('getting coffees');
     return this.http.get<Coffee[]>(this.apiURL).pipe(
-      takeUntil(this.cancelCoffeeFetch$),
-      retry({
-        count: environment.coffeeServiceRetryCount,
-        delay: (err, attemptNum) => {
-          console.error(
-            `[CoffeeApiService] => Encountered an error while retrying request on attempt ${attemptNum}: `,
-            err
-          );
-          return timer(1000 * attemptNum);
-        },
-      }),
-      catchError(this.handleErrorWithTimeout)
-    );
+      timeout(2),
+      catchError((error) => {
+        console.error(error);
+        return of([])}
+      )
+    //   takeUntil(this.cancelCoffeeFetch$),
+    //   retry({
+    //     count: environment.coffeeServiceRetryCount,
+    //     delay: (err, attemptNum) => {
+    //       console.error(
+    //         `[CoffeeApiService] => Encountered an error while retrying request on attempt ${attemptNum}: `,
+    //         err
+    //       );
+    //       return timer(1000 * attemptNum);
+    //     },
+    //   }),
+    //   catchError(this.handleErrorWithTimeout)
+    // );
   }
 
   // GET by ID
