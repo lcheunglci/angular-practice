@@ -1,14 +1,27 @@
 import { Injectable } from '@angular/core';
 import {
   HttpClient,
+  HttpContext,
+  HttpContextToken,
   HttpErrorResponse,
   HttpHeaders,
   HttpParams,
 } from '@angular/common/http';
 import { Coffee } from '../types/coffee';
 import { Observable, of, Subject, throwError, TimeoutError, timer } from 'rxjs';
-import { retry, catchError, tap, map, takeUntil, timeout } from 'rxjs/operators';
+import {
+  retry,
+  catchError,
+  tap,
+  map,
+  takeUntil,
+  timeout,
+} from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+
+export const COFFEE_API_RETRY_COUNT = new HttpContextToken(
+  () => environment.coffeeServiceRetryCount
+);
 
 @Injectable({
   providedIn: 'root',
@@ -34,26 +47,18 @@ export class CoffeeApiService {
 
   // GET
   getCoffees(): Observable<Coffee[]> {
-    console.log('getting coffees');
-    return this.http.get<Coffee[]>(this.apiURL).pipe(
-      timeout(2),
-      catchError((error) => {
-        console.error(error);
-        return of([])}
-      )
-    //   takeUntil(this.cancelCoffeeFetch$),
-    //   retry({
-    //     count: environment.coffeeServiceRetryCount,
-    //     delay: (err, attemptNum) => {
-    //       console.error(
-    //         `[CoffeeApiService] => Encountered an error while retrying request on attempt ${attemptNum}: `,
-    //         err
-    //       );
-    //       return timer(1000 * attemptNum);
-    //     },
-    //   }),
-    //   catchError(this.handleErrorWithTimeout)
-    // );
+    return (
+      this.http
+        // Uncomment this to test retry interceptor
+        // .get<Coffee[]>(this.apiURL + 'lskdfjalskdf', {
+        .get<Coffee[]>(this.apiURL, {
+          context: new HttpContext().set(
+            COFFEE_API_RETRY_COUNT,
+            environment.coffeeServiceRetryCount
+          ),
+        })
+        .pipe(takeUntil(this.cancelCoffeeFetch$), catchError(this.handleError))
+    );
   }
 
   // GET by ID
