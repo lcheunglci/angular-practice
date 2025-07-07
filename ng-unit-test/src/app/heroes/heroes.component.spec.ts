@@ -32,4 +32,15 @@ describe('HeroesComponent', () => {
       expect(component.heroes.length).toBe(2);
     });
   });
+
+  // xit means to skip test
+  it('should call deleteHero with the indicated hero', () => {
+    mockHeroService.deleteHero.and.returnValue(of(true));
+    component.heroes = HEROES;
+    // component.ngOnInit()
+
+    component.delete(HEROES[2]);
+
+    expect(mockHeroService.deleteHero).toHaveBeenCalledWith(HEROES[2]);
+  });
 });
