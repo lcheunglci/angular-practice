@@ -42,9 +42,19 @@ describe('HeroService', () => {
   describe('getHero', () => {
     it('should call get with the correct URL', () => {
       // call getHero
-      service.getHero(4);
+      service.getHero(4).subscribe();
+
+      // service.getHero(4).subscribe((hero) => {
+      //   expect(hero.id).toBe(4);
+      // });
+      // service.getHero(3).subscribe();
 
       // test that the URL was correct
+      const req = httpTestingController.expectOne('api/heroes/4');
+
+      req.flush({ id: 4, name: 'SuperDude', strength: 100 });
+      expect(req.request.method).toBe('GET');
+      httpTestingController.verify(); // ensure the http call is only called once and with the s
     });
   });
 });
