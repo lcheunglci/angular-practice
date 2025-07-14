@@ -32,7 +32,7 @@ export class HeroesComponent implements OnInit {
     });
   }
 
-  deleteHero(hero: Hero): void {
+  delete(hero: Hero): void {
     this.heroes = this.heroes.filter((h) => h !== hero);
     this.heroService.deleteHero(hero).subscribe();
   }
