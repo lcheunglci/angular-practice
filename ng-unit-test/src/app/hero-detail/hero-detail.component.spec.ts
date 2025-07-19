@@ -8,6 +8,7 @@ import {
   flush,
   TestBed,
   tick,
+  waitForAsync,
 } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -64,4 +65,15 @@ describe('HeroDetailComponent', () => {
 
     expect(mockHeroService.updateHero).toHaveBeenCalled();
   }));
+
+  // it('should call updateHero when save is called', waitForAsync(() => {
+  //   mockHeroService.updateHero.and.returnValue(of({}));
+  //   fixture.detectChanges();
+
+  //   fixture.componentInstance.save();
+
+  //   fixture.whenStable().then(() => {
+  //     expect(mockHeroService.updateHero).toHaveBeenCalled();
+  //   });
+  // }));
 });
