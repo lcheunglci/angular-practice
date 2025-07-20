@@ -1,0 +1,39 @@
+<div class="content">
+  <div class="title">
+    {{pageTitle}}
+  </div>
+
+  <div class="grid">
+    <div class="row">
+      <div class="cellLeft">Search:</div>
+      <div class="cellRight">
+        <input type="text" name="search" class="searchInput" [(ngModel)]="enteredSearch">
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Review</th>
+        <th>Username</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (review of reviews(); track review.id) {
+      <tr>
+        <td>
+          {{ review.title }}
+        </td>
+        <td>
+          {{ review.text }}
+        </td>
+        <td>
+          {{ review.userName }}
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

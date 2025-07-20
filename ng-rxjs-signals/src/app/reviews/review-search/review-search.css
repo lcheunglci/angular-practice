@@ -1,0 +1,68 @@
+.content {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 20px 10px;
+  border: 2px solid #F15B2A;
+  border-radius: 4px;
+}
+
+.title {
+  color: #F15B2A;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding: 0 0 20px 0;
+}
+
+.grid {
+  align-items:center;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 10px;
+  width: 100%;
+  margin: 0 0 auto;
+  min-width: 80px;
+  max-width: 600px;
+  font-size: 18px;
+}
+
+.row {
+ display: contents;
+}
+
+.cellLeft {
+  color: #6A5449;
+  padding: 3px;
+  text-align: left;
+  grid-column: 1 / 2;
+}
+
+.cellRight {
+  color: #6A5449;
+  font-weight: bold;
+  padding: 3px;
+  text-align: left;
+  grid-column: 2 / 3;
+}
+
+.searchInput {
+  color: #6A5449;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 18px;
+  width: 300px;
+}
+
+table {
+  border-spacing: 10px;
+  min-width: 100%;
+  text-align: left;
+}
+
+th {
+  color: #F15B2A;
+  font-weight: bold;
+  position: sticky;
+}
+
+td {
+  color: #6A5449;
+  vertical-align: top;
+}
