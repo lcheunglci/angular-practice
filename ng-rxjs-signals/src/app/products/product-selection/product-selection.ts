@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { ProductService } from '../product.service';
@@ -11,7 +11,7 @@ import { filter, fromEvent, map, tap } from 'rxjs';
   templateUrl: './product-selection.html',
   styleUrl: './product-selection.css',
 })
-export class ProductSelection {
+export class ProductSelection implements OnDestroy {
   pageTitle = 'Product Selection';
   private productService = inject(ProductService);
 
@@ -23,6 +23,10 @@ export class ProductSelection {
     tap((key) => this.showHelp.set(key === '?'))
   );
   sub = this.questionMark$.subscribe();
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
 
   // Signals used by the template
   selectedProduct = this.productService.selectedProduct;
