@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { ProductService } from '../product.service';
 import { ReviewList } from '../../reviews/review-list/review-list';
-import { fromEvent, map, tap } from 'rxjs';
+import { filter, fromEvent, map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-product-selection',
@@ -18,9 +18,11 @@ export class ProductSelection {
   showHelp = signal(false);
   questionMark$ = fromEvent<KeyboardEvent>(document, 'keydown').pipe(
     map((event) => event.key),
-    tap((key) => console.log(key))
+    tap((key) => console.log(key)),
+    filter((key) => key === '?' || key === 'Escape'),
+    tap((key) => this.showHelp.set(key === '?'))
   );
-  sub = this.questionMark$.subscribe((e) => this.showHelp.set(true));
+  sub = this.questionMark$.subscribe();
 
   // Signals used by the template
   selectedProduct = this.productService.selectedProduct;
