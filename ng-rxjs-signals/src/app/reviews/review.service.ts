@@ -1,27 +1,36 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { ProductService } from '../products/product.service';
-import { httpResource } from '@angular/common/http';
+import { HttpClient, httpResource } from '@angular/common/http';
 import { Review } from './review';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReviewService {
   private reviewsUrl = 'api/reviews';
   private productService = inject(ProductService);
+  private http = inject(HttpClient);
 
-  reviewsResource = httpResource<Review[]>(() =>
-    this.productService.selectedProduct() ?
-      `${this.reviewsUrl}?productId=^${this.productService.selectedProduct()?.id}$` : undefined,
-    { defaultValue: [] }
-  );
+  reviewsResource = rxResource({
+    params: this.productService.selectedProduct,
+    stream: (p) =>
+      this.http.get<Review[]>(`${this.reviewsUrl}?productId=^${p.params?.id}$`),
+    defaultValue: [],
+  });
+
+  // reviewsResource = httpResource<Review[]>(() =>
+  //   this.productService.selectedProduct() ?
+  //     `${this.reviewsUrl}?productId=^${this.productService.selectedProduct()?.id}$` : undefined,
+  //   { defaultValue: [] }
+  // );
 
   // *** To support search ***
 
   enteredSearch = signal('');
 
-  reviewSearchResource = httpResource<Review[]>(() =>
-    `${this.reviewsUrl}?text=${this.enteredSearch()}`,
+  reviewSearchResource = httpResource<Review[]>(
+    () => `${this.reviewsUrl}?text=${this.enteredSearch()}`,
     { defaultValue: [] }
   );
 }
