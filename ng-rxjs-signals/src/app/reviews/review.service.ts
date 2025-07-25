@@ -2,7 +2,8 @@ import { effect, inject, Injectable, signal } from '@angular/core';
 import { ProductService } from '../products/product.service';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { Review } from './review';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -28,15 +29,18 @@ export class ReviewService {
   // *** To support search ***
 
   enteredSearch = signal('');
+  searchText$ = toObservable(this.enteredSearch).pipe(
+    debounceTime(400),
+    distinctUntilChanged()
+  );
+  searchText = toSignal(this.searchText$, { initialValue: '' });
 
   reviewSearchResource = httpResource<Review[]>(
-    () => `${this.reviewsUrl}?text=${this.enteredSearch()}`,
+    () => `${this.reviewsUrl}?text=${this.searchText()}`,
     { defaultValue: [] }
   );
 
-  effSearch = effect(() =>
-    console.log('Entered search:', this.enteredSearch())
-  );
+  effSearch = effect(() => console.log('Entered search:', this.searchText()));
 
   effLoading = effect(() =>
     console.log('HTTP request loading:', this.reviewSearchResource.isLoading())
