@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { ProductService } from '../products/product.service';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { Review } from './review';
@@ -32,5 +32,13 @@ export class ReviewService {
   reviewSearchResource = httpResource<Review[]>(
     () => `${this.reviewsUrl}?text=${this.enteredSearch()}`,
     { defaultValue: [] }
+  );
+
+  effSearch = effect(() =>
+    console.log('Entered search:', this.enteredSearch())
+  );
+
+  effLoading = effect(() =>
+    console.log('HTTP request loading:', this.reviewSearchResource.isLoading())
   );
 }
