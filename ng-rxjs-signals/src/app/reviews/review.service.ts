@@ -3,7 +3,7 @@ import { ProductService } from '../products/product.service';
 import { HttpClient, httpResource } from '@angular/common/http';
 import { Review } from './review';
 import { rxResource, toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,14 +31,26 @@ export class ReviewService {
   enteredSearch = signal('');
   searchText$ = toObservable(this.enteredSearch).pipe(
     debounceTime(400),
-    distinctUntilChanged()
+    distinctUntilChanged(),
+    map((text) => text.toLocaleLowerCase())
   );
   searchText = toSignal(this.searchText$, { initialValue: '' });
 
-  reviewSearchResource = httpResource<Review[]>(
-    () => `${this.reviewsUrl}?text=${this.searchText()}`,
-    { defaultValue: [] }
-  );
+  // reviewSearchResource = httpResource<Review[]>(
+  //   () => `${this.reviewsUrl}?text=${this.searchText()}`,
+  //   { defaultValue: [] }
+  // );
+
+  reviewSearchResource = rxResource({
+    params: this.searchText,
+    stream: (p) =>
+      this.http
+        .get<Review[]>(`${this.reviewsUrl}?text=${p.params}`)
+        .pipe(
+          map((items) => items.sort((a, b) => (a.title < b.title ? -1 : 0)))
+        ),
+    defaultValue: [],
+  });
 
   effSearch = effect(() => console.log('Entered search:', this.searchText()));
 
