@@ -10,7 +10,9 @@ import { App } from './app';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CommonModule,
+    HttpClientModule
   ],
   providers: [
     provideBrowserGlobalErrorListeners()
