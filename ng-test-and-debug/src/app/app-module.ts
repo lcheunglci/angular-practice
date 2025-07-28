@@ -20,7 +20,7 @@ import { UserListInterceptorService } from './mocks/user-list-interceptor.servic
         AppRoutingModule,
     ],
     providers: [
-    // { provide: ErrorHandler, useClass: ErrorMetadataService },
+        { provide: ErrorHandler, useClass: ErrorMetadataService },
         { provide: HTTP_INTERCEPTORS, useClass: UserListInterceptorService, multi: true },
         provideHttpClient(withInterceptorsFromDi())
     ],
