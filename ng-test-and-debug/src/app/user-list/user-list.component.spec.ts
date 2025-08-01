@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserListComponent } from './user-list.component';
 import { WebStorageService } from '../services/web-storage.service';
+import { LocationIdPipe } from '../pipes/location-id.pipe';
 
 describe('UserListComponent', () => {
     let component: UserListComponent;
@@ -9,7 +10,7 @@ describe('UserListComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [ UserListComponent ],
+            declarations: [ UserListComponent, LocationIdPipe ],
             providers: [
                 { provide: WebStorageService, useValue: jasmine.createSpyObj('WebStorageService', [ 'getRemote', 'setRemote' ]) }
             ]

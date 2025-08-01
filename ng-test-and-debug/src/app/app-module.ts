@@ -9,6 +9,7 @@ import { HighlightTextPipe } from './pipes/highlight-text.pipe';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { UserListInterceptorService } from './mocks/user-list-interceptor.service';
 import { LocationIdPipe } from './pipes/location-id.pipe';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import { LocationIdPipe } from './pipes/location-id.pipe';
     imports: [
         BrowserModule,
         AppRoutingModule,
+        RouterModule
     ],
     providers: [
         { provide: ErrorHandler, useClass: ErrorMetadataService },
