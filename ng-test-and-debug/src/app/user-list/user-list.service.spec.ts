@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { UserListService } from './user-list.service';
-import { HttpClient } from '@angular/common/http';
+import { WebStorageService } from '../services/web-storage.service';
 
 describe('User List Service', () => {
     let service: UserListService;
@@ -8,7 +8,7 @@ describe('User List Service', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                {provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', ['get', 'put'])}
+                {provide: WebStorageService, useValue: jasmine.createSpyObj('WebStorageService', ['getRemote', 'setRemote'])}
             ]
         })
 
