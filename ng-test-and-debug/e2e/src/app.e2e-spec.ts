@@ -13,6 +13,14 @@ describe('User List App', () => {
 
     expect(text).toBe('Active Users');
   })
+
+  it('should have 16 users on page load', async () => {
+    const items = by.css('li');
+    const users = element.all(items);
+    expect(await users.count()).toBe(16);
+
+  });
+
   //const page = new AppPage();
 
   // beforeEach(async () => {
