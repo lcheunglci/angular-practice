@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { User } from '../user/user';
 import { UserListService } from './user-list.service';
 
@@ -14,10 +14,8 @@ export class UserListComponent implements OnInit {
   public users: Promise<User[]> | null = null;
   //public users: User[] | null = null;
 
-  constructor(
-    private userListService: UserListService,
-    private webStorageService: WebStorageService
-  ) {}
+  private userListService = inject(UserListService);
+  private webStorageService = inject(WebStorageService);
 
   public async ngOnInit(): Promise<void> {
     // const filtered = this.webStorageService.get('USERS');

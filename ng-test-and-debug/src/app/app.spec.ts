@@ -5,7 +5,7 @@ import { App } from './app';
 describe('App', () => {
 
 
-  let component: App;
+  // let component: App;
   let fixture: ComponentFixture<App>;
   
   beforeEach(async () => {
@@ -15,7 +15,7 @@ describe('App', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(App);
-    component = fixture.componentInstance;
+    // component = fixture.componentInstance;
     fixture.detectChanges();
   })
 

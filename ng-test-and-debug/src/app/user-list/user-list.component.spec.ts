@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture } from '@angular/core/testing';
+//import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UserListComponent } from './user-list.component';
-import { WebStorageService } from '../services/web-storage.service';
-import { LocationIdPipe } from '../pipes/location-id.pipe';
+// import { WebStorageService } from '../services/web-storage.service';
+// import { LocationIdPipe } from '../pipes/location-id.pipe';
 import { CustomTestBed } from '../custom-test-bed';
 
 describe('UserListComponent', () => {

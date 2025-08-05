@@ -16,6 +16,7 @@ export class UserListInterceptorService implements HttpInterceptor {
   private readonly STORAGE_KEY = 'MOCK_API_FILTER';
 
   intercept(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<string>> {

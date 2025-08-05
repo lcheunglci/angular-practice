@@ -12,12 +12,14 @@ export class CustomTestBed implements Partial<TestBed> {
       ]
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return TestBed.configureTestingModule({
       declarations: Object.assign([], defaults.declarations, config.declarations),
       providers: Object.assign([], defaults.providers, config.providers)
     })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public static compileComponents(): Promise<any> {
     return TestBed.compileComponents();
   }

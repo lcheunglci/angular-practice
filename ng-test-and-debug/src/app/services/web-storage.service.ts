@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -7,9 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class WebStorageService {
 
-    constructor(
-    private http: HttpClient
-    ) { }
+    private http = inject(HttpClient);
 
     public get(key: string): string | null {
         return window.localStorage.getItem(key);
