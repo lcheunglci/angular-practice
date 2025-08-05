@@ -8,9 +8,15 @@ describe('User List Service', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                {provide: WebStorageService, useValue: jasmine.createSpyObj('WebStorageService', ['getRemote', 'setRemote'])}
-            ]
-        })
+                {
+                    provide: WebStorageService,
+                    useValue: jasmine.createSpyObj('WebStorageService', [
+                        'getRemote',
+                        'setRemote',
+                    ]),
+                },
+            ],
+        });
 
         service = new UserListService();
     });

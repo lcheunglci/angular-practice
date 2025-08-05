@@ -2,10 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'highlightText',
-    standalone: false
+    standalone: false,
 })
 export class HighlightTextPipe implements PipeTransform {
-
     transform(value: string, filter: string): string {
         if (filter.length === 0) {
             return value;
@@ -17,5 +16,4 @@ export class HighlightTextPipe implements PipeTransform {
             return `<span class="highlight-text">${match}</span>`;
         });
     }
-
-} 
+}

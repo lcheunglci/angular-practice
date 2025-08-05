@@ -13,6 +13,10 @@ module.exports = tseslint.config(
       ...angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    plugins: {
+      'prefer-arrow': {},
+      'js-doc': {}
+    },
     rules: {
       "@angular-eslint/directive-selector": [
         "error",
@@ -32,6 +36,22 @@ module.exports = tseslint.config(
       ],
       "@angular-eslint/prefer-standalone": [
         "off"
+      ],
+      'indent': [
+        'error',
+        4
+      ],
+      'linebreak-style': [
+        'error',
+        'unix'
+      ],
+      'quotes': [
+        'error',
+        'single'
+      ],
+      'semi': [
+        'error',
+        'always'
       ]
     },
   },
@@ -41,6 +61,8 @@ module.exports = tseslint.config(
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
     ],
-    rules: {},
+    rules: {
+      
+    },
   }
 );

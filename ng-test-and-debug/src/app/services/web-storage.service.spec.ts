@@ -9,8 +9,11 @@ describe('WebStorageService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [
-                { provide: HttpClient, useValue: jasmine.createSpyObj('HttpClient', [ 'get', 'put' ]) }
-            ]
+                {
+                    provide: HttpClient,
+                    useValue: jasmine.createSpyObj('HttpClient', ['get', 'put']),
+                },
+            ],
         });
         service = TestBed.inject(WebStorageService);
     });

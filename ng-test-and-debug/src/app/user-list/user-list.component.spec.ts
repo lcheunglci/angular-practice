@@ -11,20 +11,19 @@ describe('UserListComponent', () => {
     let fixture: ComponentFixture<UserListComponent>;
 
     beforeEach(async () => {
-        // await TestBed.configureTestingModule({
-        //     declarations: [ UserListComponent, LocationIdPipe ],
-        //     providers: [
-        //         { provide: WebStorageService, useValue: jasmine.createSpyObj('WebStorageService', [ 'getRemote', 'setRemote' ]) }
-        //     ]
-        // })
+    // await TestBed.configureTestingModule({
+    //     declarations: [ UserListComponent, LocationIdPipe ],
+    //     providers: [
+    //         { provide: WebStorageService, useValue: jasmine.createSpyObj('WebStorageService', [ 'getRemote', 'setRemote' ]) }
+    //     ]
+    // })
         await CustomTestBed.configureTestingModule({
             declarations: [UserListComponent],
-        })
-            .compileComponents();
+        }).compileComponents();
     });
 
     beforeEach(() => {
-        // fixture = TestBed.createComponent(UserListComponent);
+    // fixture = TestBed.createComponent(UserListComponent);
         fixture = CustomTestBed.createComponent(UserListComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
