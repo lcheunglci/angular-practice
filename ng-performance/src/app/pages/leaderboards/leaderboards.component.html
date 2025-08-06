@@ -1,0 +1,16 @@
+@let sortedByScore = players() | sortByScore | slice : 0 : 5;
+@let sortedByGemCount = players() | sortByGemCount | slice : 0 : 5;
+
+<h2 class="my-4">
+  High Scores
+  @if (synchronized()) {<i class="bi bi-activity"></i>}
+</h2>
+
+<app-player-list [players]="sortedByScore" show-score (selected)="goto($event)" />
+
+<h2 class="my-4">
+  Most Gems
+  @if (synchronized()) {<i class="bi bi-activity"></i>}
+</h2>
+
+<app-player-list [players]="sortedByGemCount" show-gems (selected)="goto($event)" />

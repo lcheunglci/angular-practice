@@ -1,0 +1,5 @@
+@let status = server().status;
+@let closest = server().closest;
+@let latency = server().latency;
+
+<p class="m-0 fs-6">Server: {{ status }} • Closest: {{ closest }} • Latency: {{ latency }}</p>

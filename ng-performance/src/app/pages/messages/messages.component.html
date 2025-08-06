@@ -1,0 +1,14 @@
+@let unread = messageService.unread();
+
+<ul class="list-group list-group-flush my-4">
+  @for (item of unread; track item.id) {
+  <li class="list-group-item">
+    <div class="d-flex w-100 justify-content-between">
+      <span>{{ item.message }}</span>
+      <i class="bi bi-x-square-fill ms-2" (click)="messageService.delete(item)"></i>
+    </div>
+  </li>
+  } @empty {
+  <li class="list-group-item">No new messages</li>
+  }
+</ul>

@@ -1,0 +1,26 @@
+:root {
+  /* https://getbootstrap.com/docs/5.3/customize/css-variables/ */
+  --bs-body-bg: #53777A;
+  --bs-body-color: #ECD078;
+  --bs-body-font-family: 'Oswald', sans-serif;
+  --bs-body-font-size: 1.4rem;
+  --bs-link-color-rgb: rgb(var(--bs-body-color));
+  --bs-link-color: var(--bs-body-color);
+  --bs-link-hover-color-rgb: rgb(var(--bs-body-color));
+  --bs-link-hover-color: var(--bs-body-color);
+}
+
+.form-control {
+  background-color: white;
+  color: var(--bs-secondary-color);
+}
+
+.form-control:focus {
+  background-color: white;
+  color: var(--bs-secondary-color);
+}
+
+.nav-pills {
+  --bs-nav-pills-link-active-color: var(--bs-body-bg);
+  --bs-nav-pills-link-active-bg: var(--bs-body-color);
+}

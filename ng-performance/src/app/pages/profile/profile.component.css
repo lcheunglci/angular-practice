@@ -1,0 +1,8 @@
+.btn {
+  --bs-btn-bg: var(--bs-body-color);
+  --bs-btn-border-color: transparent;
+  --bs-btn-color: var(--bs-body-bg);
+  --bs-btn-disabled-bg: var(--bs-body-color);
+  --bs-btn-disabled-color: var(--bs-body-bg);
+  --bs-btn-disabled-opacity: 0.65;
+}

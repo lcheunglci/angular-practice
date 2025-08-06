@@ -1,0 +1,13 @@
+@let players = (players$ | async) ?? [];
+
+<form (ngSubmit)="update(filterText)">
+  <div class="input-group my-4">
+    <input type="text" [(ngModel)]="filterText" #filter="ngModel" required minlength="3" name="search" class="form-control" placeholder="Find Players by Name">
+
+    <button class="btn btn-light" type="submit" [disabled]="filter.invalid">Search</button>
+
+    <button class="btn btn-light" type="button" (click)="update(''); filterText = ''">Clear</button>
+  </div>
+</form>
+
+<app-player-list [players]="players" (selected)="goto($event)" />

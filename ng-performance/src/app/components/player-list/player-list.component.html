@@ -1,0 +1,21 @@
+<ul>
+  @for (player of players(); track player.id) {
+  <li (click)="selected.emit(player)" style="cursor: pointer;">
+    <span>{{ player.name }}</span>
+
+    @if (player.online) {
+    <span class="lead"><i class="bi bi-lightning-fill"></i></span>
+    }
+
+    @if (score()) {
+    <app-player-score [score]="player.score"></app-player-score>
+    }
+
+    @if (gems()) {
+    <app-player-gems [count]="player.gems.length"></app-player-gems>
+    }
+  </li>
+  } @empty {
+  <li>Loading players&hellip;</li>
+  }
+</ul>

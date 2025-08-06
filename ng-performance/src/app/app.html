@@ -1,0 +1,40 @@
+@let count = messageService.count();
+
+<h1 class="my-4 text-center">Jewel Finder</h1>
+
+<nav class="nav nav-pills nav-fill">
+  <a class="nav-link" routerLink="players" routerLinkActive="active">
+    <i class="bi bi-people-fill"></i>
+  </a>
+
+  <a class="nav-link" routerLink="leaderboards" routerLinkActive="active">
+    <i class="bi bi-trophy-fill"></i>
+  </a>
+
+  <a class="nav-link position-relative" routerLink="messages" routerLinkActive="active">
+    <i class="bi bi-inbox-fill"></i>
+    @if (count) {
+    <span>&nbsp;({{ count }})</span>
+    }
+  </a>
+</nav>
+
+<router-outlet />
+
+<footer #footerContainer class="w-100 py-3 text-center">
+
+  @defer (on interaction(footerContainer)) {
+  <app-server-stats></app-server-stats>
+  }
+  @placeholder {
+  <p class="mb-0 fs-6" style="cursor: pointer;">Tap for server stats</p>
+  }
+  @loading {
+  <p class="mb-0 fs-6">Loading server stats&hellip;</p>
+  }
+  @error {
+  <p class="mb-0 fs-6">Trouble loading server stats!</p>
+  }
+
+  <p class="mb-0 fs-6">&copy; Jewel Finder, LLC</p>
+</footer>

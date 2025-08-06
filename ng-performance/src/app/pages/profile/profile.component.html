@@ -1,0 +1,54 @@
+@if (player(); as player) {
+<div class="container mt-5">
+  <div class="row text-center">
+    <div class="col">
+      <img class="rounded-circle" [ngSrc]="player.avatar" width="175" height="175" sizes="50vw" ngSrcset="1x, 2x, 3x" priority placeholder>
+    </div>
+  </div>
+
+  <div class="row text-center">
+    <div class="col">
+      <h2 class="mt-4">
+        Profile for {{ player.id }}
+        @if (player.online) {<i class="bi bi-lightning-fill"></i>}
+        @if (synchronized()) {<i class="bi bi-activity"></i>}
+      </h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <dl class="mt-4">
+        <dt>Name</dt>
+        <dd class="lead">{{ player.name }}</dd>
+
+        <dt>Score</dt>
+        <dd class="lead">{{ player.score | percent : '1.1-1' }}</dd>
+
+        <dt>Gems</dt>
+        <dd class="lead">{{ player.gems.join(', ') }}</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form class="mt-4" [formGroup]="msgForm" (ngSubmit)="submit()">
+        <textarea formControlName="msg" class="form-control form-control-lg" placeholder="Send a message" style="height: 10dvh;"></textarea>
+
+        <div class="d-grid gap-2 mt-2">
+          <button class="btn btn-lg" type="submit" [disabled]="msgForm.invalid">Send <i class="bi bi-send"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+} @else {
+<div class="container text-center">
+  <div class="row">
+    <div class="col">
+      <p class="my-4">Loading&hellip;</p>
+    </div>
+  </div>
+</div>
+}
