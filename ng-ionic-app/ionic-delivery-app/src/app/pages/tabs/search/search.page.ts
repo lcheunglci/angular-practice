@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-search',
@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchPage implements OnInit {
 
+  @ViewChild('searchInput') searchInput: any;
+
   constructor() { }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.searchInput.setFocus();
+    }, 500);
+  }
+
+  onSearchChange(event: any) {
+    console.log(event.detail.value);
   }
 
 }
