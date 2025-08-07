@@ -2,7 +2,7 @@ import { IMAGE_LOADER, ImageLoaderConfig } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideRouter, withComponentInputBinding, withPreloading } from '@angular/router';
+import { NoPreloading, PreloadAllModules, provideRouter, withComponentInputBinding, withPreloading } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app-routing-module';
 import { PreloadingService } from './services/preloading.service';
@@ -12,6 +12,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
 
     provideRouter(routes, withComponentInputBinding(), withPreloading(PreloadingService)),
+    // provideRouter(routes, withComponentInputBinding(), withPreloading(NoPreloading)),
+    // provideRouter(routes, withComponentInputBinding(), withPreloading(PreloadAllModules)),
 
     provideClientHydration(withEventReplay()),
 
