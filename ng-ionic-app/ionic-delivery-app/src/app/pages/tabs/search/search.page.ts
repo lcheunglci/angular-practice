@@ -7,6 +7,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./search.page.scss'],
 })
 export class SearchPage implements OnInit {
+  @ViewChild('searchInput') searchInput: any;
+  model: any = {
+    icon: 'search-outline',
+    title: 'No Restaurant records found',
+  };
+
   isLoading: boolean = false;
   query: string = '';
 
@@ -39,10 +45,7 @@ export class SearchPage implements OnInit {
       price: 100,
     },
   ];
-
   restaurants: any[] = [];
-
-  @ViewChild('searchInput') searchInput: any;
 
   constructor() {}
 
@@ -52,13 +55,19 @@ export class SearchPage implements OnInit {
     }, 500);
   }
 
-  onSearchChange(event: any) {
+  async onSearchChange(event: any) {
     console.log(event.detail.value);
     this.query = <string>event.detail.value.toLowerCase();
+    this.restaurants = [];
     if (this.query.length > 0) {
-      this.restaurants = this.allRestaurants.filter((element: any) =>
-        element.short_name.includes(this.query)
-      );
+      this.isLoading = true;
+      setTimeout(async () => {
+        this.restaurants = await this.allRestaurants.filter((element: any) =>
+          element.short_name.includes(this.query)
+        );
+      }, 3000);
+      console.log(this.restaurants);
+      this.isLoading = false;
     }
   }
 }
