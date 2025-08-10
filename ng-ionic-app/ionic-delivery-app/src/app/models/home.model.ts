@@ -3,6 +3,7 @@ export interface Banner {
 }
 
 export interface Restaurant {
+  uid: string;
   cover: string;
   name: string;
   short_name: string;
