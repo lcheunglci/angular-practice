@@ -71,7 +71,8 @@ export class ItemsPage implements OnInit {
 
   getItems() {
     this.data = {};
-    this.data = this.restaurants.filter((x) => x.uid === this.id);
+    let data: any = this.restaurants.filter((x) => x.uid === this.id);
+    this.data = data[0];
     console.log('restaurant: ', this.data);
   }
 

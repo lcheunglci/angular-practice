@@ -1,6 +1,6 @@
-<ion-header [translucent]="true">
+<ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-title>items</ion-title>
+    <!-- <ion-title>items</ion-title> -->
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/home"></ion-back-button>
     </ion-buttons>
@@ -14,11 +14,13 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-grid>
-    <ion-row>
+  <ion-grid *ngIf="data?.name">
+    <ion-row class="ion-padding-horizontal">
       <ion-label>
         <h1>{{ data?.name }}</h1>
-        <ion-text>{{ getCuisine(data.cuisines)}}</ion-text>
+        <ion-text *ngIf="data?.cuisines"
+          >{{ getCuisine(data.cuisines)}}</ion-text
+        >
         <p>{{data?.address}}</p>
       </ion-label>
     </ion-row>
