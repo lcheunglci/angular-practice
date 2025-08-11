@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { Restaurant } from 'src/app/models/home.model';
 
 @Component({
   selector: 'app-items',
@@ -6,10 +9,73 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./items.page.scss'],
 })
 export class ItemsPage implements OnInit {
+  id: any;
+  data: any = {};
+  items: any[] = [];
+  categories: any[] = [];
 
-  constructor() { }
+  restaurants: any[] = [
+    {
+      uid: '1001',
+      cover: 'assets/imgs/1.jpg',
+      name: 'Stayfit',
+      short_name: 'stayfit',
+      address: '1234 Test, CA',
+      cuisines: ['Italian', 'Mexican'],
+      rating: 5,
+      delivery_time: 25,
+      distance: 2.5,
+      price: 100,
+    },
+    {
+      uid: '1002',
+      cover: 'assets/imgs/2.jpg',
+      name: 'Stayfit1',
+      short_name: 'stayfit1',
+      address: '2345 Test, CA',
+      cuisines: ['Italian', 'Mexican'],
+      rating: 5,
+      delivery_time: 25,
+      distance: 2.5,
+      price: 100,
+    },
+    {
+      uid: '1003',
+      cover: 'assets/imgs/3.jpg',
+      name: 'Stayfit2',
+      short_name: 'stayfit2',
+      address: '4321 Test, CA',
+      cuisines: ['Italian', 'Mexican'],
+      rating: 5,
+      delivery_time: 25,
+      distance: 2.5,
+      price: 100,
+    },
+  ];
+
+  constructor(private navCtrl: NavController, private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.route.paramMap.subscribe((paramMap) => {
+      console.log('data: ', paramMap);
+      if (!paramMap.has('restaurantId')) {
+        this.navCtrl.back();
+        return;
+      }
+
+      this.id = paramMap.get('restaurantId');
+      console.log('id: ', this.id);
+      this.getItems();
+    });
   }
 
+  getItems() {
+    this.data = {};
+    this.data = this.restaurants.filter((x) => x.uid === this.id);
+    console.log('restaurant: ', this.data);
+  }
+
+  getCuisine(cuisines: any[]) {
+    return cuisines.join(',');
+  }
 }

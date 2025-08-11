@@ -13,4 +13,14 @@
       <ion-title size="large">items</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-label>
+        <h1>{{ data?.name }}</h1>
+        <ion-text>{{ getCuisine(data.cuisines)}}</ion-text>
+        <p>{{data?.address}}</p>
+      </ion-label>
+    </ion-row>
+  </ion-grid>
 </ion-content>
