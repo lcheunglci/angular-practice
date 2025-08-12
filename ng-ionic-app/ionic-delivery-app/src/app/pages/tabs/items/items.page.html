@@ -25,4 +25,12 @@
       </ion-label>
     </ion-row>
   </ion-grid>
+
+  <ion-row class="ion-padding veg borderBottomSmall">
+    <ion-label>
+      <h4>VEG ONLY</h4>
+    </ion-label>
+    <ion-toggle mode="md" color="success" (ionChange)="vegOnly($event)" [(ngModel)]="veg">
+    </ion-toggle>
+  </ion-row>
 </ion-content>

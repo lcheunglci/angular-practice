@@ -13,6 +13,7 @@ export class ItemsPage implements OnInit {
   data: any = {};
   items: any[] = [];
   categories: any[] = [];
+  veg: boolean = false;
 
   restaurants: any[] = [
     {
@@ -78,5 +79,9 @@ export class ItemsPage implements OnInit {
 
   getCuisine(cuisines: any[]) {
     return cuisines.join(',');
+  }
+
+  vegOnly(event: any) {
+    console.log(event.detail.checked);
   }
 }
