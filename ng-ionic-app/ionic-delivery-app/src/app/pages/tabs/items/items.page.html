@@ -57,4 +57,15 @@
     <ion-toggle mode="md" color="success" (ionChange)="vegOnly($event)" [(ngModel)]="veg">
     </ion-toggle>
   </ion-row>
+
+  <ion-list lines="none" *ngFor="let category of categories">
+    <ion-list-header>
+      {{ category?.name }}
+    </ion-list-header>
+    <ion-item>
+      <ion-thumbnail slot="start">
+        
+      </ion-thumbnail>
+    </ion-item>
+  </ion-list>
 </ion-content>

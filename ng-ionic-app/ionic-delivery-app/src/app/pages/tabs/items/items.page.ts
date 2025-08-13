@@ -12,7 +12,6 @@ export class ItemsPage implements OnInit {
   id: any;
   data: any = {};
   items: any[] = [];
-  categories: any[] = [];
   veg: boolean = false;
 
   restaurants: any[] = [
@@ -53,6 +52,58 @@ export class ItemsPage implements OnInit {
       price: 100,
     },
   ];
+
+  categories: any[] = [
+    {
+      id: "e00",
+      name: "Italian",
+      uid: "12wefdss"
+    },
+    {
+      id: "e0",
+      name: "Mexican",
+      uid: "12wefdss"
+    },
+  ]
+
+  allItems = [
+    {
+      category_id: "e00",
+      cover: "assets/imgs/pizza.jpg",
+      desc: "Great in taste",
+      id: "i1",
+      name: "Pizza",
+      rating: 0,
+      status: true,
+      uid: "12wefdss",
+      variation: false,
+      veg: false
+    },
+    {
+      category_id: "e01",
+      cover: "assets/imgs/salad.jpg",
+      desc: "Great in taste",
+      id: "i2",
+      name: "Salad",
+      rating: 0,
+      status: true,
+      uid: "12wefdss",
+      variation: false,
+      veg: true
+    },
+    {
+      category_id: "e02",
+      cover: "assets/imgs/soup.jpg",
+      desc: "Great in taste",
+      id: "i1",
+      name: "Soup",
+      rating: 0,
+      status: true,
+      uid: "12wefdss",
+      variation: false,
+      veg: false
+    },
+  ]
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute) {}
 
