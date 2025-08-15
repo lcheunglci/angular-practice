@@ -54,18 +54,30 @@
     <ion-label>
       <h4>VEG ONLY</h4>
     </ion-label>
-    <ion-toggle mode="md" color="success" (ionChange)="vegOnly($event)" [(ngModel)]="veg">
+    <ion-toggle
+      mode="md"
+      color="success"
+      (ionChange)="vegOnly($event)"
+      [(ngModel)]="veg"
+    >
     </ion-toggle>
   </ion-row>
 
   <ion-list lines="none" *ngFor="let category of categories">
-    <ion-list-header>
-      {{ category?.name }}
-    </ion-list-header>
-    <ion-item>
-      <ion-thumbnail slot="start">
-        
-      </ion-thumbnail>
-    </ion-item>
+    <ion-list-header> {{ category?.name }} </ion-list-header>
+    <ng-container *ngFor="let item of items; let i = index">
+      <ion-item *ngIf="category.id === item.category_id">
+        <ion-thumbnail slot="start">
+          <img [src]="item?.cover ? item.cover : 'asset/imgs/1.jpg'" alt="" />
+        </ion-thumbnail>
+        <ion-label>
+          <h4>{{item?.name}}</h4>
+          <p class="ion-text-wrap">{{item?.desc}}</p>
+          <ion-text>
+            <p>{{item?.price}}</p>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+    </ng-container>
   </ion-list>
 </ion-content>

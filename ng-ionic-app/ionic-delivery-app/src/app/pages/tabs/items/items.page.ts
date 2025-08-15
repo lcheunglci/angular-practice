@@ -55,55 +55,67 @@ export class ItemsPage implements OnInit {
 
   categories: any[] = [
     {
-      id: "e00",
-      name: "Italian",
-      uid: "12wefdss"
+      id: 'e00',
+      name: 'Italian',
+      uid: '12wefdss',
     },
     {
-      id: "e0",
-      name: "Mexican",
-      uid: "12wefdss"
+      id: 'e0',
+      name: 'Mexican',
+      uid: '12wefdss',
     },
-  ]
+  ];
 
   allItems = [
     {
-      category_id: "e00",
-      cover: "assets/imgs/pizza.jpg",
-      desc: "Great in taste",
-      id: "i1",
-      name: "Pizza",
+      category_id: 'e00',
+      cover: 'assets/imgs/pizza.jpg',
+      desc: 'Great in taste',
+      id: 'i1',
+      name: 'Pizza',
       rating: 0,
       status: true,
-      uid: "12wefdss",
+      uid: '12wefdss',
       variation: false,
-      veg: false
+      veg: false,
     },
     {
-      category_id: "e01",
-      cover: "assets/imgs/salad.jpg",
-      desc: "Great in taste",
-      id: "i2",
-      name: "Salad",
+      category_id: 'e01',
+      cover: 'assets/imgs/salad.jpg',
+      desc: 'Great in taste',
+      id: 'i2',
+      name: 'Salad',
       rating: 0,
       status: true,
-      uid: "12wefdss",
+      uid: '12wefdss',
       variation: false,
-      veg: true
+      veg: true,
     },
     {
-      category_id: "e02",
-      cover: "assets/imgs/soup.jpg",
-      desc: "Great in taste",
-      id: "i1",
-      name: "Soup",
+      category_id: 'e02',
+      cover: 'assets/imgs/soup.jpg',
+      desc: 'Great in taste',
+      id: 'i1',
+      name: 'Soup',
       rating: 0,
       status: true,
-      uid: "12wefdss",
+      uid: '12wefdss',
       variation: false,
-      veg: false
+      veg: false,
     },
-  ]
+    {
+      category_id: 'e03',
+      cover: 'assets/imgs/pasta.jpg',
+      desc: 'Great in taste',
+      id: 'i1',
+      name: 'Pasta',
+      rating: 0,
+      status: true,
+      uid: '12wefdss',
+      variation: false,
+      veg: false,
+    },
+  ];
 
   constructor(private navCtrl: NavController, private route: ActivatedRoute) {}
 
@@ -125,6 +137,7 @@ export class ItemsPage implements OnInit {
     this.data = {};
     let data: any = this.restaurants.filter((x) => x.uid === this.id);
     this.data = data[0];
+    this.items = this.allItems;
     console.log('restaurant: ', this.data);
   }
 
