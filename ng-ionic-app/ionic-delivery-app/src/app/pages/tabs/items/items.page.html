@@ -74,20 +74,31 @@
           <h4>{{item?.name}}</h4>
           <p class="ion-text-wrap">{{item?.desc}}</p>
           <ion-text>
-            <p>{{item?.price}}</p>
+            <p>${{item?.price}}</p>
           </ion-text>
         </ion-label>
-        <!-- <ion-row>
+        <ion-row
+          *ngIf="!item?.quantity || item?.quantity <= 0"
+          (click)="quantityPlus(item, i)"
+        >
           <ion-text class="ion-padding-horizontal" color="success"
             >Add</ion-text
           >
-        </ion-row> -->
-        <ion-row>
-          <ion-icon color="success" name="remove-outline"></ion-icon>
+        </ion-row>
+        <ion-row *ngIf="item?.quantity > 0">
+          <ion-icon
+            color="success"
+            name="remove-outline"
+            (click)="quantityMinus(item, i)"
+          ></ion-icon>
           <ion-text class="ion-text-center quantity" color="success"
-            >1</ion-text
+            >{{item?.quantity}}</ion-text
           >
-          <ion-icon color="success" name="add-outline"></ion-icon>
+          <ion-icon
+            color="success"
+            name="add-outline"
+            (click)="quantityPlus(item, i)"
+          ></ion-icon>
         </ion-row>
       </ion-item>
     </ng-container>

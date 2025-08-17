@@ -12,6 +12,7 @@ export class ItemsPage implements OnInit {
   id: any;
   data: any = {};
   items: any[] = [];
+  cartData: any = {};
   veg: boolean = false;
 
   restaurants: any[] = [
@@ -137,7 +138,8 @@ export class ItemsPage implements OnInit {
     this.data = {};
     let data: any = this.restaurants.filter((x) => x.uid === this.id);
     this.data = data[0];
-    this.items = this.allItems;
+    this.categories = this.categories.filter((x) => x.uid === this.id);
+    this.items = this.allItems.filter((x) => x.uid === this.id);
     console.log('restaurant: ', this.data);
   }
 
@@ -147,5 +149,40 @@ export class ItemsPage implements OnInit {
 
   vegOnly(event: any) {
     console.log(event.detail.checked);
+  }
+
+  quantityPlus(item: any, index: number) {
+    try {
+      console.log(this.items[index]);
+      if (!this.items[index].quantity || this.items[index].quantity === 0) {
+        this.items[index].quantity = 1;
+        this.calculate();
+      } else {
+        this.items[index].quantity += 1;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  quantityMinus(item: any, index: number) {
+    try {
+      console.log(this.items[index]);
+      if (this.items[index].quantity !== 0) {
+        this.items[index].quantity -= 1;
+      } else {
+        this.items[index].quantity = 0;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  calculate() {
+    console.log(this.items);
+    this.cartData.item = [];
+    let item = this.items.filter((x) => x.quantity > 0);
+    this.cartData.items = item;
+    // console.log('added item', )
   }
 }
