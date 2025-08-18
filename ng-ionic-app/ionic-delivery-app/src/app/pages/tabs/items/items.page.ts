@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Restaurant } from 'src/app/models/home.model';
 
@@ -85,7 +85,7 @@ export class ItemsPage implements OnInit {
       cover: 'assets/imgs/salad.jpg',
       desc: 'Great in taste',
       id: 'i2',
-      name: 'Salad',
+      name: 'Caprese Salad',
       rating: 0,
       status: true,
       uid: '12wefdss',
@@ -118,7 +118,11 @@ export class ItemsPage implements OnInit {
     },
   ];
 
-  constructor(private navCtrl: NavController, private route: ActivatedRoute) {}
+  constructor(
+    private navCtrl: NavController,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap) => {
@@ -149,6 +153,13 @@ export class ItemsPage implements OnInit {
 
   vegOnly(event: any) {
     console.log(event.detail.checked);
+    this.items = [];
+    if (event.detail.checked) {
+      this.items = this.allItems.filter((x) => x.veg);
+    } else {
+      this.items = this.allItems;
+    }
+    console.log('items', this.items);
   }
 
   quantityPlus(item: any, index: number) {
@@ -170,6 +181,7 @@ export class ItemsPage implements OnInit {
       console.log(this.items[index]);
       if (this.items[index].quantity !== 0) {
         this.items[index].quantity -= 1;
+        this.calculate();
       } else {
         this.items[index].quantity = 0;
       }
@@ -182,7 +194,36 @@ export class ItemsPage implements OnInit {
     console.log(this.items);
     this.cartData.item = [];
     let item = this.items.filter((x) => x.quantity > 0);
+    console.log('added item', item);
     this.cartData.items = item;
-    // console.log('added item', )
+    this.cartData.totalPrice = 0;
+    this.cartData.totalItem = 0;
+    item.forEach((element) => {
+      this.cartData.totalItem += element.quantity;
+      this.cartData.totalPrice += parseFloat(element.price) * element.quantity;
+    });
+    this.cartData.totalPrice = parseFloat(this.cartData.totalPrice).toFixed(2);
+    if (this.cartData.total === 0) {
+      this.cartData.totalItem = 0;
+      this.cartData.totalPrice = 0;
+    }
+    console.log('cart: ', this.cartData);
+  }
+
+  async viewCart() {
+    if (this.cartData.items && this.cartData.items.length > 0) {
+      await this.saveToCart();
+      // this.router.navigate([this.router.url + '/cart']);
+    }
+  }
+
+  saveToCart() {
+    try {
+      this.cartData.restaurant = {};
+      this.cartData.restaurant = this.data;
+      console.log('cartData', this.cartData);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

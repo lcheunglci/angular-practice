@@ -74,7 +74,7 @@
           <h4>{{item?.name}}</h4>
           <p class="ion-text-wrap">{{item?.desc}}</p>
           <ion-text>
-            <p>${{item?.price}}</p>
+            <p>${{item?.price | number: '0.2-2'}}</p>
           </ion-text>
         </ion-label>
         <ion-row
@@ -105,15 +105,18 @@
   </ion-list>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="cartData?.totalItem > 0">
   <ion-toolbar color="success">
     <ion-label color="white">
-      <h4>1 Item | $40.00</h4>
+      <h4>
+        {{ cartData?.totalItem }} Item<span *ngIf="cartData?.total > 1">s</span>
+        | $ {{cartData?.totalPrice}}
+      </h4>
       <ion-text color="light">
         <p>Extra charges may apply</p>
       </ion-text>
     </ion-label>
-    <ion-button slot="end" fill="clear" color="white">
+    <ion-button slot="end" fill="clear" color="white" (click)="viewCart()">
       <ion-icon slot="end" name="basket-outline"></ion-icon>
       VIEW CART
     </ion-button>
