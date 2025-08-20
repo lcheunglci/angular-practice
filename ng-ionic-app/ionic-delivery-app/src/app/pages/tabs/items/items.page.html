@@ -66,41 +66,13 @@
   <ion-list lines="none" *ngFor="let category of categories">
     <ion-list-header> {{ category?.name }} </ion-list-header>
     <ng-container *ngFor="let item of items; let i = index">
-      <ion-item *ngIf="category.id === item.category_id">
-        <ion-thumbnail slot="start">
-          <img [src]="item?.cover ? item.cover : 'asset/imgs/1.jpg'" alt="" />
-        </ion-thumbnail>
-        <ion-label>
-          <h4>{{item?.name}}</h4>
-          <p class="ion-text-wrap">{{item?.desc}}</p>
-          <ion-text>
-            <p>${{item?.price | number: '0.2-2'}}</p>
-          </ion-text>
-        </ion-label>
-        <ion-row
-          *ngIf="!item?.quantity || item?.quantity <= 0"
-          (click)="quantityPlus(item, i)"
-        >
-          <ion-text class="ion-padding-horizontal" color="success"
-            >Add</ion-text
-          >
-        </ion-row>
-        <ion-row *ngIf="item?.quantity > 0">
-          <ion-icon
-            color="success"
-            name="remove-outline"
-            (click)="quantityMinus(item, i)"
-          ></ion-icon>
-          <ion-text class="ion-text-center quantity" color="success"
-            >{{item?.quantity}}</ion-text
-          >
-          <ion-icon
-            color="success"
-            name="add-outline"
-            (click)="quantityPlus(item, i)"
-          ></ion-icon>
-        </ion-row>
-      </ion-item>
+      <app-item
+        *ngIf="category.id === item.category_id"
+        [item]="item"
+        [index]="i"
+        (add)="quantityPlus($event)"
+        (minus)="quantityMinus($event)"
+      ></app-item>
     </ng-container>
   </ion-list>
 </ion-content>

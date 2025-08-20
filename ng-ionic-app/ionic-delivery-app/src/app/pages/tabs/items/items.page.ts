@@ -190,7 +190,7 @@ export class ItemsPage implements OnInit {
     console.log('items', this.items);
   }
 
-  quantityPlus(item: any, index: number) {
+  quantityPlus(index: number) {
     try {
       console.log(this.items[index]);
       if (!this.items[index].quantity || this.items[index].quantity === 0) {
@@ -204,7 +204,7 @@ export class ItemsPage implements OnInit {
     }
   }
 
-  quantityMinus(item: any, index: number) {
+  quantityMinus(index: number) {
     try {
       console.log(this.items[index]);
       if (this.items[index].quantity !== 0) {

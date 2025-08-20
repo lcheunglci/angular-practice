@@ -13,32 +13,10 @@ h1 {
   align-items: center;
 }
 
-ion-item {
-  ion-thumbnail {
-    height: 10vh;
-    width: 20vw;
-    img {
-      border-radius: 5px;
-      height: 100%;
-      width: 100%;
-    }
-  }
-
-  ion-row {
-    border: 1px solid var(--ion-color-medium);
-    border-radius: 2px;
-    padding: 0.3rem;
-  }
-}
-
 ion-list-header {
   font-size: 1rem;
   font-weight: bold;
   letter-spacing: 0.5px;
-}
-
-.quantity {
-  width: 2rem;
 }
 
 ion-text {
