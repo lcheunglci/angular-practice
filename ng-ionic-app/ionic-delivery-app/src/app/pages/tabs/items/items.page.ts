@@ -16,6 +16,7 @@ export class ItemsPage implements OnInit {
   cartData: any = {};
   veg: boolean = false;
   storeData: any = {};
+  isLoading: boolean = false;
 
   restaurants: any[] = [
     {
@@ -145,34 +146,39 @@ export class ItemsPage implements OnInit {
   }
 
   async getItems() {
+    this.isLoading = true;
     this.data = {};
+    this.cartData = {};
     this.storeData = {};
-    let data: any = this.restaurants.filter((x) => x.uid === this.id);
-    this.data = data[0];
-    this.categories = this.categories.filter((x) => x.uid === this.id);
-    this.items = this.allItems.filter((x) => x.uid === this.id);
-    console.log('restaurant: ', this.data);
-    let cart: any = await this.getCart();
-    console.log('cart:', cart);
-    if (cart?.value) {
-      this.storeData = JSON.parse(cart.value);
-      console.log('storeData', this.storeData);
-      if (
-        this.id === this.storeData.restaurant.uid &&
-        this.allItems.length > 0
-      ) {
-        this.allItems.forEach((element: any) => {
-          this.storeData.items.forEach((ele: any) => {
-            if (element.id !== ele.id) {
-              return;
-            }
-            element.quantity = ele.quantity;
+    setTimeout(async () => {
+      let data: any = this.restaurants.filter((x) => x.uid === this.id);
+      this.data = data[0];
+      this.categories = this.categories.filter((x) => x.uid === this.id);
+      this.items = this.allItems.filter((x) => x.uid === this.id);
+      console.log('restaurant: ', this.data);
+      let cart: any = await this.getCart();
+      console.log('cart:', cart);
+      if (cart?.value) {
+        this.storeData = JSON.parse(cart.value);
+        console.log('storeData', this.storeData);
+        if (
+          this.id === this.storeData.restaurant.uid &&
+          this.allItems.length > 0
+        ) {
+          this.allItems.forEach((element: any) => {
+            this.storeData.items.forEach((ele: any) => {
+              if (element.id !== ele.id) {
+                return;
+              }
+              element.quantity = ele.quantity;
+            });
           });
-        });
+        }
+        this.cartData.totalItem = this.storeData.totalItem;
+        this.cartData.totalPrice = this.storeData.totalPrice;
       }
-      this.cartData.totalItem = this.storeData.totalItem;
-      this.cartData.totalPrice = this.storeData.totalPrice;
-    }
+      this.isLoading = false;
+    }, 300);
   }
 
   getCuisine(cuisines: any[]) {

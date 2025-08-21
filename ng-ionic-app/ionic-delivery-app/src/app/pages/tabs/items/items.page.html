@@ -63,6 +63,8 @@
     </ion-toggle>
   </ion-row>
 
+  <app-loading-restaurant></app-loading-restaurant>
+
   <ion-list lines="none" *ngFor="let category of categories">
     <ion-list-header> {{ category?.name }} </ion-list-header>
     <ng-container *ngFor="let item of items; let i = index">

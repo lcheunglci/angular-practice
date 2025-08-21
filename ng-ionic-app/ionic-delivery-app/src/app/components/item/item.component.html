@@ -13,7 +13,7 @@
     *ngIf="!item?.quantity || item?.quantity <= 0"
     (click)="quantityPlus()"
   >
-    <ion-text class="ion-padding-horizontal" color="success">Add</ion-text>
+    <ion-text class="add" color="success">Add</ion-text>
   </ion-row>
   <ion-row *ngIf="item?.quantity > 0">
     <ion-icon
