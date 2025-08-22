@@ -40,7 +40,8 @@ ion-title {
   font-weight: bold;
 }
 
-ion-label, h4 {
+ion-label,
+h4 {
   font-weight: bold !important;
   font-size: 0.9rem;
 }
@@ -64,4 +65,10 @@ h6 {
 
 .borderBottom {
   border-bottom: 0.5rem solid var(--ion-color-light);
+}
+
+.dashedBorderBottom {
+  border-bottom: 1px dashed var(--ion-color-medium);
+  padding-bottom: 1vh;
+  margin-bottom: 1vh;
 }

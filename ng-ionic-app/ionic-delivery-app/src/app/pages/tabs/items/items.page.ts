@@ -181,10 +181,6 @@ export class ItemsPage implements OnInit {
     }, 300);
   }
 
-  getCuisine(cuisines: any[]) {
-    return cuisines.join(',');
-  }
-
   vegOnly(event: any) {
     console.log(event.detail.checked);
     this.items = [];
