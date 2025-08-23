@@ -244,13 +244,6 @@ export class ItemsPage implements OnInit {
     console.log('cart: ', this.cartData);
   }
 
-  async viewCart() {
-    if (this.cartData.items && this.cartData.items.length > 0) {
-      await this.saveToCart();
-      // this.router.navigate([this.router.url + '/cart']);
-    }
-  }
-
   async saveToCart() {
     try {
       this.cartData.restaurant = {};
@@ -262,6 +255,14 @@ export class ItemsPage implements OnInit {
       });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async viewCart() {
+    if (this.cartData.items && this.cartData.items.length > 0) {
+      await this.saveToCart();
+      console.log('router url', this.router.url);
+      this.router.navigate([this.router.url + '/cart']);
     }
   }
 }
