@@ -17,6 +17,10 @@ export class ItemsPage implements OnInit {
   veg: boolean = false;
   storeData: any = {};
   isLoading: boolean = false;
+  model = {
+    icon: 'fast-food-outline',
+    title: 'No Menu Available',
+  };
 
   restaurants: any[] = [
     {
