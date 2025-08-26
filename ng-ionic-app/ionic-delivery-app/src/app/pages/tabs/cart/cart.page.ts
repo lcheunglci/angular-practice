@@ -79,4 +79,7 @@ export class CartPage implements OnInit {
   getPreviousUrl() {
     return this.url.join('/');
   }
+
+  quantityPlus(index: number) {}
+  quantityMinus(index: number) {}
 }
