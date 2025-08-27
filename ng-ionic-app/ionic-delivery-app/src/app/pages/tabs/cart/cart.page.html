@@ -47,4 +47,32 @@
       </ion-text>
     </ion-item>
   </ion-list>
+  <ion-item lines="none" class="borderBottom">
+    <ion-icon slot="start" name="list-outline"></ion-icon>
+    <ion-input
+      type="text"
+      placeholder="Any instructions? We will try out best"
+      [(ngModel)]="instruction"
+    ></ion-input>
+  </ion-item>
+
+  <ion-list class="borderBottom">
+    <ion-list-header>
+      <ion-label color="tertiary">Bill Details</ion-label>
+    </ion-list-header>
+    <ion-item lines="none">
+      <ion-label color="dark">Item Total</ion-label>
+      <ion-text slot="end" color="dark">${{ model?.totalPrice }} </ion-text>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label color="dark">Delivery fee</ion-label>
+      <ion-text slot="end" color="dark">${{ model?.deliveryCharge }} </ion-text>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label color="dark">To Pay Total</ion-label>
+      <ion-text slot="end" color="dark"
+        ><h5>${{ model?.grandTotal }}</h5>
+      </ion-text>
+    </ion-item>
+  </ion-list>
 </ion-content>

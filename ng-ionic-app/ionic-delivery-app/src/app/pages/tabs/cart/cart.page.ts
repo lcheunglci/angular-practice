@@ -12,6 +12,7 @@ export class CartPage implements OnInit {
   url: any;
   model: any;
   deliveryCharge = 20;
+  instruction: string = '';
 
   constructor(private router: Router) {}
 
