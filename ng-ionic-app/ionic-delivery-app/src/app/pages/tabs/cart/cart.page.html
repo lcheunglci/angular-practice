@@ -76,3 +76,54 @@
     </ion-item>
   </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="success"
+          (click)="addAddress()"
+          >ADD ADDRESS</ion-button
+        >
+      </ion-col>
+      <ion-col size="6">
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="success"
+          (click)="changeAddress()"
+          >CHANGE ADDRESS</ion-button
+        >
+      </ion-col>
+    </ion-row>
+    <ion-item lines="none">
+      <ion-button slot="end" size="small" fill="clear" (click)="changeAddress()"
+        >CHANGE</ion-button
+      >
+      <ion-icon slot="start" name="home-outline"></ion-icon>
+      <ion-label>
+        <h5>Deliver to HOME</h5>
+        <ion-text color="medium"><p>Random City, Random State</p></ion-text>
+      </ion-label>
+    </ion-item>
+    <ion-row size="6" class="ion-no-padding">
+      <ion-item lines="none" color="light" class="ion-no-padding">
+        <ion-label>
+          <h6>$ {{model?.grandTotal}}</h6>
+          <ion-text color="secondary">
+            VIEW DETAIL BILL
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          </ion-text>
+        </ion-label>
+      </ion-item>
+      <ion-col size="6" class="ion-text-center colStyle">
+        <ion-button color="white" fill="clear" (click)="makePayment()"
+          >MAKE PAYMENT</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

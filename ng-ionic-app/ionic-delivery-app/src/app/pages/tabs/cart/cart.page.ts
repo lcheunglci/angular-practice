@@ -83,4 +83,10 @@ export class CartPage implements OnInit {
 
   quantityPlus(index: number) {}
   quantityMinus(index: number) {}
+
+  addAddress() {}
+  changeAddress() {}
+  makePayment() {
+    console.log('make payment');
+  }
 }

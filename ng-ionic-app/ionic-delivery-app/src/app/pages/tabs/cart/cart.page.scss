@@ -39,3 +39,19 @@ h5 {
   padding: 0 0.1rem;
   margin-right: 2vw;
 }
+
+ion-footer {
+  ion-text,
+  p {
+    font-size: 0.7rem;
+  }
+  ion-col {
+    ion-label {
+      margin-left: 5px;
+    }
+  }
+}
+
+.colStyle {
+  background-color: var(--ion-color-success);
+}
