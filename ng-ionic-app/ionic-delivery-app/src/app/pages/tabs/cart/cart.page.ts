@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
+import { IonContent } from '@ionic/angular';
 
 @Component({
   selector: 'app-cart',
@@ -8,25 +9,32 @@ import { Preferences } from '@capacitor/preferences';
   styleUrls: ['./cart.page.scss'],
 })
 export class CartPage implements OnInit {
+  @ViewChild(IonContent, { static: false }) content!: IonContent;
   urlCheck: any;
   url: any;
   model: any;
   deliveryCharge = 20;
   instruction: string = '';
+  location: any = {};
 
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.checkUrl();
-    this.getCartData();
+    this.getModel();
   }
 
   getCart() {
     return Preferences.get({ key: 'cart' });
   }
 
-  async getCartData() {
+  async getModel() {
     let data: any = await this.getCart();
+    this.location = {
+      lat: 47.60573476038986,
+      lng: -122.33775157730875,
+      address: 'Seattle, Washington',
+    };
     if (data?.value) {
       this.model = await JSON.parse(data.value);
       console.log(this.model);
@@ -81,12 +89,43 @@ export class CartPage implements OnInit {
     return this.url.join('/');
   }
 
-  quantityPlus(index: number) {}
-  quantityMinus(index: number) {}
+  quantityPlus(index: number) {
+    try {
+      console.log(this.model.items[index]);
+      if (
+        !this.model.items[index].quantity ||
+        this.model.items[index].quantity === 0
+      ) {
+        this.model.items[index].quantity = 1;
+        this.calculate();
+      } else {
+        this.model.items[index].quantity += 1;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  quantityMinus(index: number) {
+    try {
+      console.log(this.model.items[index]);
+      if (this.model.items[index].quantity !== 0) {
+        this.model.items[index].quantity -= 1;
+        this.calculate();
+      } else {
+        this.model.items[index].quantity = 0;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   addAddress() {}
   changeAddress() {}
   makePayment() {
     console.log('make payment');
+  }
+
+  scrollToBottom() {
+    this.content.scrollToBottom(500);
   }
 }
