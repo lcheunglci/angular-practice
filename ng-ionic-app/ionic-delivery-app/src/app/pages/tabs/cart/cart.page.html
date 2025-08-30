@@ -44,7 +44,7 @@
           ></ion-icon>
         </ion-row>
         <ion-text slot="end" color="dark" class="price ion-text-right">
-          ${{item?.price * item.quantity}}
+          ${{item?.price * item.quantity | number: '0.2:2'}}
         </ion-text>
       </ion-item>
     </ion-list>

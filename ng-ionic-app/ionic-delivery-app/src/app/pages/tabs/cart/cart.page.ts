@@ -1,7 +1,9 @@
+import { Restaurant } from 'src/app/models/home.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Preferences } from '@capacitor/preferences';
 import { IonContent } from '@ionic/angular';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-cart',
@@ -122,7 +124,23 @@ export class CartPage implements OnInit {
   addAddress() {}
   changeAddress() {}
   makePayment() {
-    console.log('make payment');
+    try {
+      const data = {
+        restaurant_id: this.model.restaurant.uid,
+        res: this.model.restaurant,
+        order: JSON.stringify(this.model.items),
+        time: moment().format('lll'),
+        address: this.location,
+        total: this.model.totalPrice,
+        grandTotal: this.model.grandTotal,
+        deliveryCharge: this.deliveryCharge,
+        status: 'Created',
+        paid: 'COD',
+      };
+      console.log('order:', data);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   scrollToBottom() {
