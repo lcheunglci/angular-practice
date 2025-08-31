@@ -8,6 +8,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <app-empty-screen *ngIf="!model?.restaurant"></app-empty-screen>
+
   <ng-container *ngIf="model?.restaurant">
     <ion-list lines="none" class="borderBottomSmall">
       <ion-item>
@@ -26,6 +28,9 @@
       <app-cart-item
         *ngFor="let item of model?.items; let i = index"
         [item]="item"
+        [index]="i"
+        (add)="quantityPlus($event)"
+        (minus)="quantityMinus($event)"
       >
       </app-cart-item>
     </ion-list>
