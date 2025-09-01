@@ -1,13 +1,26 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>account</ion-title>
+    <ion-title>My Account</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="logout()">
+        <ion-icon
+          name="power-outline"
+          color="white"
+          slot="icon-only"
+        ></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">account</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-list>
+    <ion-item lines="full">
+      <ion-button slot="end" fill="clear">EDIT</ion-button>
+      <ion-label>
+        <ion-text class="ion-text-uppercase">FirstName LastName</ion-text>
+        <p>123456789 | {{ 'email@email.com'}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
