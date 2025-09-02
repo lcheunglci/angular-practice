@@ -14,13 +14,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
+  <ion-list class="borderBottom">
     <ion-item lines="full">
       <ion-button slot="end" fill="clear">EDIT</ion-button>
       <ion-label>
         <ion-text class="ion-text-uppercase">FirstName LastName</ion-text>
         <p>123456789 | {{ 'email@email.com'}}</p>
       </ion-label>
+    </ion-item>
+    <ion-item lines="none" detail="true">
+      <ion-icon name="home-outline" slot="start" color="dark"></ion-icon>
+      <h5>Manage Addresses</h5>
     </ion-item>
   </ion-list>
 </ion-content>
