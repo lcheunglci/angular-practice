@@ -7,14 +7,10 @@ import { IonicModule } from '@ionic/angular';
 import { AccountPageRoutingModule } from './account-routing.module';
 
 import { AccountPage } from './account.page';
+import { OrdersComponent } from 'src/app/components/orders/orders.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    AccountPageRoutingModule
-  ],
-  declarations: [AccountPage]
+  imports: [CommonModule, FormsModule, IonicModule, AccountPageRoutingModule],
+  declarations: [AccountPage, OrdersComponent],
 })
 export class AccountPageModule {}

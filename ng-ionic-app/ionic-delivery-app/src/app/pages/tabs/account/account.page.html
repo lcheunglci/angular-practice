@@ -32,46 +32,6 @@
     <ion-list-header>
       <ion-label>PAST ORDERS</ion-label>
     </ion-list-header>
-    <ion-item-group>
-      <ion-item lines="none" class="dashedBorderBottom">
-        <ion-label>
-          Stayfit
-          <p>City, State</p>
-          <ion-text>
-            <p>
-              $60.00
-              <ion-icon name="chevron-forward-outline"></ion-icon>
-            </p>
-          </ion-text>
-        </ion-label>
-        <ion-note slot="end" color="dark">
-          Delivered
-          <ion-icon name="checkmark-circle-outline" color="success"></ion-icon>
-        </ion-note>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>
-          <ion-text color="dark">
-            <p>Pizza x 2</p>
-          </ion-text>
-          <ion-text color="dark">
-            <p>Salad x 2</p>
-          </ion-text>
-          <p class="time">Sept 4 2025 12:00 PM</p>
-          <ion-row>
-            <ion-col size="6">
-              <ion-button fill="outline" expand="block" color="primary"
-                >REORDER</ion-button
-              >
-            </ion-col>
-            <ion-col size="6">
-              <ion-button fill="outline" expand="block" color="dark"
-                >GET HELP</ion-button
-              >
-            </ion-col>
-          </ion-row>
-        </ion-label>
-      </ion-item>
-    </ion-item-group>
+    <app-orders *ngFor="let order of orders" [order]="order"></app-orders>
   </ion-list>
 </ion-content>
