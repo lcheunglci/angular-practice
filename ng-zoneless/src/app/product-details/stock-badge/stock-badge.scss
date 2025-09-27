@@ -1,0 +1,58 @@
+:host {
+    display: block;
+    font-family: system-ui, sans-serif;
+}
+
+.tile {
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(white, 0.05);
+    position: relative;
+}
+
+.name {
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.price {
+    color: #6b7280;
+    font-size: 12px;
+}
+
+.pill {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    border: 1px solid #e5e7eb;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.ok {
+    background: #065f46;
+    color: white;
+    border-color: #a7f3d0;
+}
+
+.no {
+    background: #991b1b;
+    color: white;
+    border-color: #fecaca;
+}
+
+.compact .price {
+    display: none;
+}
+
+.pill {
+    margin-bottom: 0;
+}

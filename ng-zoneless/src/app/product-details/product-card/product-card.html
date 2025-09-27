@@ -1,0 +1,37 @@
+<!-- 1. --------------------------------------------- Before -->
+<!-- @if (product) {
+    <article class="card">
+        <header class="title">
+            <h4>{{ product.name }}</h4>
+        </header>
+
+        <div class="row">
+            <span class="key">ID</span>
+            <span class="val">#{{ product.id }}</span>
+        </div>
+
+        <div class="row">
+            <span class="key">Price</span>
+            <span class="val">${{ product.price }}</span>
+        </div>
+    </article>
+} -->
+
+<!-- 2. --------------------------------------------- Signals -->
+@if (product()) {
+    <article class="card">
+        <header class="title">
+            <h4>{{ product()!.name }}</h4>
+        </header>
+
+        <div class="row">
+            <span class="key">ID</span>
+            <span class="val">#{{ product()!.id }}</span>
+        </div>
+
+        <div class="row">
+            <span class="key">Price</span>
+            <span class="val">${{ product()!.price }}</span>
+        </div>
+    </article>
+}

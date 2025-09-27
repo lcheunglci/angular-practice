@@ -1,0 +1,78 @@
+:host {
+    --bg: #0b1220;
+    --fg: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --row-hover: #0f172a;
+    --accent: #60a5fa;
+    background: var(--muted);
+    display: grid;
+    place-items: center;
+    height: 100dvh;
+}
+
+section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.7));
+    padding: 1.1rem 1.5rem 1.5rem 1.5rem;
+    width: 300px;
+}
+
+.timer {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-family: system-ui, sans-serif;
+    justify-content: center;
+}
+
+.label {
+    color: var(--fg);
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+}
+
+.value {
+    color: var(--fg);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.progress {
+    height: 6px;
+    background: rgba(white, 0.4);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-top: 0.25rem;
+}
+
+.bar {
+    height: 100%;
+    background: #3b82f6;
+    transition: width 1s linear, background 0.3s ease;
+}
+
+.warn {
+    .label,
+    .value {
+        color: orange;
+    }
+
+    .bar {
+        background: orange;
+    }
+}
+
+.danger {
+    .label,
+    .value {
+        color: red;
+    }
+
+    .bar {
+        background: red;
+    }
+}

@@ -1,0 +1,37 @@
+<nav>
+    <!-- 1. --------------------------------------------- Before -->
+    <!-- <button [attr.title]="cancel.textContent">
+        <svg viewBox="0 0 24 24">
+            <path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z"/>
+        </svg>
+        <span #cancel class="visually-hidden">
+            Cancel changes to {{ product().name }}
+        </span>
+    </button>
+    <button type="submit" [attr.title]="save.textContent">
+        <svg viewBox="0 0 24 24">
+            <path d="M14 3h2.997v5h-2.997v-5zm9 1v20h-22v-24h17.997l4.003 4zm-17 5h12v-7h-12v7zm14 4h-16v9h16v-9z"/>
+        </svg>
+        <span #save class="visually-hidden">
+            Save changes to {{ product().name }}
+        </span>
+    </button> -->
+
+    <!-- 2. --------------------------------------------- Template Variables -->
+    @let cancelLabel = `Cancel changes to ${product().name}`;
+    <button [attr.title]="cancelLabel">
+        <svg viewBox="0 0 24 24">
+            <path d="M23.954 21.03l-9.184-9.095 9.092-9.174-2.832-2.807-9.09 9.179-9.176-9.088-2.81 2.81 9.186 9.105-9.095 9.184 2.81 2.81 9.112-9.192 9.18 9.1z"/>
+        </svg>
+        <span #cancel class="visually-hidden">cancelLabel</span>
+    </button>
+
+    @let saveLabel = `Save changes to ${product().name}`;
+    <button type="submit" [attr.title]="saveLabel">
+        <svg viewBox="0 0 24 24">
+            <path d="M14 3h2.997v5h-2.997v-5zm9 1v20h-22v-24h17.997l4.003 4zm-17 5h12v-7h-12v7zm14 4h-16v9h16v-9z"/>
+        </svg>
+        <span #save class="visually-hidden">saveLabel</span>
+    </button>
+</nav>
+ 

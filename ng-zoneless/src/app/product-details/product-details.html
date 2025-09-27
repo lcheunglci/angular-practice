@@ -1,0 +1,24 @@
+<section class="wrap">
+    <header class="toolbar">
+        <h3>Products</h3>
+        <div class="spacer"></div>
+        <label class="ctl">
+            View:
+            <select #control [value]="widget" (change)="switchView(control.value)">
+                <option value="card">Product Details</option>
+                <option value="badge">Available Inventory</option>
+            </select>
+        </label>
+        <button class="btn" (click)="prev()">Prev</button>
+        <button class="btn" (click)="next()">Next</button>
+    </header>
+    <ng-container #viewContainer></ng-container>
+    <p class="hint">
+        This product tool lets you explore our product catalog in two different
+        views. Use the "Product Details" option to see full product information with
+        pricing and descriptions, or switch to "Available Inventory" for a quick
+        stock status overview. Navigate through products using the Previous/Next
+        buttons, and toggle between compact and expanded layouts to customize your
+        viewing experience.
+    </p>
+</section>

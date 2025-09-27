@@ -1,0 +1,48 @@
+:host {
+    --bg: #0b1220;
+    --fg: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --row-hover: #0f172a;
+    --accent: #60a5fa;
+    background: var(--muted);
+    display: grid;
+    place-items: center;
+    height: 100dvh;
+}
+
+nav {
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, 0.7));
+    gap: 1rem;
+    justify-content: center;
+    padding: 1.1rem 1.5rem;
+    width: 300px;
+}
+
+button {
+    border-radius: 50%;
+    display: grid;
+    height: 3em;
+    margin: 0;
+    padding: 0;
+    place-items: center;
+    width: 3em;
+
+    svg {
+        display: block;
+        fill: white;
+    }
+
+    &:first-child svg {
+        width: 1.25em;
+    }
+
+    &:last-child svg {
+        width: 1.5em;
+    }
+}
