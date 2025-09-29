@@ -1,9 +1,7 @@
 <div class="notification-panel">
   <h4>Notifications</h4>
   <button (click)="markAllRead()">Mark All Read</button>
-  <!-- @for (notification of notifications; track notification.id) { -->
-  @for (notification of notifications$ | async; track notification.id) {
-  <!-- @for (notification of notifications(); track notification.id) { -->
+  @for (notification of notifications(); track notification.id) {
   <div>
     <app-notification-item
       [notification]="notification"
