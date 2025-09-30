@@ -1,5 +1,5 @@
 <!-- 1. / 2. --------------------------------------------- -->
-<section
+<!-- <section
   [class.warn]="secondsRemaining <= warnAt"
   [class.danger]="secondsRemaining <= dangerAt"
 >
@@ -14,23 +14,25 @@
   <div class="progress">
     <div class="bar" [style.width.%]="(secondsRemaining / total) * 100"></div>
   </div>
-</section>
+</section> -->
 
 <!-- 3. --------------------------------------------- Signals -->
-<!-- <section
-    [class.warn]="secondsRemaining() <= warnAt"
-    [class.danger]="secondsRemaining() <= dangerAt">
-    <div class="timer">
-        @if (secondsRemaining()) {
-            <span class="label">Your session expires in:</span>
-            <span class="value">
-                {{ formattedRemaining() }}
-            </span>
-        } @else {
-            <span class="label">Your session has expired!</span>
-        }
-    </div>
-    <div class="progress">
-        <div class="bar" [style.width.%]="(secondsRemaining() / this.total) * 100"></div>
-    </div>
-</section> -->
+<section
+  [class.warn]="secondsRemaining() <= warnAt"
+  [class.danger]="secondsRemaining() <= dangerAt"
+>
+  <div class="timer">
+    @if (secondsRemaining()) {
+    <span class="label">Your session expires in:</span>
+    <span class="value"> {{ formattedRemaining() }} </span>
+    } @else {
+    <span class="label">Your session has expired!</span>
+    }
+  </div>
+  <div class="progress">
+    <div
+      class="bar"
+      [style.width.%]="(secondsRemaining() / this.total) * 100"
+    ></div>
+  </div>
+</section>
