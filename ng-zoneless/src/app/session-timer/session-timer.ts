@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 
 @Component({
   selector: 'app-session-timer',
@@ -14,30 +14,30 @@ export class SessionTimerComponent {
     private readonly destroyRef = inject(DestroyRef);
 
     // 1. / 2.
-    // protected secondsRemaining = this.total;
-    // protected formattedRemaining = this.formatMMSS(this.secondsRemaining);
+    protected secondsRemaining = this.total;
+    protected formattedRemaining = this.formatMMSS(this.secondsRemaining);
 
     // 3. --------------------------------------------- Signals
-    protected readonly secondsRemaining = signal(this.total);
-    protected readonly formattedRemaining = computed(() => this.formatMMSS(this.secondsRemaining()));
+    // protected readonly secondsRemaining = signal(this.total);
+    // protected readonly formattedRemaining = computed(() => this.formatMMSS(this.secondsRemaining()));
 
     // 2. --------------------------------------------- Change Detector Ref
-    // private cdRef = inject(ChangeDetectorRef);
+    private cdRef = inject(ChangeDetectorRef);
 
     // 1. / 2.
     constructor() {
         const timerId = setInterval(() => {
             // 1. / 2.
-            // this.secondsRemaining = Math.max(this.secondsRemaining - 1, 0);
-            // this.formattedRemaining = this.formatMMSS(this.secondsRemaining);
+            this.secondsRemaining = Math.max(this.secondsRemaining - 1, 0);
+            this.formattedRemaining = this.formatMMSS(this.secondsRemaining);
 
             // 2. --------------------------------------------- Change Detector Ref
-            // this.cdRef.markForCheck();
+            this.cdRef.markForCheck();
 
             // 3. --------------------------------------------- Signals
-            this.secondsRemaining.update(v => Math.max(v - 1, 0));
+            // this.secondsRemaining.update(v => Math.max(v - 1, 0));
         }, 1000);
-      
+
         this.destroyRef.onDestroy(() => clearInterval(timerId));
     }
 
