@@ -1,31 +1,31 @@
 <!-- 1. / 2. -->
-<!-- <div class="shell" #scroller>
-    <div class="insights" [class.scrolled]="scrollTop > 0">
-        <div class="meta">
-            <span class="k">Scrolled</span>
-            <span class="v">{{ scrollTop | number:'1.0-0' }} px</span>
-        </div>
-
-        <div class="meta">
-            <span class="k">Visible</span>
-            <span class="v">{{ startIndex + 1 }}–{{ endIndex }}</span>
-            <span class="t">/ {{ totalItems }}</span>
-        </div>
+<div class="shell" #scroller>
+  <div class="insights" [class.scrolled]="scrollTop > 0">
+    <div class="meta">
+      <span class="k">Scrolled</span>
+      <span class="v">{{ scrollTop | number:'1.0-0' }} px</span>
     </div>
 
-    <div class="list">
-        @for (o of orders; track o.id) {
-            <div class="row">
-                <div class="cell id">#{{ o.id }}</div>
-                <div class="cell customer">{{ o.customer }}</div>
-                <div class="cell amt">${{ o.total }}</div>
-            </div>
-        }
+    <div class="meta">
+      <span class="k">Visible</span>
+      <span class="v">{{ startIndex + 1 }}–{{ endIndex }}</span>
+      <span class="t">/ {{ totalItems }}</span>
     </div>
-</div> -->
+  </div>
+
+  <div class="list">
+    @for (o of orders; track o.id) {
+    <div class="row">
+      <div class="cell id">#{{ o.id }}</div>
+      <div class="cell customer">{{ o.customer }}</div>
+      <div class="cell amt">${{ o.total }}</div>
+    </div>
+    }
+  </div>
+</div>
 
 <!-- 3. --------------------------------------------- Signals -->
-<div class="shell" #scroller>
+<!-- <div class="shell" #scroller>
     <div class="insights" [class.scrolled]="scrollTop() > 0">
         <div class="meta">
             <span class="k">Scrolled</span>
@@ -48,4 +48,4 @@
             </div>
         }
     </div>
-</div>
+</div> -->
