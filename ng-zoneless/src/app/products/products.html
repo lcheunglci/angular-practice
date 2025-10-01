@@ -2,44 +2,44 @@
 <!-- @let isHandset = layout === 'handset'; -->
 
 <!-- 2. --------------------------------------------- AsyncPipe -->
-<!-- @let isHandset = (layout | async) === 'handset'; -->
+@let isHandset = (layout | async) === 'handset';
 
 <!-- 2. --------------------------------------------- Signals -->
-@let isHandset = layout() === 'handset';
+<!-- @let isHandset = layout() === 'handset'; -->
 
 <section class="wrap">
-    <header class="toolbar" [class.compact]="isHandset">
-        <h3>Products</h3>
-        <div class="spacer"></div>
-        @if (!isHandset) {
-            <button class="btn ghost">Add product</button>
-            <button class="btn ghost">Filters</button>
-        }
-    </header>
-
-    @if (isHandset) {
-        <ul class="list">
-            @for (p of productsSmall; track p.id) {
-                <li class="row">
-                    <span class="name">{{ p.name }}</span>
-                    <span class="price">${{ p.price }}</span>
-                </li>
-            }
-        </ul>
-        <p class="hint">Handset: showing top 6 only</p>
-    } @else {
-        <div class="grid cols-3">
-            @for (p of productsLarge; track p.id) {
-                <article class="card">
-                    <div class="name">{{ p.name }}</div>
-                    <div class="sub">
-                        <span class="price">${{ p.price }}</span>
-                        <span class="rating">{{ '★'.repeat(p.rating) }}</span>
-                    </div>
-                    <p class="desc">{{ p.description }}</p>
-                </article>
-            }
-        </div>
-        <p class="hint">Tablet/Web: full grid with details</p>
+  <header class="toolbar" [class.compact]="isHandset">
+    <h3>Products</h3>
+    <div class="spacer"></div>
+    @if (!isHandset) {
+    <button class="btn ghost">Add product</button>
+    <button class="btn ghost">Filters</button>
     }
+  </header>
+
+  @if (isHandset) {
+  <ul class="list">
+    @for (p of productsSmall; track p.id) {
+    <li class="row">
+      <span class="name">{{ p.name }}</span>
+      <span class="price">${{ p.price }}</span>
+    </li>
+    }
+  </ul>
+  <p class="hint">Handset: showing top 6 only</p>
+  } @else {
+  <div class="grid cols-3">
+    @for (p of productsLarge; track p.id) {
+    <article class="card">
+      <div class="name">{{ p.name }}</div>
+      <div class="sub">
+        <span class="price">${{ p.price }}</span>
+        <span class="rating">{{ '★'.repeat(p.rating) }}</span>
+      </div>
+      <p class="desc">{{ p.description }}</p>
+    </article>
+    }
+  </div>
+  <p class="hint">Tablet/Web: full grid with details</p>
+  }
 </section>
