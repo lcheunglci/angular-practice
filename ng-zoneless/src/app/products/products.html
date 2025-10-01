@@ -2,10 +2,10 @@
 <!-- @let isHandset = layout === 'handset'; -->
 
 <!-- 2. --------------------------------------------- AsyncPipe -->
-@let isHandset = (layout | async) === 'handset';
+<!-- @let isHandset = (layout | async) === 'handset'; -->
 
 <!-- 2. --------------------------------------------- Signals -->
-<!-- @let isHandset = layout() === 'handset'; -->
+@let isHandset = layout() === 'handset';
 
 <section class="wrap">
   <header class="toolbar" [class.compact]="isHandset">

@@ -8,7 +8,7 @@ import {
   PRODUCTS_SMALL,
   ProductSmall,
 } from './products.data';
-import { AsyncPipe } from '@angular/common';
+// import { AsyncPipe } from '@angular/common';
 
 type Layout = 'handset' | 'web';
 
@@ -17,7 +17,7 @@ type Layout = 'handset' | 'web';
   templateUrl: './products.html',
   styleUrl: './products.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe], // 2.
+  // imports: [AsyncPipe], // 2.
 })
 export class ProductsComponent {
   protected productsLarge: ProductLarge[] = PRODUCTS_LARGE;
@@ -44,28 +44,28 @@ export class ProductsComponent {
   // }
 
   // 2. --------------------------------------------- AsyncPipe
-  protected layout = this.breakpointObserver.observe([Breakpoints.XSmall]).pipe(
-    map((state) => {
-      if (state.matches) {
-        return 'handset';
-      }
-      return 'web';
-    }),
-    distinctUntilChanged()
-  );
-
-  // 3. --------------------------------------------- Signals
-  // protected layoutObserver = this.breakpointObserver
-  //     .observe([Breakpoints.XSmall])
-  //     .pipe(
-  //         map(state => {
-  //             if (state.matches) {
-  //                 return 'handset';
-  //             }
-  //             return 'web';
-  //         }),
-  //         distinctUntilChanged()
+  // protected layout = this.breakpointObserver.observe([Breakpoints.XSmall]).pipe(
+  //   map((state) => {
+  //     if (state.matches) {
+  //       return 'handset';
+  //     }
+  //     return 'web';
+  //   }),
+  //   distinctUntilChanged()
   // );
 
-  // readonly layout = toSignal(this.layoutObserver, { initialValue: 'web' });
+  // 3. --------------------------------------------- Signals
+  protected layoutObserver = this.breakpointObserver
+    .observe([Breakpoints.XSmall])
+    .pipe(
+      map((state) => {
+        if (state.matches) {
+          return 'handset';
+        }
+        return 'web';
+      }),
+      distinctUntilChanged()
+    );
+
+  readonly layout = toSignal(this.layoutObserver, { initialValue: 'web' });
 }
