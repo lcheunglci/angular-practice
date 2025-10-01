@@ -21,12 +21,12 @@ import { getOrders } from './scroll-insights.data';
 })
 export class ScrollInsightsComponent {
   // 1. / 2.
-  protected scrollTop = 0;
-  protected startIndex = 0;
+  // protected scrollTop = 0;
+  // protected startIndex = 0;
 
   // 3. --------------------------------------------- Signals
-  // protected scrollTop = signal(0);
-  // protected startIndex = signal(0);
+  protected scrollTop = signal(0);
+  protected startIndex = signal(0);
 
   protected readonly totalItems = 100;
   protected readonly orders = getOrders(this.totalItems);
@@ -38,10 +38,10 @@ export class ScrollInsightsComponent {
   private readonly rowHeight = 56;
 
   // 1. / 2.
-  protected endIndex = Math.ceil(380 / this.rowHeight);
+  // protected endIndex = Math.ceil(380 / this.rowHeight);
 
   // 3.
-  // protected endIndex = signal(Math.ceil(380 / this.rowHeight));
+  protected endIndex = signal(Math.ceil(380 / this.rowHeight));
 
   // 2. --------------------------------------------- Change Detector Ref
   private readonly cdRef = inject(ChangeDetectorRef);
@@ -54,21 +54,21 @@ export class ScrollInsightsComponent {
       // 1.
       // this.scrollTop = el.scrollTop;
 
-      const first = Math.floor(this.scrollTop / this.rowHeight);
-      const visible = Math.max(1, Math.ceil(el.clientHeight / this.rowHeight));
-      this.startIndex = Math.max(0, Math.min(this.totalItems - 1, first));
-      this.endIndex = Math.min(this.totalItems, this.startIndex + visible);
+      // const first = Math.floor(this.scrollTop / this.rowHeight);
+      // const visible = Math.max(1, Math.ceil(el.clientHeight / this.rowHeight));
+      // this.startIndex = Math.max(0, Math.min(this.totalItems - 1, first));
+      // this.endIndex = Math.min(this.totalItems, this.startIndex + visible);
 
       // 2. --------------------------------------------- Change Detector Ref
-      this.cdRef.markForCheck();
+      // this.cdRef.markForCheck();
 
       // 3. --------------------------------------------- Signals
-      // this.scrollTop.set(el.scrollTop);
+      this.scrollTop.set(el.scrollTop);
 
-      // const first = Math.floor(this.scrollTop() / this.rowHeight);
-      // const visible = Math.max(1, Math.ceil(el.clientHeight / this.rowHeight));
-      // this.startIndex.set(Math.max(0, Math.min(this.totalItems - 1, first)));
-      // this.endIndex.set(Math.min(this.totalItems, this.startIndex() + visible));
+      const first = Math.floor(this.scrollTop() / this.rowHeight);
+      const visible = Math.max(1, Math.ceil(el.clientHeight / this.rowHeight));
+      this.startIndex.set(Math.max(0, Math.min(this.totalItems - 1, first)));
+      this.endIndex.set(Math.min(this.totalItems, this.startIndex() + visible));
     };
 
     const unlisten = this.renderer.listen(el, 'scroll', onScroll);
