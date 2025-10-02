@@ -13,13 +13,17 @@
 
 <!-- 2. / 3. --------------------------------------------- Signals -->
 @if (product()) {
-    <div class="tile">
-        <div class="name">{{ product()!.name }}</div>
-        <div class="meta">
-            <span class="price">${{ product()!.price }}</span>
-        </div>
-        <span class="pill" [class.ok]="product()!.inStock" [class.no]="!product()!.inStock">
-            {{ product()!.inStock ? 'Available' : 'Backorder' }}
-        </span>
-    </div>
+<div class="tile">
+  <div class="name">{{ product()!.name }}</div>
+  <div class="meta">
+    <span class="price">${{ product()!.price }}</span>
+  </div>
+  <span
+    class="pill"
+    [class.ok]="product()!.inStock"
+    [class.no]="!product()!.inStock"
+  >
+    {{ product()!.inStock ? 'Available' : 'Backorder' }}
+  </span>
+</div>
 }
