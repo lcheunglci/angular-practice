@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Product } from '../product-details-data';
 
 @Component({
@@ -14,6 +9,6 @@ import { Product } from '../product-details-data';
 })
 export class StockBadgeComponent {
   // product?: Product; // 1. Before
-  product = signal<Product | undefined>(undefined); // 2. Signals
-  // product = input<Product>(); // 3. Inputs
+  // product = signal<Product | undefined>(undefined); // 2. Signals
+  product = input<Product>(); // 3. Inputs
 }

@@ -67,10 +67,10 @@ export class ProductDetailsComponent implements OnInit {
     // this.componentRef.instance.product = product;
 
     // 2. --------------------------------------------- Signals
-    this.componentRef.instance.product.apply(product);
+    // this.componentRef.instance.product.apply(product);
 
     // 3. --------------------------------------------- Inputs
-    // this.componentRef.setInput('product', product);
+    this.componentRef.setInput('product', product);
 
     console.log('Product:', this.componentRef.instance.product);
   }
