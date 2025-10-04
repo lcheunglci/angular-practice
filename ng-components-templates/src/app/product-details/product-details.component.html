@@ -4,7 +4,18 @@
     <h2>{{ product().name }}</h2>
     <p>{{ product().description }}</p>
     <p>Part Type: {{ product().category }}</p>
-    <p>Available Inventory: {{ availableInventory() }}</p>
+    <p>
+      Available Inventory: {{ availableInventory() }}
+      @if (availableInventory() === 1) {
+      <span class="pill red">Only one left!</span>
+      } @else if (availableInventory() < 1) {
+      <span class="pill red">Out of stock!</span>
+      } @else if (availableInventory() < 5) {
+      <span class="pill yellow">Few left!</span>
+      } @else {
+      <span class="pill">Get yours today!</span>
+      }
+    </p>
   </div>
 </div>
 <div class="price">
