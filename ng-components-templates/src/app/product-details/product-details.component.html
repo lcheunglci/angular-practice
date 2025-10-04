@@ -3,7 +3,13 @@
   <div>
     <h2>{{ product().name }}</h2>
     <p>{{ product().description }}</p>
-    <p>Part Type: {{ product().category }}</p>
+    <p>
+      Part Type: @switch (product().category) { @case('heads') { Head }
+      @case('arms') { Arm } @case('bases') { Base } @case('torsos') { Torso }
+      @default {
+      {{ product().category }}
+      } }
+    </p>
     @if (product().productNotes; as notes) {
     <p>Product Notes: {{ notes }}</p>
     }
