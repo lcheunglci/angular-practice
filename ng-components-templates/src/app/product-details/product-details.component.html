@@ -1,16 +1,17 @@
+@let p = product(); @let discountedPrice = p.price * (1 - p.discount) |
+currency;
 <div class="details">
-  <img [src]="getImageUrl(product())" [alt]="product().name" />
+  <img [src]="getImageUrl(p)" [alt]="p.name" />
   <div>
-    <h2>{{ product().name }}</h2>
-    <p>{{ product().description }}</p>
+    <h2>{{ p.name }}</h2>
+    <p>{{ p.description }}</p>
     <p>
-      Part Type: @switch (product().category) { @case('heads') { Head }
-      @case('arms') { Arm } @case('bases') { Base } @case('torsos') { Torso }
-      @default {
-      {{ product().category }}
+      Part Type: @switch (p.category) { @case('heads') { Head } @case('arms') {
+      Arm } @case('bases') { Base } @case('torsos') { Torso } @default {
+      {{ p.category }}
       } }
     </p>
-    @if (product().productNotes; as notes) {
+    @if (p.productNotes; as notes) {
     <p>Product Notes: {{ notes }}</p>
     }
     <p>
@@ -28,9 +29,9 @@
   </div>
 </div>
 <div class="price">
-  <p [ngClass]="getPriceClasses()">{{ product().price | currency }}</p>
-  @if (product().discount > 0) {
-  <p>{{ product().price * (1 - product().discount) | currency }}</p>
+  <p [ngClass]="getPriceClasses()">{{ p.price | currency }}</p>
+  @if (p.discount > 0) {
+  <p>{{ discountedPrice }}</p>
   }
   <button class="cta" (click)="addToCart()">Buy</button>
 </div>
