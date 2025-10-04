@@ -4,6 +4,9 @@
     <h2>{{ product().name }}</h2>
     <p>{{ product().description }}</p>
     <p>Part Type: {{ product().category }}</p>
+    @if (product().productNotes; as notes) {
+    <p>Product Notes: {{ notes }}</p>
+    }
     <p>
       Available Inventory: {{ availableInventory() }}
       @if (availableInventory() === 1) {
