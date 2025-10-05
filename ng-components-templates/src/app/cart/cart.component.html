@@ -10,6 +10,8 @@
   <li>
     <bot-cart-item [product]="product" />
   </li>
+  } @empty {
+  <h2>You have no items in your cart</h2>
   }
 </ul>
 <span #checkout></span>
