@@ -5,3 +5,11 @@ ul {
 li {
   border-top: 2px solid #999;
 }
+
+.alt {
+  background-color: #eee;
+}
+
+.top {
+  border-top: none;
+}
