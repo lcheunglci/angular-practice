@@ -9,7 +9,7 @@
 }
 
 li {
-    border-top: 2px solid #999;
+  border-top: 2px solid #999;
 }
 
 .total {
@@ -17,4 +17,8 @@ li {
   align-self: right;
   font-size: 25px;
   text-align: right;
+}
+
+button.cta {
+  width: 100%;
 }

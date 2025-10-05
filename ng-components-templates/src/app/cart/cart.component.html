@@ -1,7 +1,10 @@
+@let hasCartItems = cartItems().length > 0;
 <h1 class="header">Your Cart</h1>
+@if (hasCartItems) {
 <button (click)="checkout.scrollIntoView({ behavior: 'smooth' })">
   Proceed to checkout
 </button>
+}
 <ul>
   @for (product of cartItems(); track product.id) {
   <li>
@@ -9,4 +12,7 @@
   </li>
   }
 </ul>
-<button #checkout class="cta">Checkout</button>
+<span #checkout></span>
+@if (hasCartItems) {
+<button class="cta">Checkout</button>
+}
