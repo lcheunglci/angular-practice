@@ -1,5 +1,7 @@
 <h1 class="header">Your Cart</h1>
-<button (click)="checkout.scrollIntoView()">Proceed to checkout</button>
+<button (click)="checkout.scrollIntoView({ behavior: 'smooth' })">
+  Proceed to checkout
+</button>
 <ul>
   @for (product of cartItems(); track product.id) {
   <li>
