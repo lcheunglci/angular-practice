@@ -5,12 +5,7 @@ currency;
   <div>
     <h2>{{ p.name }}</h2>
     <p>{{ p.description }}</p>
-    <p>
-      Part Type: @switch (p.category) { @case('heads') { Head } @case('arms') {
-      Arm } @case('bases') { Base } @case('torsos') { Torso } @default {
-      {{ p.category }}
-      } }
-    </p>
+    <p>Part Type: {{ p.category | categoryToPartType : true }}</p>
     @if (p.productNotes; as notes) {
     <p>Product Notes: {{ notes }}</p>
     }
