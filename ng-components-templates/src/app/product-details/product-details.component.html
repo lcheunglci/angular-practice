@@ -22,5 +22,5 @@ currency;
   @if (p.discount > 0) {
   <p>{{ discountedPrice }}</p>
   }
-  <button class="cta" (click)="addToCart()">Buy</button>
+  <ng-content />
 </div>

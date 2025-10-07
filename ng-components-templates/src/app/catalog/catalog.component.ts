@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ProductDetailsComponent } from '../product-details/product-details.component';
 import { IProduct } from '../product.model';
 import allProducts from '../products.json';
+import { CartService } from '../cart.service';
+import { FilterByCategoryPipe } from '../filter-by-category-pipe';
 
 @Component({
   selector: 'bot-catalog',
@@ -12,6 +14,8 @@ import allProducts from '../products.json';
 export class CatalogComponent {
   products: IProduct[] = allProducts;
   categoryFilter: string | null = null;
+
+  constructor(private cartService: CartService) {}
 
   addProduct() {
     this.products = [
@@ -26,5 +30,10 @@ export class CatalogComponent {
         discount: 0,
       },
     ];
+  }
+
+  addToCart(product: IProduct) {
+    // this.availableInventory.update((p) => p - 1);
+    this.cartService.addToCart(product);
   }
 }

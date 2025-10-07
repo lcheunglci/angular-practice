@@ -6,7 +6,7 @@ import { IProduct } from './product.model';
   // pure: false // avoid this
 })
 export class FilterByCategoryPipe implements PipeTransform {
-  transform(products: IProduct[], category: string | null[]): IProduct[] {
+  transform(products: IProduct[], category: string | null): IProduct[] {
     if (!category) {
       return products;
     }
