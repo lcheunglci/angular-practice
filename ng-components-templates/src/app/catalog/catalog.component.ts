@@ -14,14 +14,17 @@ export class CatalogComponent {
   categoryFilter: string | null = null;
 
   addProduct() {
-    this.products.push({
-      id: 6,
-      description: 'Something new.',
-      name: 'New arm',
-      imageName: 'arm-propeller.png',
-      category: 'arms',
-      price: 100,
-      discount: 0,
-    });
+    this.products = [
+      ...this.products,
+      {
+        id: 6,
+        description: 'Something new.',
+        name: 'New arm',
+        imageName: 'arm-propeller.png',
+        category: 'arms',
+        price: 100,
+        discount: 0,
+      },
+    ];
   }
 }
