@@ -23,6 +23,13 @@ button.cta {
   width: 100%;
 }
 
+button.remove {
+  padding: 10px;
+  width: 100px;
+  display: block;
+  margin: 10px auto;
+}
+
 h2 {
   text-align: center;
 }
