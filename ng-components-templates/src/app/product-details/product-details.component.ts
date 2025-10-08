@@ -1,4 +1,4 @@
-import { Component, signal, input } from '@angular/core';
+import { Component, signal, input, output } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
@@ -11,6 +11,10 @@ import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
 })
 export class ProductDetailsComponent {
   product = input.required<IProduct>();
+  mode = input<'shop' | 'cart'>('shop');
+  addToCart = output<IProduct>();
+  removeFromCart = output<IProduct>();
+
   availableInventory = signal(5);
 
   inventoryMap = {
@@ -21,6 +25,14 @@ export class ProductDetailsComponent {
     '=4': 'Few left!',
     other: 'Get yours today!',
   };
+
+  add() {
+    this.addToCart.emit(this.product());
+  }
+
+  remove() {
+    this.removeFromCart.emit(this.product());
+  }
 
   getImageUrl(product: IProduct) {
     return '/images/robot-parts/' + product.imageName;
