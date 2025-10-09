@@ -2,10 +2,11 @@ import { Component, signal, input, output } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
+import { SliderComponent } from '../slider/slider.component';
 
 @Component({
   selector: 'bot-product-details',
-  imports: [CommonModule, CategoryToPartTypePipe],
+  imports: [CommonModule, CategoryToPartTypePipe, SliderComponent],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })
@@ -15,6 +16,7 @@ export class ProductDetailsComponent {
   addToCart = output<IProduct>();
   removeFromCart = output<IProduct>();
 
+  favorite = signal(3);
   availableInventory = signal(5);
 
   inventoryMap = {

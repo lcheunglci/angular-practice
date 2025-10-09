@@ -1,0 +1,8 @@
+<input
+  #slider
+  type="range"
+  min="1"
+  max="5"
+  [value]="sliderValue()"
+  (input)="sliderValue.set(+slider.value)"
+/>

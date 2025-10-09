@@ -15,6 +15,8 @@ currency;
         {{ availableInventory() | i18nPlural : inventoryMap }}</span
       >
     </p>
+    <div>Favorite rating: {{ favorite() }}</div>
+    <bot-slider [(sliderValue)]="favorite" />
   </div>
 </div>
 <div class="price">
