@@ -1,19 +1,22 @@
 import { Injectable, signal } from '@angular/core';
 import { IProduct } from './product.model';
+import { InventoryService } from './inventory.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CartService {
   cart = signal<IProduct[]>([]);
 
-  constructor() { }
+  constructor(private inventoryService: InventoryService) {}
 
   addToCart(product: IProduct) {
-    this.cart.update(cart => [...cart, product]);
+    this.inventoryService.decrement(product.id);
+    this.cart.update((cart) => [...cart, product]);
   }
 
   removeFromCart(product: IProduct) {
-    this.cart.update(cart => cart.filter(p => p.id != product.id));
+    this.inventoryService.increment(product.id);
+    this.cart.update((cart) => cart.filter((p) => p.id != product.id));
   }
 }

@@ -1,8 +1,9 @@
-import { Component, signal, input, output } from '@angular/core';
+import { Component, signal, input, output, computed } from '@angular/core';
 import { IProduct } from '../product.model';
 import { CommonModule } from '@angular/common';
 import { CategoryToPartTypePipe } from '../category-to-part-type-pipe';
 import { SliderComponent } from '../slider/slider.component';
+import { InventoryService } from '../inventory.service';
 
 @Component({
   selector: 'bot-product-details',
@@ -20,7 +21,9 @@ export class ProductDetailsComponent {
   removeFromCart = output<IProduct>();
 
   favorite = signal(3);
-  availableInventory = signal(5);
+  availableInventory = computed(() =>
+    this.inventoryService.get(this.product().id)
+  );
 
   inventoryMap = {
     '=0': 'Out of Stock',
@@ -30,6 +33,8 @@ export class ProductDetailsComponent {
     '=4': 'Few left!',
     other: 'Get yours today!',
   };
+
+  constructor(private inventoryService: InventoryService) {}
 
   normalizeDiscount(product: IProduct): IProduct {
     if (product.discount < 1) {
