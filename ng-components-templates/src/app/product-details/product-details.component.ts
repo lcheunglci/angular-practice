@@ -11,7 +11,10 @@ import { SliderComponent } from '../slider/slider.component';
   styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent {
-  product = input.required<IProduct>();
+  product = input.required<IProduct, IProduct>({
+    transform: this.normalizeDiscount,
+  });
+  // width = input<string, number>('5px', { transform: (w: number) => w + 'px' });
   mode = input<'shop' | 'cart'>('shop');
   addToCart = output<IProduct>();
   removeFromCart = output<IProduct>();
@@ -27,6 +30,13 @@ export class ProductDetailsComponent {
     '=4': 'Few left!',
     other: 'Get yours today!',
   };
+
+  normalizeDiscount(product: IProduct): IProduct {
+    if (product.discount < 1) {
+      return product;
+    }
+    return { ...product, discount: product.discount / 100 };
+  }
 
   add() {
     this.addToCart.emit(this.product());
