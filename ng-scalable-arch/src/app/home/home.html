@@ -1,0 +1,11 @@
+<div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <mat-card *ngFor="let product of products" class="shadow-lg hover:shadow-xl transition-shadow">
+      <img mat-card-image [src]="product.image" alt="{{product.name}}" class="object-cover">
+      <mat-card-content>
+        <h2 class="text-xl font-bold">{{product.name}}</h2>
+        <p>${{product.price}}</p>
+        <button mat-raised-button color="primary" (click)="addToCart(product)">Add to Cart</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

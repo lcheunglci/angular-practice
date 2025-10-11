@@ -1,0 +1,17 @@
+<mat-card class="max-w-md mx-auto my-8 shadow-xl dark:bg-gray-800 dark:text-white">
+    <mat-card-header>
+      <mat-card-title class="text-2xl font-bold">User Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="p-4">
+      <ng-container *ngIf="user; else notLoggedIn">
+        <p class="text-lg">Welcome, {{user.name}}!</p>
+        <p>Order History: (Mock) 5 orders placed.</p>
+        <button mat-raised-button color="warn" (click)="logout()">Logout</button>
+      </ng-container>
+      <ng-template #notLoggedIn>
+        <p class="text-lg">You are not logged in.</p>
+        <button mat-button routerLink="/user/login">Go to Login</button>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+  

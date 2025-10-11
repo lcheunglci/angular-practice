@@ -1,0 +1,8 @@
+<div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+    <mat-card *ngFor="let product of products" class="shadow-lg hover:shadow-xl transition-shadow dark:bg-gray-800 dark:text-white">
+      <mat-card-content class="p-4">
+        <app-product-detail [product]="product"></app-product-detail>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  

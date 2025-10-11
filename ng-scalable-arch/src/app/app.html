@@ -1,0 +1,11 @@
+<mat-toolbar color="primary" class="flex justify-between">
+  <span>Store</span>
+  <div>
+    <button mat-button routerLink="/">Home</button>
+    <button mat-button routerLink="/products">Products</button>
+    <button mat-button routerLink="/user/profile">Profile</button>
+    <button mat-button routerLink="/cart">Cart</button>
+    <button mat-icon-button (click)="toggleDarkMode()"><mat-icon>brightness_6</mat-icon></button>
+  </div>
+</mat-toolbar>
+<router-outlet></router-outlet>
