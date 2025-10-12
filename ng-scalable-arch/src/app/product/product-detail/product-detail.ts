@@ -7,9 +7,9 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, MatCardModule],
   templateUrl: './product-detail.html',
-  styleUrls: ['./product-detail.scss']
+  styleUrls: ['./product-detail.scss'],
+  standalone: false
 })
 export class ProductDetailComponent implements OnInit {
   product = model<Product | undefined>();

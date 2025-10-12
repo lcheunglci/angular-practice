@@ -4,8 +4,7 @@ import { HomeComponent } from './home/home';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'products', loadComponent: () => import('./product/product-list/product-list').then(m => m.ProductListComponent) },
-  { path: 'products/:id', loadComponent: () => import('./product/product-detail/product-detail').then(m => m.ProductDetailComponent) },
+  { path: 'products', loadComponent: () => import('./product/product.module').then(m => m.ProductModule) },
   { path: 'user', loadChildren: () => import('./user/user-module').then(m => m.UserModule) },
   { path: 'cart', loadChildren: () => import('./cart/cart-module').then(m => m.CartModule) },
 ];
