@@ -10,9 +10,9 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-product-list',
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatIconModule, ProductDetailComponent],
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.scss'],
-  standalone: false
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];

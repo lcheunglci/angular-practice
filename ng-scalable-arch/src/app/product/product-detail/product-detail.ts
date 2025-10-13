@@ -2,14 +2,15 @@ import { Component, model, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product, ProductService } from '../../shared/services/product.service';
 import { CartService } from '../../shared/services/cart.service';
-import {  MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-product-detail',
+  imports: [CommonModule, MatCardModule, MatButton],
   templateUrl: './product-detail.html',
   styleUrls: ['./product-detail.scss'],
-  standalone: false
 })
 export class ProductDetailComponent implements OnInit {
   product = model<Product | undefined>();
