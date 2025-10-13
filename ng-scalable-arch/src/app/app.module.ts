@@ -8,16 +8,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { HomeComponent } from './home/home';
+import { APP_CONFIG } from './shared/tokens/config.token';
 // Add other components/ modules
 
 @NgModule({
   declarations: [AppComponent, HomeComponent /* others */],
   imports: [
-    BrowserModule, AppRoutingModule, BrowserAnimationsModule,
-    MatToolbarModule, MatButtonModule, MatIconModule, MatCardModule,
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
     /* ProductModule, UserModule, CartModule */
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    { provide: APP_CONFIG, useValue: { apiUrl: 'google.com', timeout: 1000 } },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
