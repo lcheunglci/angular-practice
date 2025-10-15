@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService } from '../../shared/services/cart.service';
-import { Product } from '../../shared/services/product.service';
+import { CartService, Product } from '@shared/services';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Product, ProductService } from '../../shared/services/product.service';
-import { CartService } from '../../shared/services/cart.service';
+import { Product, ProductService } from '../../../../libs/shared/services/src/lib/shared/product.service';
+import { CartService } from '../../../../libs/shared/services/src/lib/shared/cart.service';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';

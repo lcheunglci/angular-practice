@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-, "libs/shared/user/src/lib/user-module.ts", "libs/shared/user/src/lib/user-routing-module.ts"  ],
+, "libs/shared/user/src/lib/user-module.ts", "libs/shared/user/src/lib/user-routing-module.ts", "libs/scale/cart/src/lib/scale/cart-module.ts", "libs/scale/cart/src/lib/scale/cart-routing-module.ts", "libs/scale/cart/src/lib/scale/cart-routing.module.ts", "libs/shared/services/src/lib/shared/product.service.ts", "libs/shared/services/src/lib/shared/cart.service.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

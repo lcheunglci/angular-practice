@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/nx/schemas/project-schema.json",
-  "name": "ng-scalable-arch",
+  "name": "@scale/store",
   "projectType": "application",
-  "tags": ["scope:app"],
+  "tags": ["@scale:app"],
   "generators": {
     "@schematics/angular:class": {
       "skipTests": true
@@ -94,6 +94,9 @@
     },
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@angular/build:karma",

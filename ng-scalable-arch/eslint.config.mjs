@@ -21,8 +21,8 @@ export default [
               onlyDependOnLibsWithTags: ['shared'],
             },
             {
-              sourceTag: 'scope:app',
-              onlyDependOnLibsWithTags: ['shared', 'scope:lib']
+              sourceTag: 'scale:app',
+              onlyDependOnLibsWithTags: ['shared', 'scale:lib']
             }
           ],
         },

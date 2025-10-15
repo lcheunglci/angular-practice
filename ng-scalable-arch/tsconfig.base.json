@@ -9,7 +9,9 @@
     "baseUrl": ".",
     "paths": {
       "@shared/user": ["libs/shared/user/src/index.ts"],
-      "@mystore/store": ["src/app/product/services/product-logging.service.ts"],
+      "@shared/services": ["libs/shared/services/src/index.ts"],
+      "@scale/cart": ["libs/scale/cart/src/index.ts"],
+      "@scale/store": ["src/app/product/services/product-logging.service.ts"],
     }
   }
 }

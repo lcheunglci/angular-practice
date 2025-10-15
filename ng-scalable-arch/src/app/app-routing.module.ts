@@ -7,7 +7,7 @@ const routes: Routes = [
   { path: 'products', loadComponent: () => import('./product/product-list/product-list').then(m => m.ProductListComponent) },
   { path: 'products/:id', loadComponent: () => import('./product/product-detail/product-detail').then(m => m.ProductDetailComponent) },
   { path: 'user', loadChildren: () => import('@shared/user').then(m => m.UserModule) },
-  { path: 'cart', loadChildren: () => import('./cart/cart-module').then(m => m.CartModule) },
+  { path: 'cart', loadChildren: () => import('@scale/cart').then(m => m.CartModule) },
 ];
 
 @NgModule({

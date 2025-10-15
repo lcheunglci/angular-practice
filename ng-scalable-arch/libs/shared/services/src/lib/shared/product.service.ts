@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { APP_CONFIG, AppConfig } from '../tokens/config.token';
+import { APP_CONFIG, AppConfig } from '../../../../../../src/app/shared/tokens/config.token';
 
 export interface Product {
   id: number;
