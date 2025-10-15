@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "user": ["libs/shared/user/src/index.ts"]
+      "@shared/user": ["libs/shared/user/src/index.ts"]
     }
   }
 }

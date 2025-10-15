@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "libs/shared/user/src/lib/user-module.ts", "libs/shared/user/src/lib/user-routing-module.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

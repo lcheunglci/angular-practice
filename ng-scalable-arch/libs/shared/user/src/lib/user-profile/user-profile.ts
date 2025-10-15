@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../shared/services/user.service';
+import { UserService } from '../../../../../../src/app/shared/services/user.service';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 
