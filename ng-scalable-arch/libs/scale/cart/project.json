@@ -4,7 +4,7 @@
   "sourceRoot": "libs/scale/cart/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["analytics:lib"],
+  "tags": ["scale:lib"],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
