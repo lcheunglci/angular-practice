@@ -8,7 +8,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shared/user": ["libs/shared/user/src/index.ts"]
+      "@shared/user": ["libs/shared/user/src/index.ts"],
+      "@mystore/store": ["src/app/product/services/product-logging.service.ts"],
     }
   }
 }

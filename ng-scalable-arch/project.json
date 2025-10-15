@@ -2,6 +2,7 @@
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "name": "ng-scalable-arch",
   "projectType": "application",
+  "tags": ["scope:app"],
   "generators": {
     "@schematics/angular:class": {
       "skipTests": true
