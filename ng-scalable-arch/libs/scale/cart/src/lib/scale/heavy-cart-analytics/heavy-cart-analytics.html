@@ -1,0 +1,10 @@
+<mat-card class="max-w-xl mx-auto my-8 shadow-xl dark:bg-gray-800 dark:text-white">
+  <mat-card-header>
+    <mat-card-title class="text-2xl font-bold">Cart Analytics</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="p-4">
+    <p *ngIf="items().length > 0">Average Price: ${{ analyticsData().averagePrice.toFixed(2) }}</p>
+    <p>Item Count: {{ analyticsData().itemCount }}</p>
+    <p class="text-gray-500">Note: This analysis involves heavy computation.</p>
+  </mat-card-content>
+</mat-card>

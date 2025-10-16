@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { HomeComponent } from './home/home';
 import { APP_CONFIG } from './shared/tokens/config.token';
+import { CanLoadHeavyGuard } from '@scale/cart';
 // Add other components/ modules
 
 @NgModule({
@@ -25,6 +26,7 @@ import { APP_CONFIG } from './shared/tokens/config.token';
   ],
   providers: [
     { provide: APP_CONFIG, useValue: { apiUrl: 'google.com', timeout: 1000 } },
+    CanLoadHeavyGuard
   ],
   bootstrap: [AppComponent],
 })
