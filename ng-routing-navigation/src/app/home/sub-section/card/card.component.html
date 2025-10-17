@@ -1,0 +1,10 @@
+<div class="pie-item">
+  <h4>{{pie().title}}</h4>
+  <img [src]="pie().image" alt="" width="400" height="400" />
+  <div class="add-to-cart">
+    <p>{{pie().price | currency}}</p>
+    <app-cart-button [item]="pie()" />
+  </div>
+  <div class="pie-info">
+  </div>
+</div>

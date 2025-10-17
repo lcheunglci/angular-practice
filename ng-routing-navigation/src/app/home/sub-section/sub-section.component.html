@@ -1,0 +1,11 @@
+<section>
+  <div class="pie-grid">
+    @for(pie of this.cartService.featuredPiesPlusQuantity(); track pie.id) {
+      <app-card
+        [pie]="pie"
+      />
+    } @empty {
+      <p>No pies available at the moment.</p>
+    }
+  </div>
+</section>
