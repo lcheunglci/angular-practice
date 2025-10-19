@@ -22,13 +22,19 @@ export const routes: Routes = [
   // products
   {
     path: 'products',
-    component: AllProductsComponent,
+    children: [
+      {
+        path: '',
+        component: AllProductsComponent,
+      },
+      // detail
+      {
+        path: 'detail',
+        component: DetailCardComponent,
+      },
+    ],
   },
-  // detail
-  {
-    path: 'detail',
-    component: DetailCardComponent,
-  },
+
   // login
   {
     path: 'login',
