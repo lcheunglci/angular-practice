@@ -7,13 +7,15 @@
     </h1>
     <nav>
       <ul>
-        <li>
+        <li routerLinkActive="active-link" ariaCurrentWhenActive="page">
           <button class="menu-item" mat-button [matMenuTriggerFor]="menu">
             Shop <span>&#8964;</span>
           </button>
           <mat-menu class="menu-dropdown" #menu="matMenu">
             <a
               [routerLink]="PRODUCTS_ROUTE"
+              routerActiveLink="active-link"
+              ariaCurrentWhenActive="page"
               mat-menu-item
               (click)="changeCategory('Seasonal Pies')"
             >
@@ -21,6 +23,8 @@
             </a>
             <a
               [routerLink]="PRODUCTS_ROUTE"
+              routerActiveLink="active-link"
+              ariaCurrentWhenActive="page"
               mat-menu-item
               (click)="changeCategory('Fruit Pies')"
             >
@@ -28,6 +32,8 @@
             </a>
             <a
               [routerLink]="PRODUCTS_ROUTE"
+              routerActiveLink="active-link"
+              ariaCurrentWhenActive="page"
               mat-menu-item
               (click)="changeCategory('Cheesecakes')"
             >
@@ -35,6 +41,8 @@
             </a>
             <a
               [routerLink]="PRODUCTS_ROUTE"
+              routerActiveLink="active-link"
+              ariaCurrentWhenActive="page"
               mat-menu-item
               (click)="changeCategory('All Pies')"
             >
@@ -43,12 +51,24 @@
           </mat-menu>
         </li>
         <li>
-          <a [routerLink]="CONTACT_ROUTE" class="menu-item" mat-button
+          <a
+            [routerLink]="CONTACT_ROUTE"
+            routerActiveLink="active-link"
+            ariaCurrentWhenActive="page"
+            class="menu-item"
+            mat-button
             >Contact</a
           >
         </li>
         <li>
-          <a [routerLink]="ABOUT_ROUTE" class="menu-item" mat-button>About</a>
+          <a
+            [routerLink]="ABOUT_ROUTE"
+            routerActiveLink="active-link"
+            ariaCurrentWhenActive="page"
+            class="menu-item"
+            mat-button
+            >About</a
+          >
         </li>
       </ul>
     </nav>
@@ -56,7 +76,13 @@
       <ul>
         @let userId = this.authService.userId();
         <li>
-          <a [routerLink]="LOGIN_ROUTE" mat-menu-item class="user-icon">
+          <a
+            [routerLink]="LOGIN_ROUTE"
+            routerActiveLink="active-link"
+            ariaCurrentWhenActive="page"
+            mat-menu-item
+            class="user-icon"
+          >
             @if(!userId){
             <span class="log-in">Log In</span>
             <img
@@ -78,7 +104,12 @@
         </li>
         @let totalItems = this.cartService.cartTotals().totalCartCount;
         <li>
-          <a [routerLink]="CART_ROUTE" mat-menu-item>
+          <a
+            [routerLink]="CART_ROUTE"
+            routerActiveLink="active-link"
+            ariaCurrentWhenActive="page"
+            mat-menu-item
+          >
             <span class="total-items">{{ totalItems }}</span>
             <img src="../../assets/images/cart-icon.png" alt="" />
           </a>
