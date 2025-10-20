@@ -8,20 +8,28 @@ import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
+export const HOME_ROUTE = 'home';
+export const PRODUCTS_ROUTE = 'products';
+export const DETAIL_ROUTE = 'detail';
+export const LOGIN_ROUTE = 'login';
+export const CONTACT_ROUTE = 'contact';
+export const CART_ROUTE = 'cart';
+export const ABOUT_ROUTE = 'about';
+
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: HOME_ROUTE,
     pathMatch: 'full',
   },
   // home
   {
-    path: 'home',
+    path: HOME_ROUTE,
     component: HomeComponent,
   },
   // products
   {
-    path: 'products',
+    path: PRODUCTS_ROUTE,
     children: [
       {
         path: '',
@@ -29,7 +37,7 @@ export const routes: Routes = [
       },
       // detail
       {
-        path: 'detail',
+        path: DETAIL_ROUTE,
         component: DetailCardComponent,
       },
     ],
@@ -37,22 +45,22 @@ export const routes: Routes = [
 
   // login
   {
-    path: 'login',
+    path: LOGIN_ROUTE,
     component: LoginComponent,
   },
   // contact
   {
-    path: 'contact',
+    path: CONTACT_ROUTE,
     component: ContactComponent,
   },
   // cart
   {
-    path: 'cart',
+    path: CART_ROUTE,
     component: CartComponent,
   },
   // about
   {
-    path: 'about',
+    path: ABOUT_ROUTE,
     component: AboutComponent,
   },
   {
