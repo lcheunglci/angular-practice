@@ -17,7 +17,7 @@ export class AllProductsComponent {
 
   protected readonly DETAIL_ROUTE = DETAIL_ROUTE;
 
-  selectPie(id: string) {
-    this.pieService.setSelectedPie(id);
-  }
+  // selectPie(id: string) {
+  //   this.pieService.setSelectedPie(id);
+  // }
 }
