@@ -1,4 +1,9 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,7 +13,7 @@ import { ContactForm } from '../../models/contact-form';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router } from '@angular/router';
-import { CartButtonComponent } from 'src/app/shared-ui/cart-button/cart-button.component';
+import { CartButtonComponent } from '../../shared-ui/cart-button/cart-button.component';
 
 @Component({
   selector: 'app-cart-form',
@@ -19,7 +24,7 @@ import { CartButtonComponent } from 'src/app/shared-ui/cart-button/cart-button.c
     MatButtonModule,
     FormsModule,
     MatProgressSpinnerModule,
-    CartButtonComponent
+    CartButtonComponent,
   ],
   templateUrl: './cart-form.component.html',
   styleUrls: ['./cart-form.component.scss'],
@@ -39,14 +44,14 @@ export class CartFormComponent {
   checkout() {
     this.loading.set(true);
 
-    this.contactService.submitContactForm(this.model).pipe(
-      take(1),
-      takeUntil(this.destroyed$)
-    ).subscribe(() => {
-      this.submitted.set(true);
-      this.loading.set(false);
-      this.cartService.checkout();
-    })
+    this.contactService
+      .submitContactForm(this.model)
+      .pipe(take(1), takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.submitted.set(true);
+        this.loading.set(false);
+        this.cartService.checkout();
+      });
   }
 
   ngOnDestroy(): void {
