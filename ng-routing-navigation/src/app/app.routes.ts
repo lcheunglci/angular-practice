@@ -29,7 +29,7 @@ export const routes: Routes = [
   },
   // products
   {
-    path: PRODUCTS_ROUTE,
+    path: `${PRODUCTS_ROUTE}/:categoryId`,
     children: [
       {
         path: '',
