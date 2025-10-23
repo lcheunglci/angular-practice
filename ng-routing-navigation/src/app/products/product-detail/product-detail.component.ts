@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Category } from './../../models/pie';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { DetailCardComponent } from './detail-card/detail-card.component';
 import { BreadcrumbsComponent } from '../../shared-ui/breadcrumbs/breadcrumbs.component';
+import { PieService } from '../../services/pie.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -10,4 +18,15 @@ import { BreadcrumbsComponent } from '../../shared-ui/breadcrumbs/breadcrumbs.co
   styleUrl: './product-detail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductDetailComponent {}
+export class ProductDetailComponent {
+  // inject the pie service to use it in the effect
+  private readonly pieService = inject(PieService);
+
+  // Use a signal input to bind the categoryId path param
+  categoryId = input<Category>('All Pies');
+
+  // Use an effect to respond to changes in the categoryId path segment
+  categoryEffect = effect(() => {
+    this.pieService.setSelectedCategory(this.categoryId());
+  });
+}
