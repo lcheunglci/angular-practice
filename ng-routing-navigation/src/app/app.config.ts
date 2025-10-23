@@ -8,6 +8,7 @@ import {
   provideRouter,
   withComponentInputBinding,
   withDebugTracing,
+  withInMemoryScrolling,
 } from '@angular/router';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -20,7 +21,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes, withComponentInputBinding() /* withDebugTracing() */),
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      }) /* withDebugTracing() */
+    ),
     provideAnimations(),
     provideHttpClient(),
     importProvidersFrom(InMemoryWebApiModule.forRoot(AppData, { delay: 150 })),
