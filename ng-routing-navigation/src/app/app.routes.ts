@@ -7,6 +7,7 @@ import { CartComponent } from './cart/cart.component';
 import { ContactComponent } from './contact/contact.component';
 import { LoginComponent } from './login/login.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { WrapperComponent } from './products/wrapper.component';
 
 export const HOME_ROUTE = 'home';
 export const PRODUCTS_ROUTE = 'products';
@@ -30,6 +31,7 @@ export const routes: Routes = [
   // products
   {
     path: `${PRODUCTS_ROUTE}/:categoryId`,
+    component: WrapperComponent,
     children: [
       {
         path: '',
