@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CartFormComponent } from "../cart-form/cart-form.component";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { CartFormComponent } from '../cart-form/cart-form.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-modal',
@@ -9,5 +10,12 @@ import { CartFormComponent } from "../cart-form/cart-form.component";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartModalComponent {
+  router = inject(Router);
 
+  close(): void {
+    // navigate using the router to clear the cart outlet
+    this.router.navigate([{ outlets: { cartModal: null } }], {
+      queryParamsHandling: 'merge',
+    });
+  }
 }
