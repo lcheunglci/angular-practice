@@ -5,10 +5,12 @@ import {
   provideZonelessChangeDetection,
 } from '@angular/core';
 import {
+  PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
   withDebugTracing,
   withInMemoryScrolling,
+  withPreloading,
 } from '@angular/router';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -26,7 +28,8 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
-      }) /* withDebugTracing() */
+      }) /* withDebugTracing() */,
+      withPreloading(PreloadAllModules)
     ),
     provideAnimations(),
     provideHttpClient(),
