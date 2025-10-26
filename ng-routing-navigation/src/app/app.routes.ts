@@ -1,14 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { AllProductsComponent } from './products/all-products/all-products.component';
-import { DetailCardComponent } from './products/product-detail/detail-card/detail-card.component';
-import { AboutComponent } from './about/about.component';
-import { CartComponent } from './cart/cart.component';
-import { ContactComponent } from './contact/contact.component';
-import { LoginComponent } from './login/login.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { WrapperComponent } from './products/wrapper.component';
-import { CartModalComponent } from './cart/cart-modal/cart-modal.component';
 
 export const HOME_ROUTE = 'home';
 export const PRODUCTS_ROUTE = 'products';
@@ -32,43 +23,44 @@ export const routes: Routes = [
   // products
   {
     path: `${PRODUCTS_ROUTE}/:categoryId`,
-    component: WrapperComponent,
-    children: [
-      {
-        path: '',
-        component: AllProductsComponent,
-      },
-      // detail
-      {
-        path: DETAIL_ROUTE,
-        component: DetailCardComponent,
-      },
-    ],
+    loadComponent: () =>
+      import('./products/wrapper.component').then((m) => m.WrapperComponent),
+    loadChildren: () =>
+      import('./products/products.routes').then((m) => m.PRODUCT_ROUTES),
   },
 
   // login
   {
     path: LOGIN_ROUTE,
-    component: LoginComponent,
+    loadComponent: () =>
+      import('./login/login.component').then((m) => m.LoginComponent),
   },
   // contact
   {
     path: CONTACT_ROUTE,
-    component: ContactComponent,
+    loadComponent: () =>
+      import('./contact/contact.component').then((m) => m.ContactComponent),
   },
   // cart
   {
     path: CART_ROUTE,
-    component: CartModalComponent,
+    loadComponent: () =>
+      import('./cart/cart-modal/cart-modal.component').then(
+        (m) => m.CartModalComponent
+      ),
     outlet: 'cartModal',
   },
   // about
   {
     path: ABOUT_ROUTE,
-    component: AboutComponent,
+    loadComponent: () =>
+      import('./about/about.component').then((m) => m.AboutComponent),
   },
   {
     path: '**',
-    component: NotFoundComponent,
+    loadComponent: () =>
+      import('./not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      ),
   },
 ];
