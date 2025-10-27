@@ -1,8 +1,7 @@
-import { Router, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { inject } from '@angular/core';
-import { FeatureFlagService } from './services/feature-flag.service';
-import { map } from 'rxjs';
+import { isPizzaEnableCanActivateGuard } from './is-pizza-enabled-can-activate-guard';
+import { isPizzaEnabledCanActivateChildGuard } from './is-pizza-enabled-can-activate-child-guard';
 
 export const HOME_ROUTE = 'home';
 export const PRODUCTS_ROUTE = 'products';
@@ -41,24 +40,14 @@ export const routes: Routes = [
   },
   {
     path: PIZZA_ROUTE,
-    canActivate: [
-      () => {
-        // return true; // Change to false to see the pizza-not-found component
-        const router = inject(Router);
-        const flagService = inject(FeatureFlagService);
-
-        return flagService.isPizzaFeatureEnabled$.pipe(
-          map((isEnabled) => {
-            return isEnabled ? true : router.createUrlTree([HOME_ROUTE]);
-          })
-        );
-      },
-    ],
+    canActivate: [isPizzaEnableCanActivateGuard],
+    // canActivateChild: [isPizzaEnabledCanActivateChildGuard],
 
     loadComponent: () =>
       import('./pizza/pizza.component').then((m) => m.PizzaComponent),
     children: [
       {
+        // path: 'form',
         path: '',
         loadComponent: () =>
           import('./pizza/pizza-form/pizza-form.component').then(
@@ -66,6 +55,7 @@ export const routes: Routes = [
           ),
       },
       {
+        // path: 'not-found',
         path: '',
         loadComponent: () =>
           import('./pizza/pizza-not-found/pizza-not-found.component').then(
