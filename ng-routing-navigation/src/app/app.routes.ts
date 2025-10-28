@@ -2,8 +2,11 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { isPizzaEnableCanActivateGuard } from './is-pizza-enabled-can-activate-guard';
 import { isPizzaEnabledCanActivateChildGuard } from './is-pizza-enabled-can-activate-child-guard';
+import { isPizzaEnabledCanMatchGuard } from './is-pizza-enabled-can-match-guard';
+import { NewHomeComponent } from './home/new-home/new-home.component';
 
 export const HOME_ROUTE = 'home';
+export const NEW_HOME_ROUTE = 'new-home';
 export const PRODUCTS_ROUTE = 'products';
 export const DETAIL_ROUTE = 'detail';
 export const LOGIN_ROUTE = 'login';
@@ -19,6 +22,11 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   // home
+  {
+    path: HOME_ROUTE,
+    canMatch: [isPizzaEnabledCanMatchGuard],
+    component: NewHomeComponent,
+  },
   {
     path: HOME_ROUTE,
     component: HomeComponent,
