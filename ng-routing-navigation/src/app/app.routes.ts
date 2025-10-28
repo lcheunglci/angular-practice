@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { isPizzaEnableCanActivateGuard } from './is-pizza-enabled-can-activate-guard';
+import { isPizzaEnabledCanActivateGuard } from './is-pizza-enabled-can-activate-guard';
 import { isPizzaEnabledCanActivateChildGuard } from './is-pizza-enabled-can-activate-child-guard';
 import { isPizzaEnabledCanMatchGuard } from './is-pizza-enabled-can-match-guard';
 import { NewHomeComponent } from './home/new-home/new-home.component';
+import { isUserAuthenticatedCanMatchGuard } from './is-user-authenticated-can-match-guard';
 
 export const HOME_ROUTE = 'home';
 export const NEW_HOME_ROUTE = 'new-home';
@@ -48,7 +49,8 @@ export const routes: Routes = [
   },
   {
     path: PIZZA_ROUTE,
-    canActivate: [isPizzaEnableCanActivateGuard],
+    canActivate: [isPizzaEnabledCanActivateGuard],
+    // canMatch: [isUserAuthenticatedCanMatchGuard, isPizzaEnabledCanMatchGuard],
     // canActivateChild: [isPizzaEnabledCanActivateChildGuard],
 
     loadComponent: () =>
@@ -57,6 +59,7 @@ export const routes: Routes = [
       {
         // path: 'form',
         path: '',
+        // canMatch: [isUserAuthenticatedCanMatchGuard],
         loadComponent: () =>
           import('./pizza/pizza-form/pizza-form.component').then(
             (m) => m.PizzaFormComponent
