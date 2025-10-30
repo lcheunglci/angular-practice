@@ -28,18 +28,21 @@ export const routes: Routes = [
     path: HOME_ROUTE,
     canMatch: [isPizzaEnabledCanMatchGuard],
     component: NewHomeComponent,
+    title: "Bethany's - Home",
   },
   {
     path: HOME_ROUTE,
     component: HomeComponent,
+    title: "Bethany's - Home",
   },
   // products
   {
-    path: `${PRODUCTS_ROUTE}/:categoryId`,
+    path: PRODUCTS_ROUTE,
     loadComponent: () =>
       import('./products/wrapper.component').then((m) => m.WrapperComponent),
     loadChildren: () =>
       import('./products/products.routes').then((m) => m.PRODUCT_ROUTES),
+    title: "Bethany's - Shop",
   },
 
   // login
@@ -47,6 +50,7 @@ export const routes: Routes = [
     path: LOGIN_ROUTE,
     loadComponent: () =>
       import('./login/login.component').then((m) => m.LoginComponent),
+    title: "Bethany's - Login",
   },
   {
     path: PIZZA_ROUTE,
@@ -76,12 +80,14 @@ export const routes: Routes = [
           ),
       },
     ],
+    title: "Bethany's - Pizza",
   },
   // contact
   {
     path: CONTACT_ROUTE,
     loadComponent: () =>
       import('./contact/contact.component').then((m) => m.ContactComponent),
+    title: "Bethany's - Contact",
   },
   // cart
   {
@@ -91,12 +97,14 @@ export const routes: Routes = [
         (m) => m.CartModalComponent
       ),
     outlet: 'cartModal',
+    title: "Bethany's - Cart",
   },
   // about
   {
     path: ABOUT_ROUTE,
     loadComponent: () =>
       import('./about/about.component').then((m) => m.AboutComponent),
+    title: "Bethany's - About",
   },
   {
     path: '**',
@@ -104,5 +112,6 @@ export const routes: Routes = [
       import('./not-found/not-found.component').then(
         (m) => m.NotFoundComponent
       ),
+    title: "Bethany's - Not Found",
   },
 ];
