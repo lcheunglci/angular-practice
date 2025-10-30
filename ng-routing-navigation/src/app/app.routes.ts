@@ -16,6 +16,8 @@ export const PIZZA_ROUTE = 'pizza';
 export const CONTACT_ROUTE = 'contact';
 export const CART_ROUTE = 'cart';
 export const ABOUT_ROUTE = 'about';
+export const ADMIN_ROUTE = 'admin';
+export const NOT_ADMIN_ROUTE = 'not-admin';
 
 export const routes: Routes = [
   {
@@ -105,6 +107,20 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./about/about.component').then((m) => m.AboutComponent),
     title: "Bethany's - About",
+  },
+  {
+    path: ADMIN_ROUTE,
+    loadComponent: () =>
+      import('./admin/admin.component').then((m) => m.AdminComponent),
+    title: "Bethany's - Admin",
+  },
+  {
+    path: NOT_ADMIN_ROUTE,
+    loadComponent: () =>
+      import('./admin/not-admin/not-admin.component').then(
+        (m) => m.NotAdminComponent
+      ),
+    title: "Bethany's - Admin",
   },
   {
     path: '**',
