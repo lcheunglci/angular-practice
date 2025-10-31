@@ -6,6 +6,7 @@ import {
   DETAIL_ROUTE,
   CONTACT_ROUTE,
   CART_ROUTE,
+  ADMIN_ROUTE,
 } from './../app.routes';
 import { Component, inject } from '@angular/core';
 import { Category } from '../models/pie';
@@ -41,4 +42,5 @@ export class HeaderComponent {
   protected readonly DETAIL_ROUTE = DETAIL_ROUTE;
   protected readonly CONTACT_ROUTE = CONTACT_ROUTE;
   protected readonly CART_ROUTE = CART_ROUTE;
+  protected readonly ADMIN_ROUTE = ADMIN_ROUTE;
 }
