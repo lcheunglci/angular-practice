@@ -3,6 +3,7 @@ import { User } from './models/user';
 import { AuthService } from './services/auth.service';
 import { inject } from '@angular/core';
 import { LOGIN_ROUTE, NOT_ADMIN_ROUTE } from './app.routes';
+import { delay, map, of } from 'rxjs';
 
 export const adminUserResolver: ResolveFn<User | UrlTree> = (route, state) => {
   const authService = inject(AuthService);
@@ -20,5 +21,10 @@ export const adminUserResolver: ResolveFn<User | UrlTree> = (route, state) => {
     return new RedirectCommand(router.createUrlTree(['/', NOT_ADMIN_ROUTE]));
   }
 
-  return authService.authenticatedUser.value() as User;
+  const authUser = authService.authenticatedUser.value() as User;
+
+  return of(2000).pipe(
+    delay(2000),
+    map(() => authUser)
+  );
 };
