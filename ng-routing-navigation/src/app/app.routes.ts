@@ -7,6 +7,7 @@ import { NewHomeComponent } from './home/new-home/new-home.component';
 import { isUserAuthenticatedCanMatchGuard } from './is-user-authenticated-can-match-guard';
 import { leavePizzaCanDeactivateGuard } from './leave-pizza-can-deactivate-guard';
 import { AboutComponent } from './about/about.component';
+import { adminUserResolver } from './admin-user-resolver';
 
 export const HOME_ROUTE = 'home';
 export const NEW_HOME_ROUTE = 'new-home';
@@ -123,6 +124,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./admin/admin.component').then((m) => m.AdminComponent),
     title: "Bethany's - Admin",
+    resolve: {
+      user: adminUserResolver,
+    },
   },
   {
     path: NOT_ADMIN_ROUTE,
