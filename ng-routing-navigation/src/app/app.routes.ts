@@ -8,6 +8,11 @@ import { isUserAuthenticatedCanMatchGuard } from './is-user-authenticated-can-ma
 import { leavePizzaCanDeactivateGuard } from './leave-pizza-can-deactivate-guard';
 import { AboutComponent } from './about/about.component';
 import { adminUserResolver } from './admin-user-resolver';
+import { ContactComponent } from './contact/contact.component';
+import {
+  contactMessageService,
+  MESSAGE_SERVICE,
+} from './services/message.service';
 
 export const HOME_ROUTE = 'home';
 export const NEW_HOME_ROUTE = 'new-home';
@@ -90,8 +95,16 @@ export const routes: Routes = [
   {
     path: CONTACT_ROUTE,
     loadComponent: () =>
-      import('./contact/contact.component').then((m) => m.ContactComponent),
+      import('./shared-ui/image-wrapper/image-wrapper.component').then(
+        (m) => m.ImageWrapperComponent
+      ),
     title: "Bethany's - Contact",
+    data: {
+      imageUrl: '../../assets/images/contact.png',
+      routePath: CONTACT_ROUTE,
+      component: ContactComponent,
+    },
+    providers: [{ provide: MESSAGE_SERVICE, useValue: contactMessageService }],
   },
   // cart
   {

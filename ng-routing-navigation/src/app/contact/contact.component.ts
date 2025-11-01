@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+  inject,
+} from '@angular/core';
 
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -7,22 +14,20 @@ import { ContactForm } from '../models/contact-form';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { BreadcrumbsComponent } from '../shared-ui/breadcrumbs/breadcrumbs.component';
+import { MESSAGE_SERVICE } from '../services/message.service';
 
 @Component({
   selector: 'app-contact',
-  imports: [
-    FormsModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    BreadcrumbsComponent
-],
+  imports: [FormsModule, MatProgressSpinnerModule, MatButtonModule],
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnDestroy, OnInit{
-  @Input() userHello = '';
+export class ContactComponent implements OnDestroy, OnInit {
+  protected readonly messageService = inject(MESSAGE_SERVICE, {
+    optional: true,
+  });
+
   readonly contactService = inject(ContactService);
   destroyed$ = new ReplaySubject<void>(1);
 
@@ -39,12 +44,13 @@ export class ContactComponent implements OnDestroy, OnInit{
     this.submitted = true;
     this.loading = true;
 
-    this.contactService.submitContactForm(model).pipe(
-      takeUntil(this.destroyed$)
-    ).subscribe(() => {
-      this.contactService.canDeactivate.set(true);
-      this.loading = false;
-    })
+    this.contactService
+      .submitContactForm(model)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.contactService.canDeactivate.set(true);
+        this.loading = false;
+      });
   }
 
   clearForm() {
@@ -55,7 +61,7 @@ export class ContactComponent implements OnDestroy, OnInit{
       email: '',
       phone: '',
       comment: '',
-    }
+    };
   }
 
   ngOnInit() {
