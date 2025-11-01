@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MESSAGE_SERVICE } from '../services/message.service';
 
 @Component({
   selector: 'app-about',
@@ -7,4 +8,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
 })
-export class AboutComponent {}
+export class AboutComponent {
+  protected readonly messageService = inject(MESSAGE_SERVICE, {
+    optional: true,
+  });
+}

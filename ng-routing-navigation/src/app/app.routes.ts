@@ -10,9 +10,12 @@ import { AboutComponent } from './about/about.component';
 import { adminUserResolver } from './admin-user-resolver';
 import { ContactComponent } from './contact/contact.component';
 import {
+  aboutMessageService,
   contactMessageService,
+  loginMessageService,
   MESSAGE_SERVICE,
 } from './services/message.service';
+import { LoginComponent } from './login/login.component';
 
 export const HOME_ROUTE = 'home';
 export const NEW_HOME_ROUTE = 'new-home';
@@ -58,8 +61,21 @@ export const routes: Routes = [
   {
     path: LOGIN_ROUTE,
     loadComponent: () =>
-      import('./login/login.component').then((m) => m.LoginComponent),
+      import('./shared-ui/image-wrapper/image-wrapper.component').then(
+        (m) => m.ImageWrapperComponent
+      ),
     title: "Bethany's - Login",
+    data: {
+      imageUrl: '../../assets/images/login.png',
+      routePath: LOGIN_ROUTE,
+      component: LoginComponent,
+    },
+    providers: [
+      {
+        provide: MESSAGE_SERVICE,
+        useValue: loginMessageService,
+      },
+    ],
   },
   {
     path: PIZZA_ROUTE,
@@ -131,6 +147,12 @@ export const routes: Routes = [
       routePath: ABOUT_ROUTE,
       component: AboutComponent,
     },
+    providers: [
+      {
+        provide: MESSAGE_SERVICE,
+        useValue: aboutMessageService,
+      },
+    ],
   },
   {
     path: ADMIN_ROUTE,
