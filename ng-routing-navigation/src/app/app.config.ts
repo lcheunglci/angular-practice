@@ -11,6 +11,7 @@ import {
   withDebugTracing,
   withInMemoryScrolling,
   withPreloading,
+  withViewTransitions,
 } from '@angular/router';
 import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
 
@@ -29,7 +30,8 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
       }) /* withDebugTracing() */,
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
+      withViewTransitions({ skipInitialTransition: true })
     ),
     provideAnimations(),
     provideHttpClient(),
