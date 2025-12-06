@@ -168,6 +168,11 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
   }
 
   onShowFullMap() {
+    if (!this.place.location) {
+      console.log('There is no map set for this listing.', this.place);
+      return;
+    }
+
     this.modalCtrl
       .create({
         component: MapModalComponent,
