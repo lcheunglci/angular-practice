@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { AuthService } from './auth/auth.service';
+import { ThemeService } from './shared/services/theme.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Platform } from '@ionic/angular';
@@ -13,12 +14,21 @@ import { SplashScreen } from '@capacitor/splash-screen';
 })
 export class AppComponent implements OnInit, OnDestroy {
   authSub: Subscription = new Subscription();
+  themeSub: Subscription = new Subscription();
   private previousAuthState = false;
 
-  constructor(private authService: AuthService, private router: Router, private platform: Platform) {}
+  constructor(
+    private authService: AuthService,
+    private themeService: ThemeService,
+    private router: Router,
+    private platform: Platform,
+    private renderer: Renderer2,
+    private elementRef: ElementRef
+  ) {}
 
   ngOnDestroy(): void {
     this.authSub.unsubscribe();
+    this.themeSub.unsubscribe();
   }
 
   initializeApp() {
@@ -30,6 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.loadTheme();
     this.authSub.add(
       this.authService.userIsAuthenticated.subscribe((isAuth) => {
         if (!isAuth && this.previousAuthState !== isAuth) {
@@ -38,6 +49,25 @@ export class AppComponent implements OnInit, OnDestroy {
         this.previousAuthState = isAuth;
       })
     );
+  }
+
+  private loadTheme(): void {
+    this.themeService.loadSavedTheme().then(() => {
+      this.applyTheme(this.themeService.currentThemeValue);
+      this.themeSub = this.themeService.currentTheme.subscribe((theme) => {
+        this.applyTheme(theme);
+      });
+    });
+  }
+
+  private applyTheme(theme: string): void {
+    const ionApp = this.elementRef.nativeElement.querySelector('ion-app');
+    if (ionApp) {
+      this.renderer.removeClass(ionApp, 'theme-dark');
+      this.renderer.removeClass(ionApp, 'theme-blue');
+      this.renderer.removeClass(ionApp, 'theme-green');
+      this.renderer.addClass(ionApp, `theme-${theme}`);
+    }
   }
 
   onLogout() {

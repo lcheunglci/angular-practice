@@ -36,6 +36,9 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+@import './theme/themes';
+@import './theme/variables';
+
 .ion-invalid.ion-touched ion-label {
   color: var(--ion-color-danger);
 }

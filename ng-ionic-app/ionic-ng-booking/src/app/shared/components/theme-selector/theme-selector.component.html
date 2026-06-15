@@ -1,0 +1,8 @@
+<ion-item>
+  <ion-label>Theme:</ion-label>
+  <ion-select [value]="currentTheme" (ionChange)="onThemeChange($event.detail.value)" interface="popover">
+    <ion-select-option *ngFor="let theme of themes" [value]="theme">
+      {{ getThemeLabel(theme) }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
