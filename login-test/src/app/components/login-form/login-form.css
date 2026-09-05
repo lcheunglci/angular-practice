@@ -1,0 +1,28 @@
+form {
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .form-container {
+        display: inherit;
+        flex-direction: inherit;
+        gap: 8px;
+
+        .form-input {
+            display: flex;
+            justify-content: space-between;
+
+        }
+    }
+
+    .error-message {
+        color: red;
+        margin: 0;
+    }
+
+    button {
+        float: right;
+
+    }
+}
