@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LoginFormComponent > should be matching the snapshot 1`] = `
+<div
+  id="root3"
+  ng-version="22.0.0"
+>
+  <form
+    class="ng-untouched ng-pristine ng-valid"
+    novalidate=""
+  >
+    <div>
+      <label
+        for="username"
+      >
+        Username:
+      </label>
+      <input
+        class="ng-untouched ng-pristine ng-valid"
+        id="username"
+        name="username"
+        type="text"
+      />
+    </div>
+    <div>
+      <label
+        for="password"
+      >
+        Password:
+      </label>
+      <input
+        class="ng-untouched ng-pristine ng-valid"
+        id="password"
+        name="password"
+        type="password"
+      />
+    </div>
+    <!--container-->
+    <button
+      type="submit"
+    >
+      Log In
+    </button>
+  </form>
+</div>
+`;
