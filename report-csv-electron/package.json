@@ -25,7 +25,8 @@
       "dist/**/*",
       "main.js",
       "preload.js",
-      "db.js"
+      "db.js",
+      "menu.js"
     ],
     "asarUnpack": [
       "node_modules/better-sqlite3/**"

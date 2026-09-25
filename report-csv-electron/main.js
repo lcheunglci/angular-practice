@@ -1,5 +1,5 @@
 const path = require('path');
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
 const {
   openDb,
   parseCsv,
@@ -11,6 +11,7 @@ const {
   exportRowsToJson,
   exportRowsToSpreadsheet
 } = require('./db');
+const { buildApplicationMenu } = require('./menu');
 
 const DEV_URL = process.env.ELECTRON_START_URL;
 const PROD_INDEX = path.join(
@@ -93,6 +94,8 @@ app.whenReady().then(() => {
   const dbPath = path.join(app.getPath('userData'), 'reports.db');
   db = openDb(dbPath);
   registerIpc();
+
+  Menu.setApplicationMenu(buildApplicationMenu());
   createWindow();
 
   app.on('activate', () => {

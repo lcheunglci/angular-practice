@@ -1,15 +1,22 @@
 # Project Plans — Reports Insight
 
-A desktop application built with **Angular 20** + **Electron**, packaging CSV report files into a local **SQLite** database, with table viewing, renaming, deleting, and export to JSON / Excel / LibreOffice.
+A desktop application (**Reports Insight**) built with **Angular 20** + **Electron**, packaging CSV report files into a local **SQLite** database, with table viewing, renaming, deleting, and export to JSON / Excel / LibreOffice.
 
 ## Status
 
 Implemented and working. Run `npm run electron:start` to launch the desktop app.
 
+## Recent changes
+
+- Rebranded the app title/window name and installer product name from "ReportCsvElectron" to **Reports Insight**.
+- Replaced Electron's default top menu bar with a trimmed custom menu (`menu.js`): **File** (quit), **Edit** (clipboard ops), **View** (reload/devtools/zoom/fullscreen), **Help** (About dialog). Dropped the default **Window** menu and the "Learn More" Electron-docs link.
+- Added `sample-data/sample-report.csv` for manual testing.
+
 ## Architecture
 
 ```
 main.js                       Electron main process (window + IPC wiring)
+menu.js                       Custom top menu bar (File/Edit/View/Help)
 preload.js                    contextBridge -> window.reportApi (secure, nodeIntegration off)
 db.js                         SQLite layer + CSV parsing + export logic (main-process only)
 src/app/                      Angular renderer
@@ -17,7 +24,7 @@ src/app/                      Angular renderer
   report.service.ts           Angular service wrapping the IPC bridge
   reports-list.component.*    "All reports" screen
   report-detail.component.*   Per-report table + rename/delete
-  add-report-modal.component* File-picker + custom-name import dialog
+  add-report-modal.component.* File-picker + custom-name import dialog
   export.component.*          Export screen (JSON / xlsx / ods)
 sample-data/sample-report.csv Ready-made CSV for manual testing
 ```
@@ -27,6 +34,7 @@ Data always stays in the Electron main process (`better-sqlite3`). The renderer 
 ## Electron pieces
 
 - `main.js` loads the Angular build from `dist/report-csv-electron/browser/index.html`, or `http://localhost:4200` when `ELECTRON_START_URL` is set (dev mode; also opens DevTools).
+- App menu is built in `menu.js` from a trimmed template (no default Window menu, no Electron "Learn More" link); Help shows an **About Reports Insight** dialog. `menu.js` is required by `main.js` and is included in the Electron package (`files` in `package.json`).
 - DB file lives at `app.getPath('userData')/reports.db` (WAL mode).
 - Native module `better-sqlite3` is rebuilt for Electron's ABI on `postinstall` (`electron-rebuild -f -w better-sqlite3`).
 - `electron-builder` packages to `release/` (Windows: NSIS, macOS: DMG, Linux: AppImage); `better-sqlite3` is excluded from the asar archive via `asarUnpack`.
