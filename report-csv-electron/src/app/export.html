@@ -1,0 +1,50 @@
+<h1 class="h3 mb-3">Export</h1>
+
+@if (message) {
+  <div [class]="isError ? 'alert alert-danger' : 'alert alert-success'" role="alert">
+    {{ message }}
+  </div>
+}
+
+<div class="card">
+  <div class="card-body">
+    @if (loading) {
+      <div class="text-muted">Loading reports…</div>
+    } @else if (reports.length === 0) {
+      <div class="alert alert-info mb-0" role="alert">
+        No reports yet. Go to <strong>All reports</strong> and add a CSV first.
+      </div>
+    } @else {
+      <div class="mb-3">
+        <label class="form-label" for="export-report">Report</label>
+        <select id="export-report" class="form-select"
+                [(ngModel)]="selectedReportId">
+          @for (report of reports; track report.id) {
+            <option [value]="report.id">
+              {{ report.name }} ({{ report.rowCount }} rows)
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Format</label>
+        @for (fmt of formats; track fmt.value) {
+          <div class="form-check">
+            <input class="form-check-input" type="radio"
+                   name="exportFormat" [id]="'fmt-' + fmt.value"
+                   [value]="fmt.value" [(ngModel)]="format">
+            <label class="form-check-label" [for]="'fmt-' + fmt.value">
+              {{ fmt.label }}
+            </label>
+          </div>
+        }
+      </div>
+
+      <button class="btn btn-primary" (click)="export()"
+              [disabled]="exporting">
+        {{ exporting ? 'Exporting…' : 'Export' }}
+      </button>
+    }
+  </div>
+</div>

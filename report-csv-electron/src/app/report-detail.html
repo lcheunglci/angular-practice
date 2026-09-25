@@ -1,0 +1,79 @@
+@if (loading) {
+  <div class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading…</span>
+    </div>
+  </div>
+} @else if (error) {
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
+} @else if (report) {
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      @if (editingName) {
+        <div class="input-group mb-1" style="max-width: 480px">
+          <input type="text" class="form-control" [(ngModel)]="nameDraft"
+                 (keydown.enter)="saveName()">
+          <button class="btn btn-success" (click)="saveName()"
+                  [disabled]="savingName">
+            Save
+          </button>
+          <button class="btn btn-outline-secondary" (click)="editingName = false">
+            Cancel
+          </button>
+        </div>
+      } @else {
+        <h1 class="h3 mb-0">{{ report.name }}</h1>
+      }
+      <p class="text-muted mb-0">
+        {{ report.sourceFile }} · {{ report.rows.length }} rows ·
+        imported {{ report.importedAt | date: 'medium' }}
+      </p>
+    </div>
+    <div>
+      <button class="btn btn-sm btn-outline-secondary me-2"
+              (click)="startEditingName()">
+        Rename
+      </button>
+      <button class="btn btn-sm btn-outline-danger" (click)="delete()"
+              [disabled]="deleting">
+        {{ deleting ? 'Deleting…' : 'Delete report' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped align-middle">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Date</th>
+          <th scope="col">Order ID</th>
+          <th scope="col">Description</th>
+          <th scope="col" class="text-end">Cost</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of report.rows; track row.id) {
+          <tr>
+            <td>{{ $index + 1 }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.orderId }}</td>
+            <td>{{ row.description }}</td>
+            <td class="text-end">{{ row.cost }}</td>
+          </tr>
+        }
+      </tbody>
+      @if (report.rows.length > 0) {
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-end fw-bold">Total</td>
+            <td class="text-end fw-bold">{{ totalCost }}</td>
+          </tr>
+        </tfoot>
+      }
+    </table>
+  </div>
+
+  <button class="btn btn-outline-secondary" (click)="goBack()">Back</button>
+}

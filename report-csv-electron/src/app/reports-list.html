@@ -1,0 +1,57 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 mb-0">All reports</h1>
+    <p class="text-muted mb-0">Loaded CSV reports stored in the local SQLite database</p>
+  </div>
+  <button class="btn btn-primary" (click)="addReport()">
+    Add report
+  </button>
+</div>
+
+@if (loading) {
+  <div class="d-flex justify-content-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading…</span>
+    </div>
+  </div>
+} @else if (error) {
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+} @else if (reports.length === 0) {
+  <div class="alert alert-info" role="alert">
+    No reports yet. Click <strong>Add report</strong> to load a CSV file.
+  </div>
+} @else {
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Source file</th>
+          <th>Rows</th>
+          <th>Imported</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (report of reports; track report.id) {
+          <tr>
+            <td>{{ report.name }}</td>
+            <td class="text-muted">{{ report.sourceFile }}</td>
+            <td>{{ report.rowCount }}</td>
+            <td>{{ report.importedAt | date: 'medium' }}</td>
+            <td class="text-end">
+              <button class="btn btn-sm btn-outline-primary me-2"
+                      [routerLink]="['/reports', report.id]">
+                View
+              </button>
+              <button class="btn btn-sm btn-outline-danger"
+                      (click)="remove(report)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

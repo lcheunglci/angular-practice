@@ -1,0 +1,46 @@
+<div class="modal-header">
+  <h4 class="modal-title">Add report</h4>
+  <button type="button" class="btn-close"
+          (click)="activeModal.dismiss()"
+          aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  @if (error) {
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+  }
+
+  <div class="mb-3">
+    <label class="form-label">CSV file</label>
+    <div class="input-group">
+      <input type="text" class="form-control" readonly
+             [value]="selectedFile || 'No file selected'"
+             placeholder="Pick a CSV file">
+      <button class="btn btn-outline-secondary" (click)="pickFile()"
+              [disabled]="picking">
+        {{ picking ? 'Picking…' : 'Choose file' }}
+      </button>
+    </div>
+    <div class="form-text">
+      Expected columns: <code>date</code> (string),
+      <code>orderId</code> (number), <code>description</code> (string),
+      <code>cost</code> (number).
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label" for="report-name">Custom name (optional)</label>
+    <input id="report-name" type="text" class="form-control"
+           [(ngModel)]="name"
+           placeholder="Defaults to the file name">
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary"
+          (click)="activeModal.dismiss()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-primary" (click)="import()"
+          [disabled]="!selectedFile || importing">
+    {{ importing ? 'Importing…' : 'Import' }}
+  </button>
+</div>

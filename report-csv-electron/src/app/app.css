@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  height: 100%;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.sidebar .nav-link {
+  color: var(--bs-secondary);
+  border-radius: 0.375rem;
+}
+
+.sidebar .nav-link:hover {
+  color: var(--bs-white);
+}
+
+.sidebar .nav-link.active {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+}
