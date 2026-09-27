@@ -7,5 +7,6 @@ contextBridge.exposeInMainWorld('reportApi', {
   getReport: (id) => ipcRenderer.invoke('report:get', id),
   renameReport: (id, name) => ipcRenderer.invoke('report:rename', { id, name }),
   deleteReport: (id) => ipcRenderer.invoke('report:delete', id),
+  clearAllReports: () => ipcRenderer.invoke('report:clear'),
   exportReport: (id, format) => ipcRenderer.invoke('report:export', { id, format })
 });

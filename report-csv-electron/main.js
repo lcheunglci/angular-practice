@@ -8,6 +8,7 @@ const {
   insertReport,
   renameReport,
   deleteReport,
+  clearAllReports,
   exportRowsToJson,
   exportRowsToSpreadsheet
 } = require('./db');
@@ -70,6 +71,8 @@ function registerIpc() {
   );
 
   ipcMain.handle('report:delete', (_event, id) => deleteReport(db, id));
+
+  ipcMain.handle('report:clear', () => clearAllReports(db));
 
   ipcMain.handle('report:export', async (_event, { id, format }) => {
     const extensions =

@@ -120,6 +120,10 @@ function deleteReport(db, id) {
   return result.changes > 0;
 }
 
+function clearAllReports(db) {
+  return db.prepare('DELETE FROM reports').run().changes;
+}
+
 function exportRowsToJson(db, id, filePath) {
   const report = getReport(db, id);
   if (!report) return { ok: false, message: 'Report not found' };
@@ -156,6 +160,7 @@ module.exports = {
   insertReport,
   renameReport,
   deleteReport,
+  clearAllReports,
   exportRowsToJson,
   exportRowsToSpreadsheet
 };

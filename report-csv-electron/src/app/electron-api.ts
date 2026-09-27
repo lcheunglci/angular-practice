@@ -42,6 +42,7 @@ export interface ElectronReportApi {
   getReport(id: number): Promise<ReportDetail | null>;
   renameReport(id: number, name: string): Promise<ReportDetail | null>;
   deleteReport(id: number): Promise<boolean>;
+  clearAllReports(): Promise<number>;
   exportReport(id: number, format: ExportFormat): Promise<ExportResult>;
 }
 

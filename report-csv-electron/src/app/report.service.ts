@@ -28,6 +28,10 @@ export class ReportService {
     return this.requireApi().deleteReport(id);
   }
 
+  clearAllReports(): Promise<number> {
+    return this.requireApi().clearAllReports();
+  }
+
   exportReport(id: number, format: ExportFormat) {
     return this.requireApi().exportReport(id, format);
   }

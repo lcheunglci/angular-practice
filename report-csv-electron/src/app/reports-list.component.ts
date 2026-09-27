@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ReportService } from './report.service';
 import { ReportSummary } from './electron-api';
 import { AddReportModalComponent } from './add-report-modal.component';
+import { ConfirmClearAllComponent } from './confirm-clear-all.component';
 
 @Component({
   selector: 'app-reports-list',
@@ -40,6 +41,20 @@ export class ReportsListComponent implements OnInit {
       this.error = String(err);
     } finally {
       this.loading = false;
+    }
+  }
+
+  async clearAll(): Promise<void> {
+    if (this.reports.length === 0) return;
+    const modalRef = this.modalService.open(ConfirmClearAllComponent);
+    modalRef.componentInstance.reportCount = this.reports.length;
+    const confirmed = await modalRef.result.catch(() => false);
+    if (!confirmed) return;
+    try {
+      await this.reportService.clearAllReports();
+      await this.refresh();
+    } catch (err) {
+      this.error = String(err);
     }
   }
 

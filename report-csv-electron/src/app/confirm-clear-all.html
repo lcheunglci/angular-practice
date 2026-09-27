@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <h4 class="modal-title">Clear all reports</h4>
+  <button type="button" class="btn-close"
+          (click)="activeModal.dismiss()"
+          aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <div class="alert alert-danger" role="alert">
+    <strong>Warning — this cannot be undone.</strong>
+    You are about to permanently delete all
+    <strong>{{ reportCount }}</strong> report{{ reportCount === 1 ? '' : 's' }}
+    and every associated row from the local database. There is no undo.
+  </div>
+
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" id="approve-irreversible"
+           [(ngModel)]="agreed">
+    <label class="form-check-label" for="approve-irreversible">
+      I understand this action is irreversible and permanently deletes the data
+    </label>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary"
+          (click)="activeModal.dismiss()">
+    Cancel
+  </button>
+  <button type="button" class="btn btn-danger" (click)="confirm()"
+          [disabled]="!agreed">
+    Delete all
+  </button>
+</div>
