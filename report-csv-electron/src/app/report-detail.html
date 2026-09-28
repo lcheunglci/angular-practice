@@ -60,7 +60,7 @@
             <td>{{ row.date }}</td>
             <td>{{ row.orderId }}</td>
             <td>{{ row.description }}</td>
-            <td class="text-end">{{ row.cost }}</td>
+            <td class="text-end">{{ row.cost | currency }}</td>
           </tr>
         }
       </tbody>
@@ -68,7 +68,7 @@
         <tfoot>
           <tr>
             <td colspan="4" class="text-end fw-bold">Total</td>
-            <td class="text-end fw-bold">{{ totalCost }}</td>
+            <td class="text-end fw-bold">{{ totalCost | currency }}</td>
           </tr>
         </tfoot>
       }
