@@ -75,7 +75,7 @@ Columns (header row, in any order): `date` (string), `orderId` (number), `descri
 
 | Command | What it does |
 | --- | --- |
-| `npm run electron:dev` | `ng serve` + Electron on `localhost:4200` (live reload, DevTools) |
+| `npm run electron:dev` | `ng serve` (renderer HMR) + Electron via `nodemon` watching `main.js`/`preload.js`/`db.js`/`menu.js` (main process auto-restart) on `localhost:4200` |
 | `npm run electron:start` | `ng build` then run Electron against `dist/` |
 | `npm run electron:pack` | Build + unpacked app into `release/` |
 | `npm run electron:build` | Build + platform installer into `release/` |
@@ -83,6 +83,8 @@ Columns (header row, in any order): `date` (string), `orderId` (number), `descri
 | `npm run postinstall` | Rebuilds `better-sqlite3` for Electron (runs automatically on `npm install`) |
 
 ## Gotchas (hard-earned)
+
+- **Hot reload split** — `electron:dev` gives renderer HMR via `ng serve` plus main-process auto-restart via `nodemon`, but `nodemon` watches only `main.js`/`preload.js`/`db.js`/`menu.js`; renderer changes must not be watched by nodemon (they already reload through Angular). `electron:dev` (no built `dist/`) stays invalid for `electron:start` until you build.
 
 - **`file://` + Angular routing** — the built `index.html` must use `"baseHref": "./"` (angular.json) and the router uses `withHashLocation()`. Without both, the packaged window stays blank because `pushState` fails and relative script URLs resolve to the filesystem root.
 - **ng-bootstrap version** — Angular 20 needs `@ng-bootstrap/ng-bootstrap@19` (v21 requires Angular 22); also requires `@angular/localize`. Don't bump blindly.
