@@ -68,7 +68,7 @@ Columns (header row, in any order): `date` (string), `orderId` (number), `descri
 ## App flows
 
 - **All reports** — left-side table of loaded reports (name, source file, row count, imported date), each row links to its detail page; **Add report** opens the modal (file picker + optional custom name); **Delete** per row; **Clear all** empties the database (with confirmation).
-- **Report detail** — sticky-free table of rows with a total-cost footer; inline **Rename**; **Delete report** returns to the list.
+- **Report detail** — sticky-free table of rows with a total-cost footer; sortable columns (Date / Order ID / Description / Cost, click header to toggle asc/desc); per-row **Copy** button writes the row to the clipboard as CSV (quotes fields containing commas/quotes/newlines); inline **Rename**; **Delete report** returns to the list.
 - **Export** — pick a report, choose JSON / Excel (.xlsx) / LibreOffice (.ods), pick a save location.
 
 ## Commands

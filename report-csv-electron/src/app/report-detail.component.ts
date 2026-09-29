@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReportService } from './report.service';
-import { ReportDetail } from './electron-api';
+import { ReportDetail, ReportRow } from './electron-api';
 
 @Component({
   selector: 'app-report-detail',
@@ -20,6 +20,16 @@ export class ReportDetailComponent implements OnInit {
   nameDraft = '';
   savingName = false;
   deleting = false;
+  sortColumn: keyof ReportRow = 'date';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  copiedId: number | null = null;
+
+  readonly sortableColumns: { key: keyof ReportRow; label: string }[] = [
+    { key: 'date', label: 'Date' },
+    { key: 'orderId', label: 'Order ID' },
+    { key: 'description', label: 'Description' },
+    { key: 'cost', label: 'Cost' }
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -90,6 +100,62 @@ export class ReportDetailComponent implements OnInit {
     return (
       this.report?.rows.reduce((sum, row) => sum + (row.cost || 0), 0) ?? 0
     );
+  }
+
+  onSort(column: keyof ReportRow): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+  }
+
+  getDisplayedRows(): ReportRow[] {
+    const source = this.report?.rows ?? [];
+    const direction = this.sortDirection === 'asc' ? 1 : -1;
+    return [...source].sort((a, b) => {
+      const left = a[this.sortColumn];
+      const right = b[this.sortColumn];
+      if (this.sortColumn === 'date' || this.sortColumn === 'description') {
+        return String(left).localeCompare(String(right)) * direction;
+      }
+      return (Number(left) - Number(right)) * direction;
+    });
+  }
+
+  async copyRow(row: ReportRow): Promise<void> {
+    const csv = [
+      this.csvField(row.date),
+      this.csvField(row.orderId),
+      this.csvField(row.description),
+      this.csvField(row.cost)
+    ].join(',');
+
+    try {
+      await navigator.clipboard.writeText(csv);
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = csv;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
+    this.copiedId = row.id;
+    setTimeout(() => {
+      if (this.copiedId === row.id) {
+        this.copiedId = null;
+      }
+    }, 1500);
+  }
+
+  private csvField(value: unknown): string {
+    const text = value === null || value === undefined ? '' : String(value);
+    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
   }
 
   goBack(): void {
