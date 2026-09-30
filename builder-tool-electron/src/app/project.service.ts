@@ -1,0 +1,49 @@
+import { Injectable } from '@angular/core';
+import {
+  AddProjectResult,
+  BuildScript,
+  ElectronBuilderApi,
+  Project,
+  RunEvent,
+  StartRunResult
+} from './electron-api';
+
+@Injectable({ providedIn: 'root' })
+export class ProjectService {
+  listProjects(): Promise<Project[]> {
+    return this.requireApi().listProjects();
+  }
+
+  addProject(): Promise<AddProjectResult> {
+    return this.requireApi().addProject();
+  }
+
+  removeProject(projectPath: string): Promise<boolean> {
+    return this.requireApi().removeProject(projectPath);
+  }
+
+  runScript(projectPath: string, script: BuildScript): Promise<StartRunResult> {
+    return this.requireApi().runScript(projectPath, script);
+  }
+
+  cancelRun(runId: number): Promise<{ canceled: boolean }> {
+    return this.requireApi().cancelRun(runId);
+  }
+
+  runningRunId(): Promise<number | null> {
+    return this.requireApi().runningRunId();
+  }
+
+  onRunEvent(callback: (event: RunEvent) => void): () => void {
+    return this.requireApi().onRunEvent(callback);
+  }
+
+  private requireApi(): ElectronBuilderApi {
+    if (!window.builderApi) {
+      throw new Error(
+        'Electron API is not available. Run the app via Electron (npm run electron:dev or electron:start).'
+      );
+    }
+    return window.builderApi;
+  }
+}

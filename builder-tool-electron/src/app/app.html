@@ -1,0 +1,124 @@
+<header class="app-header">
+  <div>
+    <h1 class="h4 mb-1">Builder Tool</h1>
+    <p class="text-body-secondary small mb-0">
+      Runs <code>npm install</code> and <code>npm run build</code> in your local projects.
+    </p>
+  </div>
+  <button type="button" class="btn btn-primary" (click)="addProject()" [disabled]="busy">
+    Add project
+  </button>
+</header>
+
+<main class="app-body">
+  <section class="project-panel">
+    @if (loading) {
+      <p class="text-body-secondary small">Loading projects&hellip;</p>
+    } @else if (projects.length === 0) {
+      <p class="text-body-secondary small mb-0">
+        No projects yet. Use <strong>Add project</strong> to pick a folder that has a
+        <code>package.json</code>.
+      </p>
+    } @else {
+      @for (project of projects; track project.path) {
+        <article class="project-card">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div class="text-truncate">
+              <h2 class="h6 mb-1 text-truncate">{{ project.name }}</h2>
+              <code class="small text-body-secondary">{{ project.path }}</code>
+            </div>
+            @if (confirmRemovePath === project.path) {
+              <div class="d-flex gap-2 flex-shrink-0">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="remove(project)"
+                >
+                  Confirm
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="cancelRemove()"
+                >
+                  Keep
+                </button>
+              </div>
+            } @else {
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary flex-shrink-0"
+                (click)="askRemove(project)"
+                [disabled]="busy"
+              >
+                Remove
+              </button>
+            }
+          </div>
+
+          @if (!project.hasPackageJson) {
+            <p class="console-warning small mb-2 mt-2">
+              No <code>package.json</code> in this folder.
+            </p>
+          }
+
+          <div class="d-flex gap-2">
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="run(project, 'install')"
+              [disabled]="busy || !project.hasPackageJson"
+            >
+              Install
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary"
+              (click)="run(project, 'build')"
+              [disabled]="busy || !project.hasPackageJson"
+            >
+              Build
+            </button>
+          </div>
+        </article>
+      }
+    }
+  </section>
+
+  <section class="console-panel">
+    <div class="console-header">
+      <div class="text-truncate">
+        @if (activeRun; as run) {
+          <span class="console-status running">{{ run.projectName }} &mdash; {{ run.command }}</span>
+        } @else {
+          <span class="console-status">Idle</span>
+        }
+      </div>
+      <div class="d-flex gap-2 flex-shrink-0">
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearLog()">
+          Clear
+        </button>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger"
+          (click)="cancel()"
+          [disabled]="!activeRun"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+
+    @if (error) {
+      <p class="console-error small mb-0">{{ error }}</p>
+    }
+
+    <div #consoleView class="console-body">
+      @for (line of logLines; track $index) {
+        <div class="console-line" [class.stderr]="line.kind === 'stderr'">{{ line.text }}</div>
+      } @empty {
+        <p class="console-line empty">Output from the command appears here.</p>
+      }
+    </div>
+  </section>
+</main>
