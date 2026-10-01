@@ -242,4 +242,93 @@ describe('App', () => {
     expect(service.lastDeploy).toBe('C:/work/app-one');
     expect(fixture.componentInstance.activeRun?.command).toBe('deploy → C:/out');
   });
+
+  it('should show a failure banner when the build exits non-zero', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    button(fixture, 'Build')?.click();
+    await fixture.whenStable();
+
+    service.runEventHandler?.({
+      type: 'started',
+      runId: 1,
+      projectPath: 'C:/work/app-one',
+      script: 'build',
+      command: 'npm run build'
+    });
+    service.runEventHandler?.({ type: 'exit', runId: 1, code: 1 });
+    fixture.detectChanges();
+
+    const banner = elementOf(fixture).querySelector('.alert-danger');
+    expect(banner?.textContent).toContain('Build failed');
+    expect(banner?.textContent).toContain('Exit code 1');
+  });
+
+  it('should show a success banner when the build exits zero', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    button(fixture, 'Build')?.click();
+    await fixture.whenStable();
+
+    service.runEventHandler?.({ type: 'exit', runId: 1, code: 0 });
+    fixture.detectChanges();
+
+    const banner = elementOf(fixture).querySelector('.alert-success');
+    expect(banner?.textContent).toContain('Build succeeded');
+    expect(elementOf(fixture).querySelector('.alert-danger')).toBeNull();
+  });
+
+  it('should show a failure banner for an error event', async () => {
+    service.projects = [
+      { path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: 'C:/out' }
+    ];
+    const fixture = await render();
+
+    button(fixture, 'Deploy')?.click();
+    await fixture.whenStable();
+
+    service.runEventHandler?.({
+      type: 'error',
+      runId: 2,
+      message: 'No build output found under "dist". Run Build first.'
+    });
+    fixture.detectChanges();
+
+    const banner = elementOf(fixture).querySelector('.alert-danger');
+    expect(banner?.textContent).toContain('Deploy failed');
+    expect(banner?.textContent).toContain('No build output found');
+  });
+
+  it('should dismiss the banner on request', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    button(fixture, 'Build')?.click();
+    await fixture.whenStable();
+    service.runEventHandler?.({ type: 'exit', runId: 1, code: 1 });
+    fixture.detectChanges();
+    expect(elementOf(fixture).querySelector('.alert-danger')).not.toBeNull();
+
+    button(fixture, 'Dismiss')?.click();
+    fixture.detectChanges();
+    expect(elementOf(fixture).querySelector('.alert-danger')).toBeNull();
+  });
+
+  it('should clear the banner when the next run starts', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    button(fixture, 'Build')?.click();
+    await fixture.whenStable();
+    service.runEventHandler?.({ type: 'exit', runId: 1, code: 1 });
+    fixture.detectChanges();
+    expect(elementOf(fixture).querySelector('.alert-danger')).not.toBeNull();
+
+    button(fixture, 'Build')?.click();
+    fixture.detectChanges();
+
+    expect(elementOf(fixture).querySelector('.alert-danger')).toBeNull();
+  });
 });

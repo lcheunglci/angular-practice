@@ -64,6 +64,10 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
   has not been built yet.
 - **Console** — live-streamed output (stderr in red), a running status line, **Cancel**
   (tree-kill), and **Clear**. Only one command runs at a time.
+- **Result banner** — when a run ends, a dismissible Bootstrap alert spans the top of the console:
+  red `Build failed — Exit code N. See the console for details.` on a non-zero exit or an `error`
+  event (label follows the action: Install/Build/Deploy), green `… succeeded — Exit code 0.` on
+  success. Starting the next run or pressing Dismiss clears it.
 
 ## Commands
 

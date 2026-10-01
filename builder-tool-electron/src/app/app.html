@@ -133,6 +133,25 @@
       </div>
     </div>
 
+    @if (notice) {
+      <div
+        class="alert d-flex align-items-center gap-2 mb-0 rounded-0 py-2"
+        [class.alert-danger]="notice.status === 'failed'"
+        [class.alert-success]="notice.status === 'success'"
+        role="alert"
+      >
+        <strong class="flex-shrink-0">{{ notice.title }}</strong>
+        <span class="small flex-grow-1">{{ notice.detail }}</span>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-secondary flex-shrink-0"
+          (click)="dismissNotice()"
+        >
+          Dismiss
+        </button>
+      </div>
+    }
+
     @if (error) {
       <p class="console-error small mb-0">{{ error }}</p>
     }

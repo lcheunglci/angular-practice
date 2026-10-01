@@ -23,6 +23,12 @@ interface ActiveRun {
   command: string;
 }
 
+interface RunNotice {
+  status: 'success' | 'failed';
+  title: string;
+  detail: string;
+}
+
 const MAX_LOG_LINES = 2000;
 
 @Component({
@@ -38,6 +44,7 @@ export class App implements OnInit {
   projects: Project[] = [];
   logLines: LogLine[] = [];
   activeRun: ActiveRun | null = null;
+  notice: RunNotice | null = null;
   confirmRemovePath: string | null = null;
   error = '';
   loading = true;
@@ -136,6 +143,8 @@ export class App implements OnInit {
   async run(project: Project, script: RunAction): Promise<void> {
     this.error = '';
     this.logLines = [];
+    // The previous outcome is stale once a new run begins.
+    this.notice = null;
     this.runStarting = true;
     try {
       const isDeploy = script === 'deploy';
@@ -208,6 +217,7 @@ export class App implements OnInit {
   private applyRunEvent(event: RunEvent): void {
     switch (event.type) {
       case 'started':
+        this.notice = null;
         this.append('info', `$ ${event.command}`);
         this.append('info', `in ${event.projectPath}`);
         this.scrollToBottom();
@@ -220,6 +230,11 @@ export class App implements OnInit {
         break;
       case 'error':
         this.append('stderr', event.message);
+        this.notice = {
+          status: 'failed',
+          title: `${this.actionLabel(this.activeRun?.script)} failed`,
+          detail: event.message
+        };
         this.activeRun = null;
         break;
       case 'exit':
@@ -227,10 +242,29 @@ export class App implements OnInit {
           'info',
           event.code === 0 ? 'Finished successfully.' : `Exited with code ${event.code}.`
         );
+        this.notice = {
+          status: event.code === 0 ? 'success' : 'failed',
+          title:
+            event.code === 0
+              ? `${this.actionLabel(this.activeRun?.script)} succeeded`
+              : `${this.actionLabel(this.activeRun?.script)} failed`,
+          detail:
+            event.code === 0
+              ? 'Exit code 0.'
+              : `Exit code ${event.code}. See the console for details.`
+        };
         this.activeRun = null;
         this.scrollToBottom();
         break;
     }
+  }
+
+  private actionLabel(script?: string): string {
+    return script === 'install' ? 'Install' : script === 'deploy' ? 'Deploy' : 'Build';
+  }
+
+  dismissNotice(): void {
+    this.notice = null;
   }
 
   private append(kind: LogLine['kind'], text: string): void {
