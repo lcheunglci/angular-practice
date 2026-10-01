@@ -13,6 +13,7 @@ Implemented and working. Run `npm run electron:start` to launch the desktop app.
 main.js                       Electron main process (window + IPC wiring)
 preload.js                    contextBridge -> window.builderApi (secure, nodeIntegration off)
 runner.js                     spawns npm, streams stdout/stderr, cancel support (main-process only)
+deploy.js                     Resolves the built app under dist/ and copies it to the destination
 settings.js                   Project list persisted as JSON in app userData + list-shape helpers
 menu.js                       Custom top menu bar (File/Edit/View/Help)
 src/app/                      Angular renderer
@@ -44,7 +45,9 @@ preload bridge over IPC.
 | `listProjects()` | All saved projects (name, path, hasPackageJson) |
 | `addProject()` | OS folder-picker; refuses duplicates; ignores folders already listed |
 | `removeProject(projectPath)` | Remove from the saved list |
+| `setDeployDir(projectPath)` | Folder-picker for where the built app is deployed; stored on the project record |
 | `runScript(projectPath, script)` | Start `npm install` or `npm run build`; returns the runId |
+| `startDeploy(projectPath)` | Copy the built app to the project's deploy destination; returns the runId |
 | `cancelRun(runId)` | Kill the running command and its process tree |
 | `runningRunId()` | Currently running runId, or null |
 | `onRunEvent(cb)` | Subscribe to `run:event`; returns an unsubscribe function |
@@ -55,6 +58,10 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
 
 - **Project list** — saved folders with name, path, and Install/Build buttons. Folders without a
   `package.json` are flagged and have their actions disabled. Remove is a two-step inline confirm.
+- **Deploy** — each project has an optional destination folder (**Set…** picks it, `deployTo` on the
+  saved record). **Deploy** copies the built app there and streams into the same console. Disabled
+  until a destination is chosen, and reports `No build output found under "dist"` if the project
+  has not been built yet.
 - **Console** — live-streamed output (stderr in red), a running status line, **Cancel**
   (tree-kill), and **Clear**. Only one command runs at a time.
 
@@ -93,9 +100,15 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
 - **IPC event ordering** — the `started` event can arrive before the `invoke` reply updates the
   renderer; the renderer buffers events until it knows the runId (see `runStarting`/`pendingEvents`
   in `app.ts`).
-- **`projects:list` shape** — `settings.js` stores records as `{ path }`; `toProject` decorates a
-  *record*, so `list` must map `loadProjects().map(toProject)` — passing a plain string (as an
-  early bug did) throws `ERR_INVALID_ARG_TYPE` in the renderer.
+- **`projects:list` shape** — `settings.js` stores records as `{ path, deployTo? }`; `toProject`
+  decorates a *record*, so `list` must map `loadProjects().map(toProject)` — passing a plain string
+  (as an early bug did) throws `ERR_INVALID_ARG_TYPE` in the renderer.
+- **Deploy output location** — `deploy.js` finds the built app by looking for the folder containing
+  `index.html` under `dist/` (preferring a `browser` subfolder, i.e. Angular 20's
+  `@angular/build:application` layout `dist/<name>/browser`). The *contents* are copied so
+  `index.html` lands directly in the destination, overwriting existing files. Deploy shares the
+  single-run slot with npm (the slot is reserved synchronously, before the async source lookup, or
+  two runs could start at once).
 - **Node engine** — `electron-builder`/`@electron/rebuild` warn they want Node >= 22; on Node 20 the
   install and packaging still work for this project (no native modules to rebuild).
 - **Budget** — Bootstrap CSS pushes the initial bundle past the default 500 kB; the warning

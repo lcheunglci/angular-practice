@@ -5,6 +5,7 @@ import {
   ElectronBuilderApi,
   Project,
   RunEvent,
+  SetDeployResult,
   StartRunResult
 } from './electron-api';
 
@@ -22,8 +23,16 @@ export class ProjectService {
     return this.requireApi().removeProject(projectPath);
   }
 
+  setDeployDir(projectPath: string): Promise<SetDeployResult> {
+    return this.requireApi().setDeployDir(projectPath);
+  }
+
   runScript(projectPath: string, script: BuildScript): Promise<StartRunResult> {
     return this.requireApi().runScript(projectPath, script);
+  }
+
+  startDeploy(projectPath: string): Promise<StartRunResult> {
+    return this.requireApi().startDeploy(projectPath);
   }
 
   cancelRun(runId: number): Promise<{ canceled: boolean }> {

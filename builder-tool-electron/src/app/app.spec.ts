@@ -1,11 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { ProjectService } from './project.service';
-import { AddProjectResult, Project, RunEvent, StartRunResult } from './electron-api';
+import {
+  AddProjectResult,
+  Project,
+  RunEvent,
+  SetDeployResult,
+  StartRunResult
+} from './electron-api';
 
 class ProjectServiceStub {
   projects: Project[] = [];
   lastRun: { projectPath: string; script: string } | null = null;
+  lastDeploy: string | null = null;
+  lastDeployDir: string | null = null;
   removedPaths: string[] = [];
   runEventHandler: ((event: RunEvent) => void) | null = null;
 
@@ -22,9 +30,23 @@ class ProjectServiceStub {
     return Promise.resolve(true);
   }
 
+  setDeployDir(projectPath: string): Promise<SetDeployResult> {
+    this.lastDeployDir = projectPath;
+    const entry = this.projects.find((candidate) => candidate.path === projectPath);
+    if (!entry) {
+      return Promise.resolve({ canceled: true, set: false });
+    }
+    return Promise.resolve({ canceled: false, set: true, project: { ...entry, deployTo: 'C:/out' } });
+  }
+
   runScript(projectPath: string, script: string): Promise<StartRunResult> {
     this.lastRun = { projectPath, script };
     return Promise.resolve({ started: true, runId: 1 });
+  }
+
+  startDeploy(projectPath: string): Promise<StartRunResult> {
+    this.lastDeploy = projectPath;
+    return Promise.resolve({ started: true, runId: 2 });
   }
 
   cancelRun(): Promise<{ canceled: boolean }> {
@@ -91,8 +113,8 @@ describe('App', () => {
 
   it('should list saved projects', async () => {
     service.projects = [
-      { path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true },
-      { path: 'C:/work/app-two', name: 'app-two', hasPackageJson: true }
+      { path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null },
+      { path: 'C:/work/app-two', name: 'app-two', hasPackageJson: true, deployTo: null }
     ];
     const fixture = await render();
     expect(elementOf(fixture).querySelectorAll('.project-card').length).toBe(2);
@@ -101,7 +123,7 @@ describe('App', () => {
   });
 
   it('should warn and disable run actions for folders without a package.json', async () => {
-    service.projects = [{ path: 'C:/work/empty', name: 'empty', hasPackageJson: false }];
+    service.projects = [{ path: 'C:/work/empty', name: 'empty', hasPackageJson: false, deployTo: null }];
     const fixture = await render();
     expect(elementOf(fixture).textContent).toContain('No package.json in this folder.');
     expect(button(fixture, 'Install')?.disabled).toBe(true);
@@ -110,7 +132,7 @@ describe('App', () => {
   });
 
   it('should require a second click before removing a project', async () => {
-    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true }];
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
     const fixture = await render();
 
     button(fixture, 'Remove')?.click();
@@ -124,7 +146,7 @@ describe('App', () => {
   });
 
   it('should run the install action for the selected project', async () => {
-    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true }];
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
     const fixture = await render();
     button(fixture, 'Install')?.click();
     await fixture.whenStable();
@@ -132,7 +154,7 @@ describe('App', () => {
   });
 
   it('should stream output and clear the running state on exit', async () => {
-    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true }];
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
     const fixture = await render();
 
     button(fixture, 'Build')?.click();
@@ -160,7 +182,7 @@ describe('App', () => {
   });
 
   it('should ignore events belonging to a different run', async () => {
-    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true }];
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
     const fixture = await render();
 
     button(fixture, 'Build')?.click();
@@ -173,7 +195,7 @@ describe('App', () => {
   });
 
   it('should buffer events that arrive before the run id is known', async () => {
-    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true }];
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
     const fixture = await render();
 
     button(fixture, 'Build')?.click();
@@ -183,5 +205,41 @@ describe('App', () => {
     fixture.detectChanges();
 
     expect(elementOf(fixture).textContent).toContain('early line');
+  });
+
+  it('should show when no deploy destination is set and keep Deploy disabled', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    expect(elementOf(fixture).textContent).toContain('No deploy destination');
+    expect(button(fixture, 'Deploy')?.disabled).toBe(true);
+    expect(button(fixture, 'Set…')?.disabled).toBe(false);
+  });
+
+  it('should store a deploy destination and enable Deploy', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    button(fixture, 'Set…')?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(service.lastDeployDir).toBe('C:/work/app-one');
+    expect(elementOf(fixture).textContent).toContain('C:/out');
+    expect(button(fixture, 'Deploy')?.disabled).toBe(false);
+  });
+
+  it('should deploy the built app to the configured destination', async () => {
+    service.projects = [
+      { path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: 'C:/out' }
+    ];
+    const fixture = await render();
+
+    button(fixture, 'Deploy')?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(service.lastDeploy).toBe('C:/work/app-one');
+    expect(fixture.componentInstance.activeRun?.command).toBe('deploy → C:/out');
   });
 });

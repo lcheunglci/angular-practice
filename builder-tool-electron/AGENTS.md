@@ -22,10 +22,13 @@ command from this directory, never from the repo root.
 - `runner.js` — spawns `npm.cmd` with `shell: true` on Windows (bare `npm` is a `.cmd` shim),
   streams stdout/stderr line-by-line over IPC, one command at a time; cancel is a **tree-kill**
   (`taskkill /T /F` — killing the shell alone leaves npm's node children alive).
+- `deploy.js` — copies a project's built app (the `index.html`-bearing folder under `dist/`,
+  preferring a `browser` subfolder) to that project's deploy destination; shares the runner's
+  single-run slot, so reserve it **synchronously** before any `await`.
 - `settings.js` — project list persisted as JSON at `app.getPath('userData')/projects.json`.
   No database and no native modules, so there is **no `postinstall` electron-rebuild**.
-  Stored records are `{ path }`; `toProject()` decorates a *record*, so `projects:list` maps
-  `loadProjects().map(toProject)` — passing a raw string throws `ERR_INVALID_ARG_TYPE` in the
+  Stored records are `{ path, deployTo? }`; `toProject()` decorates a *record*, so `projects:list`
+  maps `loadProjects().map(toProject)` — passing a raw string throws `ERR_INVALID_ARG_TYPE` in the
   renderer (a past bug).
 - Angular: `electron-api.ts` (typed shape of `window.builderApi`) → `project.service.ts` (wrapper
   with a `requireApi()` guard). UI is a single `app.ts`/`app.html`/`app.css`.

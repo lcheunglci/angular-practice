@@ -7,7 +7,7 @@ import {
   ViewChild,
   inject
 } from '@angular/core';
-import { BuildScript, Project, RunEvent } from './electron-api';
+import { BuildScript, Project, RunAction, RunEvent } from './electron-api';
 import { ProjectService } from './project.service';
 
 interface LogLine {
@@ -19,7 +19,7 @@ interface ActiveRun {
   runId: number;
   projectPath: string;
   projectName: string;
-  script: BuildScript;
+  script: RunAction;
   command: string;
 }
 
@@ -113,12 +113,35 @@ export class App implements OnInit {
     }
   }
 
-  async run(project: Project, script: BuildScript): Promise<void> {
+  async setDeployDir(project: Project): Promise<void> {
+    this.error = '';
+    try {
+      const result = await this.projectService.setDeployDir(project.path);
+      if (result.canceled) return;
+      if (!result.set) {
+        this.error = result.reason ?? 'Deploy destination could not be set.';
+        return;
+      }
+      const updated = result.project;
+      if (updated) {
+        this.projects = this.projects.map(
+          (entry) => (entry.path === updated.path ? updated : entry)
+        );
+      }
+    } catch (err) {
+      this.error = String(err);
+    }
+  }
+
+  async run(project: Project, script: RunAction): Promise<void> {
     this.error = '';
     this.logLines = [];
     this.runStarting = true;
     try {
-      const result = await this.projectService.runScript(project.path, script);
+      const isDeploy = script === 'deploy';
+      const result = isDeploy
+        ? await this.projectService.startDeploy(project.path)
+        : await this.projectService.runScript(project.path, script as BuildScript);
       if (!result.started || result.runId === undefined) {
         this.error = result.reason ?? 'Command could not be started.';
         return;
@@ -128,7 +151,14 @@ export class App implements OnInit {
         projectPath: project.path,
         projectName: project.name,
         script,
-        command: script === 'install' ? 'npm install' : `npm run ${script}`
+        command:
+          isDeploy && project.deployTo
+            ? `deploy → ${project.deployTo}`
+            : script === 'install'
+              ? 'npm install'
+              : script === 'build'
+                ? 'npm run build'
+                : 'deploy'
       };
       this.flushPendingEvents();
     } catch (err) {

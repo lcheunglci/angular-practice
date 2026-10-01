@@ -27,8 +27,19 @@ function toProject(entry) {
   return {
     path: entry.path,
     name: path.basename(entry.path),
-    hasPackageJson: fs.existsSync(path.join(entry.path, 'package.json'))
+    hasPackageJson: fs.existsSync(path.join(entry.path, 'package.json')),
+    deployTo: entry.deployTo || null
   };
 }
 
-module.exports = { loadProjects, saveProjects, toProject };
+// Stores (or clears) the deploy destination for a project record.
+function setProjectDeploy(projectPath, deployTo) {
+  const projects = loadProjects();
+  const entry = projects.find((candidate) => candidate.path === projectPath);
+  if (!entry) return false;
+  entry.deployTo = deployTo || null;
+  saveProjects(projects);
+  return true;
+}
+
+module.exports = { loadProjects, saveProjects, setProjectDeploy, toProject };

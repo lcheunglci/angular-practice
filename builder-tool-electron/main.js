@@ -1,7 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
-const { loadProjects, saveProjects, toProject } = require('./settings');
-const { runningRunId, startRun, cancelRun } = require('./runner');
+const { loadProjects, saveProjects, setProjectDeploy, toProject } = require('./settings');
+const { runningRunId, startRun, startDeploy, cancelRun } = require('./runner');
 const { buildApplicationMenu } = require('./menu');
 
 const DEV_URL = process.env.ELECTRON_START_URL;
@@ -35,6 +35,19 @@ function createWindow() {
 }
 
 function registerIpc() {
+  // Delivers run:event to the window that started the run, falling back to any
+  // live window if that renderer was recreated mid-run.
+  const emitTo = (win) => (event) => {
+    if (win && !win.isDestroyed()) {
+      win.webContents.send('run:event', event);
+      return;
+    }
+    const fallback = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
+    if (fallback) {
+      fallback.webContents.send('run:event', event);
+    }
+  };
+
   ipcMain.handle('projects:list', () => loadProjects().map(toProject));
 
   ipcMain.handle('projects:add', async () => {
@@ -58,26 +71,36 @@ function registerIpc() {
     return { canceled: false, added: true, project: toProject({ path: dirPath }) };
   });
 
+  ipcMain.handle('projects:set-deploy', async (_event, projectPath) => {
+    const result = await dialog.showOpenDialog({
+      title: 'Deploy destination for this project',
+      buttonLabel: 'Select destination',
+      properties: ['openDirectory', 'createDirectory']
+    });
+    if (result.canceled || !result.filePaths.length) {
+      return { canceled: true, set: false };
+    }
+    if (!setProjectDeploy(projectPath, result.filePaths[0])) {
+      return { canceled: false, set: false, reason: 'Project is not in the saved list.' };
+    }
+    const record = loadProjects().find((entry) => entry.path === projectPath);
+    return { canceled: false, set: true, project: record ? toProject(record) : undefined };
+  });
+
   ipcMain.handle('projects:remove', (_event, projectPath) => {
     saveProjects(loadProjects().filter((entry) => entry.path !== projectPath));
     return true;
   });
 
   ipcMain.handle('run:start', (_event, payload) => {
-    // Use the window that sent the request so events follow it even after a re-create.
     const win = BrowserWindow.fromWebContents(_event.sender);
-    const result = startRun(payload, (event) => {
-      if (win && !win.isDestroyed()) {
-        win.webContents.send('run:event', event);
-      } else {
-        // Fall back to any live window (e.g. renderer recreated mid-run).
-        const fallback = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
-        if (fallback) {
-          fallback.webContents.send('run:event', event);
-        }
-      }
-    });
-    return result;
+    return startRun(payload, emitTo(win));
+  });
+
+  ipcMain.handle('deploy:start', (_event, projectPath) => {
+    const win = BrowserWindow.fromWebContents(_event.sender);
+    const record = loadProjects().find((entry) => entry.path === projectPath);
+    return startDeploy({ projectPath, deployTo: record ? record.deployTo : null }, emitTo(win));
   });
 
   ipcMain.handle('run:cancel', (_event, runId) => cancelRun(runId));

@@ -80,6 +80,30 @@
               Build
             </button>
           </div>
+
+          <div class="deploy-row">
+            <code class="deploy-path" title="{{ project.deployTo ?? '' }}">
+              <span class="deploy-target">{{ project.deployTo ?? 'No deploy destination' }}</span>
+            </code>
+            <div class="d-flex gap-2 flex-shrink-0">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                (click)="setDeployDir(project)"
+                [disabled]="busy"
+              >
+                Set&hellip;
+              </button>
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-info"
+                (click)="run(project, 'deploy')"
+                [disabled]="busy || !project.deployTo"
+              >
+                Deploy
+              </button>
+            </div>
+          </div>
         </article>
       }
     }
