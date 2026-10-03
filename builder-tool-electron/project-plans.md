@@ -64,6 +64,11 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
   has not been built yet.
 - **Console** — live-streamed output (stderr in red), a running status line, **Cancel**
   (tree-kill), and **Clear**. Only one command runs at a time.
+- **Running indicator** — build time is non-deterministic, so progress is
+  *indeterminate*: a Bootstrap `spinner-border-sm` next to the status line plus a slim
+  striped `progress-bar-animated` strip across the top of the console, both shown while
+  `busy` (a run is active *or* still starting). Between the click and the run id arriving,
+  the status reads `Starting…` rather than flashing `Idle`.
 - **Result banner** — when a run ends, a dismissible Bootstrap alert spans the top of the console:
   red `Build failed — Exit code N. See the console for details.` on a non-zero exit or an `error`
   event (label follows the action: Install/Build/Deploy), green `… succeeded — Exit code 0.` on

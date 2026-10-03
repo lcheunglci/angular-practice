@@ -111,12 +111,23 @@
 
   <section class="console-panel">
     <div class="console-header">
-      <div class="text-truncate">
-        @if (activeRun; as run) {
-          <span class="console-status running">{{ run.projectName }} &mdash; {{ run.command }}</span>
-        } @else {
-          <span class="console-status">Idle</span>
+      <div class="d-flex align-items-center gap-2 text-truncate">
+        @if (busy) {
+          <span
+            class="spinner-border spinner-border-sm text-primary flex-shrink-0"
+            role="status"
+            aria-hidden="true"
+          ></span>
         }
+        <div class="text-truncate">
+          @if (activeRun; as run) {
+            <span class="console-status running">{{ run.projectName }} &mdash; {{ run.command }}</span>
+          } @else if (starting) {
+            <span class="console-status running">Starting&hellip;</span>
+          } @else {
+            <span class="console-status">Idle</span>
+          }
+        </div>
       </div>
       <div class="d-flex gap-2 flex-shrink-0">
         <button type="button" class="btn btn-sm btn-outline-secondary" (click)="clearLog()">
@@ -132,6 +143,14 @@
         </button>
       </div>
     </div>
+
+    @if (busy) {
+      <div class="console-progress" aria-hidden="true">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
+        </div>
+      </div>
+    }
 
     @if (notice) {
       <div

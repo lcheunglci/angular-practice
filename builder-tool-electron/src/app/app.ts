@@ -70,6 +70,12 @@ export class App implements OnInit {
     return this.activeRun !== null || this.runStarting;
   }
 
+  // True between the click and the run id arriving, so the UI can say
+  // "Starting…" instead of briefly showing "Idle".
+  get starting(): boolean {
+    return this.runStarting;
+  }
+
   ngOnInit(): void {
     void this.refresh();
   }

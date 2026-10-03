@@ -88,6 +88,33 @@
   font-weight: 600;
 }
 
+/* Indeterminate progress strip: build time is unpredictable, so this only
+   signals "still working" rather than a real percentage. */
+.console-progress {
+  flex-shrink: 0;
+}
+
+.console-progress .progress {
+  height: 3px;
+  border-radius: 0;
+}
+
+/* Bootstrap's striped-bar animation relies on `--bs-progress-speed`, which does
+   not animate reliably here, so drive the stripe keyframes explicitly. */
+.console-progress .progress-bar-animated::after {
+  animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+  from {
+    background-position: 1rem 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
 .console-body {
   flex: 1;
   min-height: 0;

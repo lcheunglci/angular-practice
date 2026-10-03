@@ -331,4 +331,66 @@ describe('App', () => {
 
     expect(elementOf(fixture).querySelector('.alert-danger')).toBeNull();
   });
+
+  it('should show the spinner and progress strip while a run is active', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    const fixture = await render();
+
+    expect(elementOf(fixture).querySelector('.spinner-border')).toBeNull();
+    expect(elementOf(fixture).querySelector('.console-progress')).toBeNull();
+    expect(elementOf(fixture).textContent).toContain('Idle');
+
+    button(fixture, 'Build')?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(elementOf(fixture).querySelector('.spinner-border')).not.toBeNull();
+    expect(
+      elementOf(fixture).querySelector('.progress-bar-animated')
+    ).not.toBeNull();
+    expect(elementOf(fixture).textContent).toContain('npm run build');
+
+    service.runEventHandler?.({ type: 'exit', runId: 1, code: 0 });
+    fixture.detectChanges();
+
+    expect(elementOf(fixture).querySelector('.spinner-border')).toBeNull();
+    expect(elementOf(fixture).querySelector('.console-progress')).toBeNull();
+  });
+
+  it('should show the spinner while starting, before the run id arrives', async () => {
+    service.projects = [{ path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: null }];
+    let resolveStart!: (result: StartRunResult) => void;
+    service.runScript = () =>
+      new Promise<StartRunResult>((resolve) => {
+        resolveStart = resolve;
+      });
+
+    const fixture = await render();
+    button(fixture, 'Install')?.click();
+    fixture.detectChanges();
+
+    // The invoke reply has not landed yet, but the run is clearly in flight.
+    expect(elementOf(fixture).querySelector('.spinner-border')).not.toBeNull();
+    expect(elementOf(fixture).textContent).toContain('Starting…');
+    expect(elementOf(fixture).textContent).not.toContain('Idle');
+
+    resolveStart({ started: true, runId: 1 });
+    await fixture.whenStable();
+    fixture.detectChanges();
+    expect(elementOf(fixture).textContent).not.toContain('Starting…');
+  });
+
+  it('should show the spinner while deploying', async () => {
+    service.projects = [
+      { path: 'C:/work/app-one', name: 'app-one', hasPackageJson: true, deployTo: 'C:/out' }
+    ];
+    const fixture = await render();
+
+    button(fixture, 'Deploy')?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(elementOf(fixture).querySelector('.spinner-border')).not.toBeNull();
+    expect(elementOf(fixture).textContent).toContain('deploy → C:/out');
+  });
 });
