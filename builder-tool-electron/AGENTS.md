@@ -25,6 +25,9 @@ command from this directory, never from the repo root.
 - `deploy.js` — copies a project's built app (the `index.html`-bearing folder under `dist/`,
   preferring a `browser` subfolder) to that project's deploy destination; shares the runner's
   single-run slot, so reserve it **synchronously** before any `await`.
+- `tray.js` — system-tray icon reflecting run state (idle/running/success/failed) in the icon,
+  tooltip, menu, plus a Windows toast on completion when no window is focused. Fed by the *same*
+  `streamTo` callback as the renderer, so it must stay tolerant of a missing window.
 - `settings.js` — project list persisted as JSON at `app.getPath('userData')/projects.json`.
   No database and no native modules, so there is **no `postinstall` electron-rebuild**.
   Stored records are `{ path, deployTo? }`; `toProject()` decorates a *record*, so `projects:list`

@@ -35,6 +35,10 @@ preload bridge over IPC.
 - `runner.js` runs a single command at a time (`npm install` or `npm run <script>`), streams
   stdout/stderr line-by-line over IPC, emits `started`/`exit` events, and cancels by killing the
   process *tree* (`taskkill /T /F` on Windows — killing the shell alone leaves npm's children alive).
+- `tray.js` owns the system-tray icon: it watches the same run events and reflects progress/outcome
+  (idle → running → success/failed) in the icon, the tooltip, and the menu, plus a Windows toast on
+  completion. Icons are **generated at runtime** by a small PNG encoder rather than shipped as
+  binary assets.
 - `electron-builder` packages to `release/` (Windows: NSIS, macOS: DMG, Linux: AppImage). No
   `asarUnpack` needed (no native modules).
 
@@ -73,12 +77,19 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
   red `Build failed — Exit code N. See the console for details.` on a non-zero exit or an `error`
   event (label follows the action: Install/Build/Deploy), green `… succeeded — Exit code 0.` on
   success. Starting the next run or pressing Dismiss clears it.
+- **System tray** — the tray icon reports the same run state as the window, so a build is still
+  visible when the app is behind other windows: grey dash when idle, blue play while a command is
+  running, green check after success, red bang after a failure (the state reverts to idle after
+  8s/15s so the icon reflects the *latest* run, not an old one). The tooltip and the tray menu
+  (status line / **Open Builder Tool** / **Quit**) spell the state out in words, and a Windows toast
+  fires when a run finishes *and* no window is focused — the in-app banner is enough when you are
+  already looking at the app.
 
 ## Commands
 
 | Command | What it does |
 | --- | --- |
-| `npm run electron:dev` | `ng serve` (renderer HMR) + Electron via `nodemon` watching `main.js`/`preload.js`/`runner.js`/`settings.js`/`menu.js` (main-process auto-restart) on `localhost:4200` |
+| `npm run electron:dev` | `ng serve` (renderer HMR) + Electron via `nodemon` watching `main.js`/`preload.js`/`runner.js`/`settings.js`/`menu.js`/`deploy.js`/`tray.js` (main-process auto-restart) on `localhost:4200` |
 | `npm run electron:start` | `ng build` then run Electron against `dist/` |
 | `npm run electron:pack` | Build + unpacked app into `release/` |
 | `npm run electron:build` | Build + platform installer into `release/` |

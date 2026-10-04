@@ -8,7 +8,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "electron:dev": "concurrently -k \"npm run start\" \"wait-on http://localhost:4200 && cross-env ELECTRON_START_URL=http://localhost:4200 nodemon --watch main.js --watch preload.js --watch runner.js --watch settings.js --watch menu.js --watch deploy.js --exec electron .\"",
+    "electron:dev": "concurrently -k \"npm run start\" \"wait-on http://localhost:4200 && cross-env ELECTRON_START_URL=http://localhost:4200 nodemon --watch main.js --watch preload.js --watch runner.js --watch settings.js --watch menu.js --watch deploy.js --watch tray.js --exec electron .\"",
     "electron:start": "npm run build && electron .",
     "electron:pack": "npm run build && electron-builder --dir",
     "electron:build": "npm run build && electron-builder"
@@ -20,15 +20,16 @@
     "directories": {
       "output": "release"
     },
-    "files": [
-      "dist/**/*",
-      "main.js",
-      "preload.js",
-      "runner.js",
-      "settings.js",
-      "menu.js",
-      "deploy.js"
-    ],
+"files": [
+    "dist/**/*",
+    "main.js",
+    "preload.js",
+    "runner.js",
+    "settings.js",
+    "menu.js",
+    "deploy.js",
+    "tray.js"
+  ],
     "win": {
       "target": "nsis"
     },

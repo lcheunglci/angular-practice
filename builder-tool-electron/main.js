@@ -3,6 +3,7 @@ const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
 const { loadProjects, saveProjects, setProjectDeploy, toProject } = require('./settings');
 const { runningRunId, startRun, startDeploy, cancelRun } = require('./runner');
 const { buildApplicationMenu } = require('./menu');
+const tray = require('./tray');
 
 const DEV_URL = process.env.ELECTRON_START_URL;
 const PROD_INDEX = path.join(
@@ -36,16 +37,18 @@ function createWindow() {
 
 function registerIpc() {
   // Delivers run:event to the window that started the run, falling back to any
-  // live window if that renderer was recreated mid-run.
-  const emitTo = (win) => (event) => {
+  // live window if that renderer was recreated mid-run. The tray watches the
+  // same events so it can show progress/outcome while the window is hidden.
+  const streamTo = (win) => (event) => {
     if (win && !win.isDestroyed()) {
       win.webContents.send('run:event', event);
-      return;
+    } else {
+      const fallback = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
+      if (fallback) {
+        fallback.webContents.send('run:event', event);
+      }
     }
-    const fallback = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
-    if (fallback) {
-      fallback.webContents.send('run:event', event);
-    }
+    tray.handleRunEvent(event);
   };
 
   ipcMain.handle('projects:list', () => loadProjects().map(toProject));
@@ -94,13 +97,13 @@ function registerIpc() {
 
   ipcMain.handle('run:start', (_event, payload) => {
     const win = BrowserWindow.fromWebContents(_event.sender);
-    return startRun(payload, emitTo(win));
+    return startRun(payload, streamTo(win));
   });
 
   ipcMain.handle('deploy:start', (_event, projectPath) => {
     const win = BrowserWindow.fromWebContents(_event.sender);
     const record = loadProjects().find((entry) => entry.path === projectPath);
-    return startDeploy({ projectPath, deployTo: record ? record.deployTo : null }, emitTo(win));
+    return startDeploy({ projectPath, deployTo: record ? record.deployTo : null }, streamTo(win));
   });
 
   ipcMain.handle('run:cancel', (_event, runId) => cancelRun(runId));
@@ -108,9 +111,25 @@ function registerIpc() {
   ipcMain.handle('run:status', () => runningRunId());
 }
 
+// Required on Windows so toast notifications carry the app name/icon.
+app.setAppUserModelId('com.example.buildertool');
+
 app.whenReady().then(() => {
   Menu.setApplicationMenu(buildApplicationMenu());
   const win = createWindow();
+
+  tray.initTray({
+    onShow: () => {
+      const existing = BrowserWindow.getAllWindows().find((w) => !w.isDestroyed());
+      if (!existing) {
+        createWindow();
+        return;
+      }
+      if (existing.isMinimized()) existing.restore();
+      existing.show();
+      existing.focus();
+    }
+  });
 
   registerIpc();
 
@@ -120,6 +139,8 @@ app.whenReady().then(() => {
     }
   });
 });
+
+app.on('before-quit', () => tray.destroyTray());
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
