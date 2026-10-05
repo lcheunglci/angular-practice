@@ -3,6 +3,7 @@ import {
   ElectronReportApi,
   ExportFormat,
   ReportDetail,
+  ReportRowUpdate,
   ReportSummary
 } from './electron-api';
 
@@ -22,6 +23,10 @@ export class ReportService {
 
   renameReport(id: number, name: string): Promise<ReportDetail | null> {
     return this.requireApi().renameReport(id, name);
+  }
+
+  updateRow(id: number, values: ReportRowUpdate) {
+    return this.requireApi().updateRow(id, values);
   }
 
   deleteReport(id: number): Promise<boolean> {

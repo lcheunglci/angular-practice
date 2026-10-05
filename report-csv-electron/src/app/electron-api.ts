@@ -24,6 +24,13 @@ export interface ReportDetail {
 
 export type ExportFormat = 'json' | 'xlsx' | 'ods';
 
+export interface ReportRowUpdate {
+  date: string;
+  orderId: number;
+  description: string;
+  cost: number;
+}
+
 export type OpenCsvResult =
   | { canceled: true }
   | { canceled: false; filePath: string };
@@ -41,6 +48,7 @@ export interface ElectronReportApi {
   listReports(): Promise<ReportSummary[]>;
   getReport(id: number): Promise<ReportDetail | null>;
   renameReport(id: number, name: string): Promise<ReportDetail | null>;
+  updateRow(id: number, values: ReportRowUpdate): Promise<ReportRow | null>;
   deleteReport(id: number): Promise<boolean>;
   clearAllReports(): Promise<number>;
   exportReport(id: number, format: ExportFormat): Promise<ExportResult>;

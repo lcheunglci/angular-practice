@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReportService } from './report.service';
-import { ReportDetail, ReportRow } from './electron-api';
+import { ReportDetail, ReportRow, ReportRowUpdate } from './electron-api';
 
 @Component({
   selector: 'app-report-detail',
@@ -23,6 +23,10 @@ export class ReportDetailComponent implements OnInit {
   sortColumn: keyof ReportRow = 'date';
   sortDirection: 'asc' | 'desc' = 'asc';
   copiedId: number | null = null;
+  editMode = false;
+  drafts: Record<number, ReportRowUpdate> = {};
+  rowErrors: Record<number, string> = {};
+  savingRowId: number | null = null;
 
   readonly sortableColumns: { key: keyof ReportRow; label: string }[] = [
     { key: 'date', label: 'Date' },
@@ -156,6 +160,93 @@ export class ReportDetailComponent implements OnInit {
   private csvField(value: unknown): string {
     const text = value === null || value === undefined ? '' : String(value);
     return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  }
+
+  toggleEditMode(): void {
+    this.drafts = {};
+    this.rowErrors = {};
+    if (this.editMode) {
+      this.editMode = false;
+      return;
+    }
+    this.editMode = true;
+    for (const row of this.report?.rows ?? []) {
+      this.drafts[row.id] = this.toDraft(row);
+    }
+  }
+
+  isDirty(row: ReportRow): boolean {
+    const draft = this.drafts[row.id];
+    if (!draft) return false;
+    const original = this.toDraft(row);
+    return (
+      draft.date !== original.date ||
+      Number(draft.orderId) !== Number(original.orderId) ||
+      draft.description !== original.description ||
+      Number(draft.cost) !== Number(original.cost)
+    );
+  }
+
+  async saveRow(row: ReportRow): Promise<void> {
+    const draft = this.drafts[row.id];
+    if (!draft) return;
+
+    const error = this.validateDraft(draft);
+    if (error) {
+      this.rowErrors[row.id] = error;
+      return;
+    }
+
+    this.savingRowId = row.id;
+    try {
+      const updated = await this.reportService.updateRow(row.id, {
+        date: draft.date.trim(),
+        orderId: Number(draft.orderId),
+        description: draft.description,
+        cost: Number(draft.cost)
+      });
+      if (updated && this.report) {
+        const index = this.report.rows.findIndex((r) => r.id === row.id);
+        if (index > -1) {
+          this.report.rows[index] = updated;
+        }
+        this.drafts[row.id] = this.toDraft(updated);
+      }
+      this.rowErrors[row.id] = '';
+    } catch (err) {
+      this.rowErrors[row.id] = String(err);
+    } finally {
+      this.savingRowId = null;
+    }
+  }
+
+  cancelRow(row: ReportRow): void {
+    this.drafts[row.id] = this.toDraft(row);
+    this.rowErrors[row.id] = '';
+  }
+
+  private toDraft(row: ReportRow): ReportRowUpdate {
+    return {
+      date: row.date,
+      orderId: row.orderId,
+      description: row.description,
+      cost: row.cost
+    };
+  }
+
+  private validateDraft(draft: ReportRowUpdate): string {
+    if (!draft.date.trim()) {
+      return 'Date is required';
+    }
+    const orderId = Number(draft.orderId);
+    if (String(draft.orderId).trim() === '' || !Number.isInteger(orderId)) {
+      return 'Order ID must be a whole number';
+    }
+    const cost = Number(draft.cost);
+    if (String(draft.cost).trim() === '' || !Number.isFinite(cost)) {
+      return 'Cost must be a number';
+    }
+    return '';
   }
 
   goBack(): void {

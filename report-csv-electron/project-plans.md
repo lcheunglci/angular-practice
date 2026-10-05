@@ -12,6 +12,7 @@ Implemented and working. Run `npm run electron:start` to launch the desktop app.
 - Replaced Electron's default top menu bar with a trimmed custom menu (`menu.js`): **File** (quit), **Edit** (clipboard ops), **View** (reload/devtools/zoom/fullscreen), **Help** (About dialog). Dropped the default **Window** menu and the "Learn More" Electron-docs link.
 - Added `sample-data/sample-report.csv` for manual testing.
 - Added a **Clear all** action on the All reports screen that deletes every report and all of its rows (`report:clear` IPC); it opens a warning modal with an "irreversible" checkbox that must be agreed to before proceeding.
+- Added an **Edit rows** mode on the report detail screen: cells become inline inputs with per-row Save/Cancel and validation (whole-number Order ID, numeric Cost, required Date), persisting via `report:update-row` IPC.
 
 ## Architecture
 
@@ -61,6 +62,7 @@ Columns (header row, in any order): `date` (string), `orderId` (number), `descri
 | `listReports()` | All reports with row counts |
 | `getReport(id)` | Single report + all rows |
 | `renameReport(id, name)` | Rename report |
+| `updateRow(id, values)` | Persist an edited row (date/orderId/description/cost); returns the updated row |
 | `deleteReport(id)` | Delete report (cascade rows) |
 | `clearAllReports()` | Delete all reports and their rows; returns count deleted |
 | `exportReport(id, format)` | Save dialog, then write `json`, `xlsx`, or `ods` |
@@ -68,7 +70,7 @@ Columns (header row, in any order): `date` (string), `orderId` (number), `descri
 ## App flows
 
 - **All reports** — left-side table of loaded reports (name, source file, row count, imported date), each row links to its detail page; **Add report** opens the modal (file picker + optional custom name); **Delete** per row; **Clear all** empties the database (with confirmation).
-- **Report detail** — sticky-free table of rows with a total-cost footer; sortable columns (Date / Order ID / Description / Cost, click header to toggle asc/desc); per-row **Copy** button writes the row to the clipboard as CSV (quotes fields containing commas/quotes/newlines); inline **Rename**; **Delete report** returns to the list.
+- **Report detail** — sticky-free table of rows with a total-cost footer; sortable columns (Date / Order ID / Description / Cost, click header to toggle asc/desc); per-row **Copy** button writes the row to the clipboard as CSV (quotes fields containing commas/quotes/newlines); **Edit rows** mode turns cells into inputs with per-row Save/Cancel + validation; inline **Rename**; **Delete report** returns to the list.
 - **Export** — pick a report, choose JSON / Excel (.xlsx) / LibreOffice (.ods), pick a save location.
 
 ## Commands

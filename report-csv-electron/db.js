@@ -115,6 +115,22 @@ function renameReport(db, id, name) {
   return getReport(db, id);
 }
 
+function updateRow(db, rowId, values) {
+  const result = db.prepare(
+    'UPDATE report_rows SET date = ?, order_id = ?, description = ?, cost = ? WHERE id = ?'
+  ).run(values.date, values.orderId, values.description, values.cost, rowId);
+
+  if (result.changes === 0) return null;
+  const row = db.prepare('SELECT * FROM report_rows WHERE id = ?').get(rowId);
+  return {
+    id: row.id,
+    date: row.date,
+    orderId: row.order_id,
+    description: row.description,
+    cost: row.cost
+  };
+}
+
 function deleteReport(db, id) {
   const result = db.prepare('DELETE FROM reports WHERE id = ?').run(id);
   return result.changes > 0;
@@ -159,6 +175,7 @@ module.exports = {
   getReport,
   insertReport,
   renameReport,
+  updateRow,
   deleteReport,
   clearAllReports,
   exportRowsToJson,

@@ -7,6 +7,7 @@ const {
   getReport,
   insertReport,
   renameReport,
+  updateRow,
   deleteReport,
   clearAllReports,
   exportRowsToJson,
@@ -68,6 +69,10 @@ function registerIpc() {
 
   ipcMain.handle('report:rename', (_event, { id, name }) =>
     renameReport(db, id, name.trim())
+  );
+
+  ipcMain.handle('report:update-row', (_event, { id, values }) =>
+    updateRow(db, id, values)
   );
 
   ipcMain.handle('report:delete', (_event, id) => deleteReport(db, id));
