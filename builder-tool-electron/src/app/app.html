@@ -40,7 +40,8 @@
                   [id]="'project-name-' + $index"
                   type="text"
                   class="form-control form-control-sm"
-                  [(ngModel)]="draft.name"
+                  [value]="draft.name"
+                  (input)="patchDraft(project.path, 'name', $event)"
                 />
               </div>
               <div>
@@ -50,7 +51,8 @@
                   type="text"
                   class="form-control form-control-sm font-monospace"
                   spellcheck="false"
-                  [(ngModel)]="draft.path"
+                  [value]="draft.path"
+                  (input)="patchDraft(project.path, 'path', $event)"
                   (keydown.enter)="saveEdit(project)"
                 />
               </div>
@@ -64,7 +66,8 @@
                   class="form-control form-control-sm font-monospace"
                   spellcheck="false"
                   placeholder="Leave empty for no destination"
-                  [(ngModel)]="draft.deployTo"
+                  [value]="draft.deployTo"
+                  (input)="patchDraft(project.path, 'deployTo', $event)"
                   (keydown.enter)="saveEdit(project)"
                 />
               </div>
@@ -98,7 +101,15 @@
                 <h2 class="h6 mb-1 text-truncate">{{ project.name }}</h2>
                 <code class="small text-body-secondary">{{ project.path }}</code>
               </div>
-              @if (confirmRemovePath === project.path) {
+              @if (editMode) {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary flex-shrink-0"
+                  (click)="startEdit(project)"
+                >
+                  Edit
+                </button>
+              } @else if (confirmRemovePath === project.path) {
                 <div class="d-flex gap-2 flex-shrink-0">
                   <button
                     type="button"
@@ -127,54 +138,60 @@
               }
             </div>
 
-            @if (!project.hasPackageJson) {
-              <p class="console-warning small mb-2 mt-2">
-                No <code>package.json</code> in this folder.
-              </p>
+            @if (!editMode) {
+              <div class="d-flex gap-2">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="run(project, 'install')"
+                  [disabled]="busy || !project.hasPackageJson"
+                >
+                  Install
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="run(project, 'build')"
+                  [disabled]="busy || !project.hasPackageJson"
+                >
+                  Build
+                </button>
+              </div>
             }
 
-            <div class="d-flex gap-2">
-              <button
-                type="button"
-                class="btn btn-sm btn-outline-secondary"
-                (click)="run(project, 'install')"
-                [disabled]="busy || !project.hasPackageJson"
-              >
-                Install
-              </button>
-              <button
-                type="button"
-                class="btn btn-sm btn-outline-primary"
-                (click)="run(project, 'build')"
-                [disabled]="busy || !project.hasPackageJson"
-              >
-                Build
-              </button>
-            </div>
-
+            <!-- The destination stays visible while editing so a cancelled or
+                 saved change can still be read back. -->
             <div class="deploy-row">
               <code class="deploy-path" title="{{ project.deployTo ?? '' }}">
                 <span class="deploy-target">{{ project.deployTo ?? 'No deploy destination' }}</span>
               </code>
-              <div class="d-flex gap-2 flex-shrink-0">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-secondary"
-                  (click)="setDeployDir(project)"
-                  [disabled]="busy"
-                >
-                  Set&hellip;
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-info"
-                  (click)="run(project, 'deploy')"
-                  [disabled]="busy || !project.deployTo"
-                >
-                  Deploy
-                </button>
-              </div>
+              @if (!editMode) {
+                <div class="d-flex gap-2 flex-shrink-0">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    (click)="setDeployDir(project)"
+                    [disabled]="busy"
+                  >
+                    Set&hellip;
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-info"
+                    (click)="run(project, 'deploy')"
+                    [disabled]="busy || !project.deployTo"
+                  >
+                    Deploy
+                  </button>
+                </div>
+              }
             </div>
+          }
+
+          @if (!project.hasPackageJson) {
+            <p class="console-warning small mb-2 mt-2">
+              No <code>package.json</code> in this folder.
+            </p>
           }
         </article>
       }

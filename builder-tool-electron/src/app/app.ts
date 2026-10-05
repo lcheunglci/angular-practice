@@ -7,7 +7,6 @@ import {
   ViewChild,
   inject
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BuildScript, Project, RunAction, RunEvent } from './electron-api';
 import { ProjectService } from './project.service';
 
@@ -43,7 +42,7 @@ const MAX_LOG_LINES = 2000;
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [FormsModule],
+  imports: [],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -152,12 +151,23 @@ export class App implements OnInit {
     return this.savingPaths[projectPath] === true;
   }
 
-  // Cancel restores the stored values so the row stays in edit mode. The
-  // inputs are two-way bound, so resetting the draft really does reset the
-  // text the user typed — a one-way [value] binding would not, because Angular
-  // only rewrites a binding when its cached value changed.
-  cancelEdit(project: Project): void {
+  patchDraft(projectPath: string, field: keyof ProjectDraft, event: Event): void {
+    const draft = this.drafts[projectPath];
+    if (!draft) return;
+    draft[field] = (event.target as HTMLInputElement).value;
+  }
+
+  // Save and Cancel both leave the row's edit state, which destroys its inputs.
+  // That is deliberate: a one-way [value] binding is only rewritten when the
+  // bound value differs from Angular's cached copy, so resetting the draft alone
+  // would leave text the user typed sitting in the box.
+  startEdit(project: Project): void {
     this.drafts = { ...this.drafts, [project.path]: this.draftOf(project) };
+    this.rowErrors = this.withoutKey(this.rowErrors, project.path);
+  }
+
+  cancelEdit(project: Project): void {
+    this.drafts = this.withoutKey(this.drafts, project.path);
     this.rowErrors = this.withoutKey(this.rowErrors, project.path);
   }
 
@@ -184,11 +194,6 @@ export class App implements OnInit {
         entry.path === project.path ? updated : entry
       );
       this.drafts = this.withoutKey(this.drafts, project.path);
-      // A changed folder becomes the new identity, so re-key the draft to keep
-      // the row editable for the rest of edit mode.
-      if (this.editMode) {
-        this.drafts = { ...this.drafts, [updated.path]: this.draftOf(updated) };
-      }
       this.rowErrors = this.withoutKey(this.rowErrors, project.path);
     } catch (err) {
       this.rowErrors = { ...this.rowErrors, [project.path]: String(err) };

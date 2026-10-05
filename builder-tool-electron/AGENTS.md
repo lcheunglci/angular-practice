@@ -30,11 +30,16 @@ command from this directory, never from the repo root.
   `streamTo` callback as the renderer, so it must stay tolerant of a missing window.
 - `settings.js` — project list persisted as JSON at `app.getPath('userData')/projects.json`.
   No database and no native modules, so there is **no `postinstall` electron-rebuild**.
-  Stored records are `{ path, deployTo? }`; `toProject()` decorates a *record*, so `projects:list`
+  Stored records are `{ path, name?, deployTo? }`; `toProject()` decorates a *record*, so `projects:list`
   maps `loadProjects().map(toProject)` — passing a raw string throws `ERR_INVALID_ARG_TYPE` in the
-  renderer (a past bug).
+  renderer (a past bug). The folder is the record's identity, so `updateProject()` validates it
+  (absolute, exists, not another record's folder) and re-keys the record on change.
 - Angular: `electron-api.ts` (typed shape of `window.builderApi`) → `project.service.ts` (wrapper
   with a `requireApi()` guard). UI is a single `app.ts`/`app.html`/`app.css`.
+- **Edit mode** — header toggle swaps each row's name/folder/destination to textboxes with per-row
+  Save/Cancel. Inputs use one-way `[value]` + `(input)`, **not** `ngModel`, and Save/Cancel leave the
+  row's edit state so the inputs are *destroyed*; that is what makes a reset actually clear typed
+  text. Restoring the draft in place silently does nothing — see the gotchas list.
 
 ## Gotchas
 

@@ -50,6 +50,7 @@ preload bridge over IPC.
 | `addProject()` | OS folder-picker; refuses duplicates; ignores folders already listed |
 | `removeProject(projectPath)` | Remove from the saved list |
 | `setDeployDir(projectPath)` | Folder-picker for where the built app is deployed; stored on the project record |
+| `updateProject(projectPath, changes)` | Save edited `name` / `path` / `deployTo`; validates and returns `{ updated, reason?, project? }` |
 | `runScript(projectPath, script)` | Start `npm install` or `npm run build`; returns the runId |
 | `startDeploy(projectPath)` | Copy the built app to the project's deploy destination; returns the runId |
 | `cancelRun(runId)` | Kill the running command and its process tree |
@@ -62,6 +63,14 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
 
 - **Project list** — saved folders with name, path, and Install/Build buttons. Folders without a
   `package.json` are flagged and have their actions disabled. Remove is a two-step inline confirm.
+- **Edit mode** — the header **Edit** toggle turns every row's name, folder, and deploy destination
+  into textboxes; **Done** discards anything unsaved. Each row commits independently with
+  **Save**/**Cancel** (Enter also saves), and validation errors appear on the row itself rather than
+  in a global banner. Run controls are hidden while editing so a half-typed path can never be the
+  target of a command, and a saved destination stays visible on rows that are not being edited.
+  `name` is now stored on the record (`{ path, name?, deployTo? }`) and survives a folder change;
+  a blank name falls back to the folder name. Because the folder is the record's identity, editing
+  it re-keys the record, so lookups by the old path stop working.
 - **Deploy** — each project has an optional destination folder (**Set…** picks it, `deployTo` on the
   saved record). **Deploy** copies the built app there and streams into the same console. Disabled
   until a destination is chosen, and reports `No build output found under "dist"` if the project
@@ -120,9 +129,15 @@ Run events: `started`, `stdout`, `stderr`, `exit`, `error`.
 - **IPC event ordering** — the `started` event can arrive before the `invoke` reply updates the
   renderer; the renderer buffers events until it knows the runId (see `runStarting`/`pendingEvents`
   in `app.ts`).
-- **`projects:list` shape** — `settings.js` stores records as `{ path, deployTo? }`; `toProject`
+- **`projects:list` shape** — `settings.js` stores records as `{ path, name?, deployTo? }`; `toProject`
   decorates a *record*, so `list` must map `loadProjects().map(toProject)` — passing a plain string
   (as an early bug did) throws `ERR_INVALID_ARG_TYPE` in the renderer.
+- **One-way `[value]` needs a destroyed input to reset** — edit mode binds `[value]` plus an
+  `(input)` handler rather than `ngModel`, because Angular only rewrites a binding when the bound
+  value differs from its cached copy; text the user typed would survive a "reset the draft" (and
+  `ngModel`'s async view write can desync from the model, after which a reset is skipped as a no-op).
+  Save and Cancel therefore both leave the row's edit state, which **destroys** its inputs. Do not
+  "simplify" that into restoring the draft in place.
 - **Deploy output location** — `deploy.js` finds the built app by looking for the folder containing
   `index.html` under `dist/` (preferring a `browser` subfolder, i.e. Angular 20's
   `@angular/build:application` layout `dist/<name>/browser`). The *contents* are copied so

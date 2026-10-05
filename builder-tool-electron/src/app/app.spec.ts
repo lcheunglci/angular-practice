@@ -435,13 +435,12 @@ describe('App', () => {
       return fixture;
     }
 
-    // ngModel writes the view from a promise that whenStable() does not track, so
-    // a real macrotask is needed to observe the updated textbox.
+    // Rebuilding a row's inputs is synchronous, but a save resolves a promise
+    // first, so both are needed before reading the DOM.
     async function settle(fixture: ComponentFixture<App>): Promise<void> {
       fixture.detectChanges();
       await fixture.whenStable();
       fixture.detectChanges();
-      await new Promise((resolve) => setTimeout(resolve, 0));
     }
 
     function inputs(fixture: ComponentFixture<App>): HTMLInputElement[] {
@@ -464,8 +463,21 @@ describe('App', () => {
       expect(inputs(fixture)[2].value).toBe('C:/out/one');
       expect(inputs(fixture)[3].value).toBe('app-two');
       // Read-only markup is gone while editing.
-      expect(elementOf(fixture).querySelector('.deploy-row')).toBeNull();
+      // Run controls are hidden while every row is being edited.
       expect(button(fixture, 'Build')).toBeNull();
+      expect(button(fixture, 'Deploy')).toBeNull();
+      expect(elementOf(fixture).querySelector('.deploy-row')).toBeNull();
+    });
+
+    it('should show the saved destination on a row that is not being edited', async () => {
+      const fixture = await renderEditable();
+      // Cancelling row 0 returns it to read-only, where its destination shows.
+      button(fixture, 'Cancel')?.click();
+      await settle(fixture);
+
+      expect(elementOf(fixture).querySelector('.deploy-row')?.textContent).toContain(
+        'C:/out/one'
+      );
     });
 
     it('should offer a Done button and discard drafts when leaving edit mode', async () => {
@@ -495,27 +507,27 @@ describe('App', () => {
         changes: { name: 'renamed', path: 'C:/work/app-one', deployTo: 'C:/out/two' }
       });
 
-      // Leaving edit mode shows the saved values as text again.
-      button(fixture, 'Done')?.click();
-      fixture.detectChanges();
+      // The saved row leaves edit state, so the values show as text again.
+      expect(inputs(fixture).length).toBe(3);
       expect(elementOf(fixture).textContent).toContain('renamed');
       expect(elementOf(fixture).textContent).toContain('C:/out/two');
     });
 
-    it('should key a saved row by its new folder so it stays editable', async () => {
+    it('should re-key a row that moved to a new folder', async () => {
       const fixture = await renderEditable();
       type(inputs(fixture)[1], 'C:/work/renamed-folder');
 
       button(fixture, 'Save')?.click();
       await fixture.whenStable();
-      await settle(fixture);
+      fixture.detectChanges();
 
-      // The moved row keeps its textboxes, now holding the saved values.
-      expect(inputs(fixture).length).toBe(6);
-      expect(inputs(fixture)[1].value).toBe('C:/work/renamed-folder');
+      expect(elementOf(fixture).textContent).toContain('C:/work/renamed-folder');
+      // Only the untouched second row is still being edited.
+      expect(inputs(fixture).length).toBe(3);
+      expect(inputs(fixture)[0].value).toBe('app-two');
     });
 
-    it('should show the failure reason on the row and keep the draft', async () => {
+    it('should show the failure reason on the row and keep the row editable', async () => {
       service.updateResult = {
         updated: false,
         reason: 'Another project already uses that folder.'
@@ -534,7 +546,7 @@ describe('App', () => {
       expect(inputs(fixture)[1].value).toBe('C:/work/app-two');
     });
 
-    it('should restore the stored values when a row is cancelled', async () => {
+    it('should discard the typed values when a row is cancelled', async () => {
       const fixture = await renderEditable();
       type(inputs(fixture)[0], 'renamed');
       type(inputs(fixture)[2], 'C:/out/two');
@@ -542,8 +554,12 @@ describe('App', () => {
       button(fixture, 'Cancel')?.click();
       await settle(fixture);
 
-      expect(inputs(fixture)[0].value).toBe('app-one');
-      expect(inputs(fixture)[2].value).toBe('C:/out/one');
+      // The row leaves edit state, which destroys its inputs, so no typed text
+      // can survive the reset.
+      expect(inputs(fixture).length).toBe(3);
+      expect(elementOf(fixture).textContent).toContain('app-one');
+      expect(elementOf(fixture).textContent).toContain('C:/out/one');
+      expect(elementOf(fixture).textContent).not.toContain('renamed');
       expect(service.lastUpdate).toBeNull();
     });
 
@@ -556,10 +572,25 @@ describe('App', () => {
       fixture.detectChanges();
 
       expect(service.lastUpdate?.changes.deployTo).toBe('');
-
-      button(fixture, 'Done')?.click();
-      fixture.detectChanges();
       expect(elementOf(fixture).textContent).toContain('No deploy destination');
+    });
+
+    it('should let a single row be reopened after cancelling', async () => {
+      const fixture = await renderEditable();
+      button(fixture, 'Cancel')?.click();
+      await settle(fixture);
+
+      // Row 0 now shows text plus an Edit button that reopens its fields.
+      expect(button(fixture, 'Edit')?.textContent?.trim()).toBe('Edit');
+      const rowEditButtons = Array.from(
+        elementOf(fixture).querySelectorAll<HTMLButtonElement>('.project-card button')
+      ).filter((candidate) => candidate.textContent?.trim() === 'Edit');
+      expect(rowEditButtons.length).toBe(1);
+      rowEditButtons[0].click();
+      await settle(fixture);
+
+      expect(inputs(fixture).length).toBe(6);
+      expect(inputs(fixture)[0].value).toBe('app-one');
     });
 
     it('should not run a command while in edit mode', async () => {
