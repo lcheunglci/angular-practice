@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld('builderApi', {
   listProjects: () => ipcRenderer.invoke('projects:list'),
   addProject: () => ipcRenderer.invoke('projects:add'),
   removeProject: (projectPath) => ipcRenderer.invoke('projects:remove', projectPath),
+  updateProject: (projectPath, changes) =>
+    ipcRenderer.invoke('projects:update', projectPath, changes),
   setDeployDir: (projectPath) => ipcRenderer.invoke('projects:set-deploy', projectPath),
   runScript: (projectPath, script) => ipcRenderer.invoke('run:start', { projectPath, script }),
   startDeploy: (projectPath) => ipcRenderer.invoke('deploy:start', projectPath),

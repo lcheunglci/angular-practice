@@ -46,6 +46,27 @@
   border-top: 1px dashed var(--bs-border-color);
 }
 
+/* Edit mode: stacked labelled fields, because the panel is only 340px wide and
+   paths need the full width to stay readable. */
+.edit-grid {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.edit-grid .form-label {
+  color: var(--bs-secondary-color);
+  font-size: 0.75rem;
+}
+
+.edit-grid .form-control {
+  font-size: 0.8125rem;
+}
+
+.row-error {
+  color: var(--bs-danger);
+}
+
 .deploy-path {
   min-width: 0;
   font-size: 0.75rem;

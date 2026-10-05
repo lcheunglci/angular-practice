@@ -4,9 +4,11 @@ import { ProjectService } from './project.service';
 import {
   AddProjectResult,
   Project,
+  ProjectChanges,
   RunEvent,
   SetDeployResult,
-  StartRunResult
+  StartRunResult,
+  UpdateProjectResult
 } from './electron-api';
 
 class ProjectServiceStub {
@@ -14,6 +16,8 @@ class ProjectServiceStub {
   lastRun: { projectPath: string; script: string } | null = null;
   lastDeploy: string | null = null;
   lastDeployDir: string | null = null;
+  lastUpdate: { projectPath: string; changes: ProjectChanges } | null = null;
+  updateResult: UpdateProjectResult | null = null;
   removedPaths: string[] = [];
   runEventHandler: ((event: RunEvent) => void) | null = null;
 
@@ -28,6 +32,26 @@ class ProjectServiceStub {
   removeProject(projectPath: string): Promise<boolean> {
     this.removedPaths.push(projectPath);
     return Promise.resolve(true);
+  }
+
+  updateProject(projectPath: string, changes: ProjectChanges): Promise<UpdateProjectResult> {
+    this.lastUpdate = { projectPath, changes };
+    if (this.updateResult) {
+      return Promise.resolve(this.updateResult);
+    }
+    const entry = this.projects.find((candidate) => candidate.path === projectPath);
+    if (!entry) {
+      return Promise.resolve({ updated: false, reason: 'Project is not in the saved list.' });
+    }
+    return Promise.resolve({
+      updated: true,
+      project: {
+        ...entry,
+        name: changes.name ?? entry.name,
+        path: changes.path ?? entry.path,
+        deployTo: changes.deployTo ? changes.deployTo : null
+      }
+    });
   }
 
   setDeployDir(projectPath: string): Promise<SetDeployResult> {
@@ -392,5 +416,157 @@ describe('App', () => {
 
     expect(elementOf(fixture).querySelector('.spinner-border')).not.toBeNull();
     expect(elementOf(fixture).textContent).toContain('deploy → C:/out');
+  });
+
+  describe('edit mode', () => {
+    async function renderEditable(): Promise<ComponentFixture<App>> {
+      service.projects = [
+        {
+          path: 'C:/work/app-one',
+          name: 'app-one',
+          hasPackageJson: true,
+          deployTo: 'C:/out/one'
+        },
+        { path: 'C:/work/app-two', name: 'app-two', hasPackageJson: true, deployTo: null }
+      ];
+      const fixture = await render();
+      button(fixture, 'Edit')?.click();
+      fixture.detectChanges();
+      return fixture;
+    }
+
+    // ngModel writes the view from a promise that whenStable() does not track, so
+    // a real macrotask is needed to observe the updated textbox.
+    async function settle(fixture: ComponentFixture<App>): Promise<void> {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+
+    function inputs(fixture: ComponentFixture<App>): HTMLInputElement[] {
+      return Array.from(elementOf(fixture).querySelectorAll<HTMLInputElement>('.edit-grid input'));
+    }
+
+    function type(input: HTMLInputElement, value: string): void {
+      input.value = value;
+      input.dispatchEvent(new Event('input'));
+    }
+
+    it('should switch every row to textboxes when edit mode turns on', async () => {
+      const fixture = await renderEditable();
+
+      expect(elementOf(fixture).querySelectorAll('.project-card').length).toBe(2);
+      // Three fields per row.
+      expect(inputs(fixture).length).toBe(6);
+      expect(inputs(fixture)[0].value).toBe('app-one');
+      expect(inputs(fixture)[1].value).toBe('C:/work/app-one');
+      expect(inputs(fixture)[2].value).toBe('C:/out/one');
+      expect(inputs(fixture)[3].value).toBe('app-two');
+      // Read-only markup is gone while editing.
+      expect(elementOf(fixture).querySelector('.deploy-row')).toBeNull();
+      expect(button(fixture, 'Build')).toBeNull();
+    });
+
+    it('should offer a Done button and discard drafts when leaving edit mode', async () => {
+      const fixture = await renderEditable();
+      type(inputs(fixture)[0], 'renamed');
+
+      button(fixture, 'Done')?.click();
+      fixture.detectChanges();
+
+      expect(inputs(fixture).length).toBe(0);
+      expect(elementOf(fixture).textContent).toContain('app-one');
+      expect(elementOf(fixture).textContent).not.toContain('renamed');
+      expect(service.lastUpdate).toBeNull();
+    });
+
+    it('should save the edited fields and refresh the row', async () => {
+      const fixture = await renderEditable();
+      type(inputs(fixture)[0], 'renamed');
+      type(inputs(fixture)[2], 'C:/out/two');
+
+      button(fixture, 'Save')?.click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(service.lastUpdate).toEqual({
+        projectPath: 'C:/work/app-one',
+        changes: { name: 'renamed', path: 'C:/work/app-one', deployTo: 'C:/out/two' }
+      });
+
+      // Leaving edit mode shows the saved values as text again.
+      button(fixture, 'Done')?.click();
+      fixture.detectChanges();
+      expect(elementOf(fixture).textContent).toContain('renamed');
+      expect(elementOf(fixture).textContent).toContain('C:/out/two');
+    });
+
+    it('should key a saved row by its new folder so it stays editable', async () => {
+      const fixture = await renderEditable();
+      type(inputs(fixture)[1], 'C:/work/renamed-folder');
+
+      button(fixture, 'Save')?.click();
+      await fixture.whenStable();
+      await settle(fixture);
+
+      // The moved row keeps its textboxes, now holding the saved values.
+      expect(inputs(fixture).length).toBe(6);
+      expect(inputs(fixture)[1].value).toBe('C:/work/renamed-folder');
+    });
+
+    it('should show the failure reason on the row and keep the draft', async () => {
+      service.updateResult = {
+        updated: false,
+        reason: 'Another project already uses that folder.'
+      };
+      const fixture = await renderEditable();
+      type(inputs(fixture)[1], 'C:/work/app-two');
+
+      button(fixture, 'Save')?.click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(elementOf(fixture).querySelector('.row-error')?.textContent).toContain(
+        'Another project already uses that folder.'
+      );
+      expect(inputs(fixture).length).toBe(6);
+      expect(inputs(fixture)[1].value).toBe('C:/work/app-two');
+    });
+
+    it('should restore the stored values when a row is cancelled', async () => {
+      const fixture = await renderEditable();
+      type(inputs(fixture)[0], 'renamed');
+      type(inputs(fixture)[2], 'C:/out/two');
+
+      button(fixture, 'Cancel')?.click();
+      await settle(fixture);
+
+      expect(inputs(fixture)[0].value).toBe('app-one');
+      expect(inputs(fixture)[2].value).toBe('C:/out/one');
+      expect(service.lastUpdate).toBeNull();
+    });
+
+    it('should clear the deploy destination when the field is emptied', async () => {
+      const fixture = await renderEditable();
+      type(inputs(fixture)[2], '');
+
+      button(fixture, 'Save')?.click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(service.lastUpdate?.changes.deployTo).toBe('');
+
+      button(fixture, 'Done')?.click();
+      fixture.detectChanges();
+      expect(elementOf(fixture).textContent).toContain('No deploy destination');
+    });
+
+    it('should not run a command while in edit mode', async () => {
+      const fixture = await renderEditable();
+      expect(button(fixture, 'Build')).toBeNull();
+      expect(button(fixture, 'Install')).toBeNull();
+      expect(button(fixture, 'Add project')?.disabled).toBeTrue();
+    });
   });
 });

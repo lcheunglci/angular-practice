@@ -1,6 +1,6 @@
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
-const { loadProjects, saveProjects, setProjectDeploy, toProject } = require('./settings');
+const { loadProjects, saveProjects, setProjectDeploy, updateProject, toProject } = require('./settings');
 const { runningRunId, startRun, startDeploy, cancelRun } = require('./runner');
 const { buildApplicationMenu } = require('./menu');
 const tray = require('./tray');
@@ -94,6 +94,10 @@ function registerIpc() {
     saveProjects(loadProjects().filter((entry) => entry.path !== projectPath));
     return true;
   });
+
+  ipcMain.handle('projects:update', (_event, projectPath, changes) =>
+    updateProject(projectPath, changes ?? {})
+  );
 
   ipcMain.handle('run:start', (_event, payload) => {
     const win = BrowserWindow.fromWebContents(_event.sender);

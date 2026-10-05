@@ -7,6 +7,7 @@ import {
   ViewChild,
   inject
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BuildScript, Project, RunAction, RunEvent } from './electron-api';
 import { ProjectService } from './project.service';
 
@@ -29,12 +30,20 @@ interface RunNotice {
   detail: string;
 }
 
+// Edit-mode values for one row, keyed by the row's *saved* path because that is
+// still the record's identity until the edit is saved.
+interface ProjectDraft {
+  name: string;
+  path: string;
+  deployTo: string;
+}
+
 const MAX_LOG_LINES = 2000;
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -48,6 +57,11 @@ export class App implements OnInit {
   confirmRemovePath: string | null = null;
   error = '';
   loading = true;
+
+  editMode = false;
+  drafts: Record<string, ProjectDraft> = {};
+  rowErrors: Record<string, string> = {};
+  savingPaths: Record<string, boolean> = {};
 
   private readonly projectService = inject(ProjectService);
   private readonly destroyRef = inject(DestroyRef);
@@ -105,6 +119,92 @@ export class App implements OnInit {
     } catch (err) {
       this.error = String(err);
     }
+  }
+
+  // --- edit mode ---------------------------------------------------------
+
+  // Every row switches to textboxes at once, each with its own Save/Cancel, so
+  // edits are committed per row rather than all-or-nothing.
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
+    this.rowErrors = {};
+    if (!this.editMode) {
+      this.drafts = {};
+      this.savingPaths = {};
+      return;
+    }
+    const drafts: Record<string, ProjectDraft> = {};
+    for (const project of this.projects) {
+      drafts[project.path] = this.draftOf(project);
+    }
+    this.drafts = drafts;
+  }
+
+  draftFor(projectPath: string): ProjectDraft | null {
+    return this.editMode ? (this.drafts[projectPath] ?? null) : null;
+  }
+
+  rowErrorFor(projectPath: string): string {
+    return this.rowErrors[projectPath] ?? '';
+  }
+
+  isSaving(projectPath: string): boolean {
+    return this.savingPaths[projectPath] === true;
+  }
+
+  // Cancel restores the stored values so the row stays in edit mode. The
+  // inputs are two-way bound, so resetting the draft really does reset the
+  // text the user typed — a one-way [value] binding would not, because Angular
+  // only rewrites a binding when its cached value changed.
+  cancelEdit(project: Project): void {
+    this.drafts = { ...this.drafts, [project.path]: this.draftOf(project) };
+    this.rowErrors = this.withoutKey(this.rowErrors, project.path);
+  }
+
+  async saveEdit(project: Project): Promise<void> {
+    const draft = this.drafts[project.path];
+    if (!draft || this.isSaving(project.path)) return;
+    this.error = '';
+    this.savingPaths = { ...this.savingPaths, [project.path]: true };
+    try {
+      const result = await this.projectService.updateProject(project.path, {
+        name: draft.name,
+        path: draft.path,
+        deployTo: draft.deployTo
+      });
+      if (!result.updated || !result.project) {
+        this.rowErrors = {
+          ...this.rowErrors,
+          [project.path]: result.reason ?? 'Project could not be saved.'
+        };
+        return;
+      }
+      const updated = result.project;
+      this.projects = this.projects.map((entry) =>
+        entry.path === project.path ? updated : entry
+      );
+      this.drafts = this.withoutKey(this.drafts, project.path);
+      // A changed folder becomes the new identity, so re-key the draft to keep
+      // the row editable for the rest of edit mode.
+      if (this.editMode) {
+        this.drafts = { ...this.drafts, [updated.path]: this.draftOf(updated) };
+      }
+      this.rowErrors = this.withoutKey(this.rowErrors, project.path);
+    } catch (err) {
+      this.rowErrors = { ...this.rowErrors, [project.path]: String(err) };
+    } finally {
+      this.savingPaths = this.withoutKey(this.savingPaths, project.path);
+    }
+  }
+
+  private draftOf(project: Project): ProjectDraft {
+    return { name: project.name, path: project.path, deployTo: project.deployTo ?? '' };
+  }
+
+  private withoutKey<T>(source: Record<string, T>, key: string): Record<string, T> {
+    const next = { ...source };
+    delete next[key];
+    return next;
   }
 
   askRemove(project: Project): void {

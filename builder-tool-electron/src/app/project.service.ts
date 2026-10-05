@@ -4,9 +4,11 @@ import {
   BuildScript,
   ElectronBuilderApi,
   Project,
+  ProjectChanges,
   RunEvent,
   SetDeployResult,
-  StartRunResult
+  StartRunResult,
+  UpdateProjectResult
 } from './electron-api';
 
 @Injectable({ providedIn: 'root' })
@@ -21,6 +23,10 @@ export class ProjectService {
 
   removeProject(projectPath: string): Promise<boolean> {
     return this.requireApi().removeProject(projectPath);
+  }
+
+  updateProject(projectPath: string, changes: ProjectChanges): Promise<UpdateProjectResult> {
+    return this.requireApi().updateProject(projectPath, changes);
   }
 
   setDeployDir(projectPath: string): Promise<SetDeployResult> {

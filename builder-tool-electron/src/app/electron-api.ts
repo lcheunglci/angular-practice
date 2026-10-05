@@ -23,6 +23,18 @@ export interface SetDeployResult {
   project?: Project;
 }
 
+export interface ProjectChanges {
+  name?: string;
+  path?: string;
+  deployTo?: string | null;
+}
+
+export interface UpdateProjectResult {
+  updated: boolean;
+  reason?: string;
+  project?: Project;
+}
+
 export interface StartRunResult {
   started: boolean;
   runId?: number;
@@ -40,6 +52,7 @@ export interface ElectronBuilderApi {
   listProjects(): Promise<Project[]>;
   addProject(): Promise<AddProjectResult>;
   removeProject(projectPath: string): Promise<boolean>;
+  updateProject(projectPath: string, changes: ProjectChanges): Promise<UpdateProjectResult>;
   setDeployDir(projectPath: string): Promise<SetDeployResult>;
   runScript(projectPath: string, script: BuildScript): Promise<StartRunResult>;
   startDeploy(projectPath: string): Promise<StartRunResult>;

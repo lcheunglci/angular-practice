@@ -5,9 +5,19 @@
       Runs <code>npm install</code> and <code>npm run build</code> in your local projects.
     </p>
   </div>
-  <button type="button" class="btn btn-primary" (click)="addProject()" [disabled]="busy">
-    Add project
-  </button>
+  <div class="d-flex gap-2 flex-shrink-0">
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="toggleEditMode()"
+      [disabled]="busy || projects.length === 0"
+    >
+      {{ editMode ? 'Done' : 'Edit' }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="addProject()" [disabled]="busy || editMode">
+      Add project
+    </button>
+  </div>
 </header>
 
 <main class="app-body">
@@ -22,88 +32,150 @@
     } @else {
       @for (project of projects; track project.path) {
         <article class="project-card">
-          <div class="d-flex justify-content-between align-items-start gap-2">
-            <div class="text-truncate">
-              <h2 class="h6 mb-1 text-truncate">{{ project.name }}</h2>
-              <code class="small text-body-secondary">{{ project.path }}</code>
-            </div>
-            @if (confirmRemovePath === project.path) {
-              <div class="d-flex gap-2 flex-shrink-0">
-                <button
-                  type="button"
-                  class="btn btn-sm btn-danger"
-                  (click)="remove(project)"
-                >
-                  Confirm
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-outline-secondary"
-                  (click)="cancelRemove()"
-                >
-                  Keep
-                </button>
+          @if (draftFor(project.path); as draft) {
+            <div class="edit-grid">
+              <div>
+                <label class="form-label small mb-1" [for]="'project-name-' + $index">Name</label>
+                <input
+                  [id]="'project-name-' + $index"
+                  type="text"
+                  class="form-control form-control-sm"
+                  [(ngModel)]="draft.name"
+                />
               </div>
-            } @else {
+              <div>
+                <label class="form-label small mb-1" [for]="'project-path-' + $index">Folder</label>
+                <input
+                  [id]="'project-path-' + $index"
+                  type="text"
+                  class="form-control form-control-sm font-monospace"
+                  spellcheck="false"
+                  [(ngModel)]="draft.path"
+                  (keydown.enter)="saveEdit(project)"
+                />
+              </div>
+              <div>
+                <label class="form-label small mb-1" [for]="'project-deploy-' + $index">
+                  Deploy destination
+                </label>
+                <input
+                  [id]="'project-deploy-' + $index"
+                  type="text"
+                  class="form-control form-control-sm font-monospace"
+                  spellcheck="false"
+                  placeholder="Leave empty for no destination"
+                  [(ngModel)]="draft.deployTo"
+                  (keydown.enter)="saveEdit(project)"
+                />
+              </div>
+            </div>
+
+            @if (rowErrorFor(project.path); as rowError) {
+              <p class="row-error small mb-2 mt-2">{{ rowError }}</p>
+            }
+
+            <div class="d-flex gap-2">
               <button
                 type="button"
-                class="btn btn-sm btn-outline-secondary flex-shrink-0"
-                (click)="askRemove(project)"
-                [disabled]="busy"
+                class="btn btn-sm btn-primary"
+                (click)="saveEdit(project)"
+                [disabled]="isSaving(project.path)"
               >
-                Remove
+                {{ isSaving(project.path) ? 'Saving…' : 'Save' }}
               </button>
-            }
-          </div>
-
-          @if (!project.hasPackageJson) {
-            <p class="console-warning small mb-2 mt-2">
-              No <code>package.json</code> in this folder.
-            </p>
-          }
-
-          <div class="d-flex gap-2">
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-secondary"
-              (click)="run(project, 'install')"
-              [disabled]="busy || !project.hasPackageJson"
-            >
-              Install
-            </button>
-            <button
-              type="button"
-              class="btn btn-sm btn-outline-primary"
-              (click)="run(project, 'build')"
-              [disabled]="busy || !project.hasPackageJson"
-            >
-              Build
-            </button>
-          </div>
-
-          <div class="deploy-row">
-            <code class="deploy-path" title="{{ project.deployTo ?? '' }}">
-              <span class="deploy-target">{{ project.deployTo ?? 'No deploy destination' }}</span>
-            </code>
-            <div class="d-flex gap-2 flex-shrink-0">
               <button
                 type="button"
                 class="btn btn-sm btn-outline-secondary"
-                (click)="setDeployDir(project)"
-                [disabled]="busy"
+                (click)="cancelEdit(project)"
+                [disabled]="isSaving(project.path)"
               >
-                Set&hellip;
+                Cancel
+              </button>
+            </div>
+          } @else {
+            <div class="d-flex justify-content-between align-items-start gap-2">
+              <div class="text-truncate">
+                <h2 class="h6 mb-1 text-truncate">{{ project.name }}</h2>
+                <code class="small text-body-secondary">{{ project.path }}</code>
+              </div>
+              @if (confirmRemovePath === project.path) {
+                <div class="d-flex gap-2 flex-shrink-0">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-danger"
+                    (click)="remove(project)"
+                  >
+                    Confirm
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-secondary"
+                    (click)="cancelRemove()"
+                  >
+                    Keep
+                  </button>
+                </div>
+              } @else {
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary flex-shrink-0"
+                  (click)="askRemove(project)"
+                  [disabled]="busy"
+                >
+                  Remove
+                </button>
+              }
+            </div>
+
+            @if (!project.hasPackageJson) {
+              <p class="console-warning small mb-2 mt-2">
+                No <code>package.json</code> in this folder.
+              </p>
+            }
+
+            <div class="d-flex gap-2">
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                (click)="run(project, 'install')"
+                [disabled]="busy || !project.hasPackageJson"
+              >
+                Install
               </button>
               <button
                 type="button"
-                class="btn btn-sm btn-outline-info"
-                (click)="run(project, 'deploy')"
-                [disabled]="busy || !project.deployTo"
+                class="btn btn-sm btn-outline-primary"
+                (click)="run(project, 'build')"
+                [disabled]="busy || !project.hasPackageJson"
               >
-                Deploy
+                Build
               </button>
             </div>
-          </div>
+
+            <div class="deploy-row">
+              <code class="deploy-path" title="{{ project.deployTo ?? '' }}">
+                <span class="deploy-target">{{ project.deployTo ?? 'No deploy destination' }}</span>
+              </code>
+              <div class="d-flex gap-2 flex-shrink-0">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="setDeployDir(project)"
+                  [disabled]="busy"
+                >
+                  Set&hellip;
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-info"
+                  (click)="run(project, 'deploy')"
+                  [disabled]="busy || !project.deployTo"
+                >
+                  Deploy
+                </button>
+              </div>
+            </div>
+          }
         </article>
       }
     }
