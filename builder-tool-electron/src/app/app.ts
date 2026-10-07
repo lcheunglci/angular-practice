@@ -256,7 +256,11 @@ export class App implements OnInit {
     return next;
   }
 
-  askRemove(project: Project): void {
+  private draftOf(project: Project): ProjectDraft {
+    return { name: project.name, path: project.path, deployTo: project.deployTo ?? "" };
+  }
+
+askRemove(project: Project): void {
     this.confirmRemovePath = project.path;
   }
 
