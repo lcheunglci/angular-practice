@@ -35,6 +35,36 @@ export interface UpdateProjectResult {
   project?: Project;
 }
 
+export interface CloneRepoResult {
+  cloned: boolean;
+  path?: string;
+  reason?: string;
+  node?: boolean;
+  hasBuild?: boolean;
+  scripts?: string[];
+}
+
+export interface PickDirOptions {
+  title?: string;
+  buttonLabel?: string;
+}
+
+export interface PickDirResult {
+  canceled: boolean;
+  path?: string;
+}
+
+export interface PickTextOptions {
+  title?: string;
+  placeholder?: string;
+  value?: string;
+}
+
+export interface PickTextResult {
+  canceled: boolean;
+  value?: string;
+}
+
 export interface StartRunResult {
   started: boolean;
   runId?: number;
@@ -53,6 +83,12 @@ export interface ElectronBuilderApi {
   addProject(): Promise<AddProjectResult>;
   removeProject(projectPath: string): Promise<boolean>;
   updateProject(projectPath: string, changes: ProjectChanges): Promise<UpdateProjectResult>;
+  cloneRepo(url: string, parentDir: string, folderName: string): Promise<CloneRepoResult>;
+  pickDir(options?: PickDirOptions): Promise<PickDirResult>;
+  pickText(options?: PickTextOptions): Promise<PickTextResult>;
+  cloneRepo(url: string, parentDir: string, folderName: string): Promise<CloneRepoResult>;
+  pickDir(options?: PickDirOptions): Promise<PickDirResult>;
+  pickText(options?: PickTextOptions): Promise<PickTextResult>;
   setDeployDir(projectPath: string): Promise<SetDeployResult>;
   runScript(projectPath: string, script: BuildScript): Promise<StartRunResult>;
   startDeploy(projectPath: string): Promise<StartRunResult>;

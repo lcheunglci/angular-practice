@@ -1,5 +1,7 @@
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron');
+const fs = require('fs');
+const { spawn } = require('child_process');
 const { loadProjects, saveProjects, setProjectDeploy, updateProject, toProject } = require('./settings');
 const { runningRunId, startRun, startDeploy, cancelRun } = require('./runner');
 const { buildApplicationMenu } = require('./menu');
@@ -51,6 +53,47 @@ function registerIpc() {
     tray.handleRunEvent(event);
   };
 
+  function repoNameFromUrl(u) {
+    try {
+      const s = String(u).trim().replace(/\.git$/, '').replace(/\/+$/, '');
+      const base = path.basename(s.split('#')[0].split('?')[0]);
+      return base || 'repo';
+    } catch {
+      return 'repo';
+    }
+  }
+
+  function detectNode(root) {
+    const pkg = path.join(root, 'package.json');
+    if (!fs.existsSync(pkg)) return { node: false };
+    try {
+      const p = JSON.parse(fs.readFileSync(pkg, 'utf8'));
+      const scripts = p && typeof p.scripts === 'object' ? Object.keys(p.scripts) : [];
+      return {
+        node: true,
+        hasBuild: Boolean(p.scripts && p.scripts.build),
+        scripts
+      };
+    } catch {
+      return { node: false };
+    }
+  }
+
+  function spawnGitClone(url, dest) {
+    return new Promise((resolve, reject) => {
+      const git = spawn('git', ['clone', '--depth', '1', url, dest], { shell: false });
+      let stderr = '';
+      git.stderr.on('data', (d) => {
+        stderr += d.toString();
+      });
+      git.on('error', (err) => reject(err));
+      git.on('close', (code) => {
+        if (code === 0) return resolve();
+        reject(new Error(stderr.trim() || `git clone exited with code ${code}`));
+      });
+    });
+  }
+
   ipcMain.handle('projects:list', () => loadProjects().map(toProject));
 
   ipcMain.handle('projects:add', async () => {
@@ -98,6 +141,61 @@ function registerIpc() {
   ipcMain.handle('projects:update', (_event, projectPath, changes) =>
     updateProject(projectPath, changes ?? {})
   );
+
+  ipcMain.handle('projects:pick-dir', async (_event, options = {}) => {
+    const result = await dialog.showOpenDialog({
+      title: options.title ?? 'Select directory',
+      buttonLabel: options.buttonLabel ?? 'Select',
+      properties: ['openDirectory', 'createDirectory']
+    });
+    if (result.canceled || !result.filePaths.length) {
+      return { canceled: true };
+    }
+    return { canceled: false, path: result.filePaths[0] };
+  });
+
+  ipcMain.handle('projects:pick-text', async (_event, options = {}) => {
+    const result = await dialog.showInputBox({
+      title: options.title ?? 'Enter value',
+      placeholder: options.placeholder,
+      value: options.value ?? ''
+    });
+    if (result.canceled) {
+      return { canceled: true };
+    }
+    return { canceled: false, value: result.value ?? '' };
+  });
+
+  ipcMain.handle('projects:clone', async (_event, { url, parentDir, folderName }) => {
+    const trimmedUrl = String(url || '').trim();
+    if (!trimmedUrl) {
+      return { cloned: false, reason: 'Repository URL is required.' };
+    }
+    if (!parentDir || !fs.existsSync(parentDir) || !fs.statSync(parentDir).isDirectory()) {
+      return { cloned: false, reason: 'Parent directory does not exist or is not a directory.' };
+    }
+    const name = String(folderName || '').trim() || repoNameFromUrl(trimmedUrl);
+    const dest = path.join(parentDir, name);
+    if (fs.existsSync(dest)) {
+      return { cloned: false, reason: `Folder already exists: ${dest}` };
+    }
+    try {
+      await spawnGitClone(trimmedUrl, dest);
+      const det = detectNode(dest);
+      const projects = loadProjects();
+      projects.push({ path: dest });
+      saveProjects(projects);
+      const record = projects.find((entry) => entry.path === dest);
+      return { cloned: true, path: dest, ...det, project: record ? toProject(record) : undefined };
+    } catch (err) {
+      try {
+        fs.rmSync(dest, { recursive: true, force: true });
+      } catch {
+        /* ignore */
+      }
+      return { cloned: false, reason: err.message || String(err) };
+    }
+  });
 
   ipcMain.handle('run:start', (_event, payload) => {
     const win = BrowserWindow.fromWebContents(_event.sender);

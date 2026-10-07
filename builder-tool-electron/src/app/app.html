@@ -14,6 +14,14 @@
     >
       {{ editMode ? 'Done' : 'Edit' }}
     </button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="cloneRepo()"
+      [disabled]="busy || editMode"
+    >
+      Clone repo&hellip;
+    </button>
     <button type="button" class="btn btn-primary" (click)="addProject()" [disabled]="busy || editMode">
       Add project
     </button>

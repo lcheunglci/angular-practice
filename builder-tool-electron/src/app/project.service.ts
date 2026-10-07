@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import {
   AddProjectResult,
   BuildScript,
+  CloneRepoResult,
   ElectronBuilderApi,
+  PickDirOptions,
+  PickDirResult,
+  PickTextOptions,
+  PickTextResult,
   Project,
   ProjectChanges,
   RunEvent,
@@ -27,6 +32,18 @@ export class ProjectService {
 
   updateProject(projectPath: string, changes: ProjectChanges): Promise<UpdateProjectResult> {
     return this.requireApi().updateProject(projectPath, changes);
+  }
+
+  cloneRepo(url: string, parentDir: string, folderName: string): Promise<CloneRepoResult> {
+    return this.requireApi().cloneRepo(url, parentDir, folderName);
+  }
+
+  pickDir(options?: PickDirOptions): Promise<PickDirResult> {
+    return this.requireApi().pickDir(options);
+  }
+
+  pickText(options?: PickTextOptions): Promise<PickTextResult> {
+    return this.requireApi().pickText(options);
   }
 
   setDeployDir(projectPath: string): Promise<SetDeployResult> {

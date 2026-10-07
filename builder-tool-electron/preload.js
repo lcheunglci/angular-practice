@@ -6,6 +6,10 @@ contextBridge.exposeInMainWorld('builderApi', {
   removeProject: (projectPath) => ipcRenderer.invoke('projects:remove', projectPath),
   updateProject: (projectPath, changes) =>
     ipcRenderer.invoke('projects:update', projectPath, changes),
+  cloneRepo: (url, parentDir, folderName) =>
+    ipcRenderer.invoke('projects:clone', { url, parentDir, folderName }),
+  pickDir: (options) => ipcRenderer.invoke('projects:pick-dir', options),
+  pickText: (options) => ipcRenderer.invoke('projects:pick-text', options),
   setDeployDir: (projectPath) => ipcRenderer.invoke('projects:set-deploy', projectPath),
   runScript: (projectPath, script) => ipcRenderer.invoke('run:start', { projectPath, script }),
   startDeploy: (projectPath) => ipcRenderer.invoke('deploy:start', projectPath),

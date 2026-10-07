@@ -202,8 +202,52 @@ export class App implements OnInit {
     }
   }
 
-  private draftOf(project: Project): ProjectDraft {
-    return { name: project.name, path: project.path, deployTo: project.deployTo ?? '' };
+  async cloneRepo(): Promise<void> {
+    this.error = '';
+    if (this.busy || this.editMode) return;
+    try {
+      const urlRes = await this.projectService.pickText({
+        title: 'Clone repository',
+        placeholder: 'https://github.com/user/repo.git or git@github.com:user/repo.git'
+      });
+      if (urlRes.canceled || !urlRes.value?.trim()) return;
+      const url = urlRes.value.trim();
+
+      const parentRes = await this.projectService.pickDir({
+        title: 'Choose clone parent folder',
+        buttonLabel: 'Select parent'
+      });
+      if (parentRes.canceled || !parentRes.path) return;
+      const parentDir = parentRes.path;
+
+      const defaultName = this.defaultRepoName(url);
+      const nameRes = await this.projectService.pickText({
+        title: 'Clone folder name',
+        value: defaultName
+      });
+      if (nameRes.canceled) return;
+      const folderName = nameRes.value?.trim() || defaultName;
+
+      const res = await this.projectService.cloneRepo(url, parentDir, folderName);
+      if (!res.cloned) {
+        this.error = res.reason ?? 'Clone failed.';
+        return;
+      }
+      await this.refresh();
+      this.error = '';
+    } catch (err) {
+      this.error = String(err);
+    }
+  }
+
+  private defaultRepoName(url: string): string {
+    try {
+      const s = url.trim().replace(/\.git$/, '').replace(/\/+$/, '');
+      const base = s.split('#')[0].split('?')[0].split('/').pop();
+      return base || 'repo';
+    } catch {
+      return 'repo';
+    }
   }
 
   private withoutKey<T>(source: Record<string, T>, key: string): Record<string, T> {
